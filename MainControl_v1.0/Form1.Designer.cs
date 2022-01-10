@@ -246,15 +246,16 @@
             this.btn_serialPort_TRM_disconn = new System.Windows.Forms.Button();
             this.tb_serialPort_TRM = new System.Windows.Forms.TextBox();
             this.gp_IotSys = new System.Windows.Forms.GroupBox();
+            this.gp_IotSys_ManualMode = new System.Windows.Forms.GroupBox();
+            this.btn_IotTest = new System.Windows.Forms.Button();
+            this.btn_TagSel = new System.Windows.Forms.Button();
+            this.btn_WaitRmOn = new System.Windows.Forms.Button();
+            this.btn_TagReSel = new System.Windows.Forms.Button();
             this.lb_programmedbyBBangJun = new System.Windows.Forms.Label();
             this.gp_IotSys_timer = new System.Windows.Forms.GroupBox();
             this.btn_IotSys_timerStart = new System.Windows.Forms.Button();
             this.btn_IotSys_timerStop = new System.Windows.Forms.Button();
             this.lb_IotSys_Clock = new System.Windows.Forms.Label();
-            this.btn_TagReSel = new System.Windows.Forms.Button();
-            this.btn_WaitRmOn = new System.Windows.Forms.Button();
-            this.btn_TagSel = new System.Windows.Forms.Button();
-            this.btn_IotTest = new System.Windows.Forms.Button();
             this.tc_serialPort_IOT = new System.Windows.Forms.TabControl();
             this.tp_G1 = new System.Windows.Forms.TabPage();
             this.lb_G1P8_state = new System.Windows.Forms.Label();
@@ -299,7 +300,9 @@
             this.timer_IotSys = new System.Windows.Forms.Timer(this.components);
             this.timer_GameSys = new System.Windows.Forms.Timer(this.components);
             this.timer_ExerciseSys = new System.Windows.Forms.Timer(this.components);
-            this.gp_IotSys_ManualMode = new System.Windows.Forms.GroupBox();
+            this.serialPort_PCM = new System.IO.Ports.SerialPort(this.components);
+            this.serialPort_IOT = new System.IO.Ports.SerialPort(this.components);
+            this.serialPort_TRM = new System.IO.Ports.SerialPort(this.components);
             this.gp_GameSys.SuspendLayout();
             this.gp_IotGroup.SuspendLayout();
             this.gp_GameSys_ManualMode.SuspendLayout();
@@ -319,12 +322,12 @@
             this.gp_ExerciseSys_ManualMode.SuspendLayout();
             this.gp_ExerciseSys_timer.SuspendLayout();
             this.gp_IotSys.SuspendLayout();
+            this.gp_IotSys_ManualMode.SuspendLayout();
             this.gp_IotSys_timer.SuspendLayout();
             this.tc_serialPort_IOT.SuspendLayout();
             this.tp_G1.SuspendLayout();
             this.tp_G2.SuspendLayout();
             this.tp_G3.SuspendLayout();
-            this.gp_IotSys_ManualMode.SuspendLayout();
             this.SuspendLayout();
             // 
             // btn_serialPort_PCM_conn
@@ -1247,22 +1250,24 @@
             this.btn_Revive_send.TabIndex = 11;
             this.btn_Revive_send.Text = "전송";
             this.btn_Revive_send.UseVisualStyleBackColor = true;
+            this.btn_Revive_send.Click += new System.EventHandler(this.btn_Revive_send_Click);
             // 
             // cb_Revive_state
             // 
             this.cb_Revive_state.Font = new System.Drawing.Font("Helvetica75", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cb_Revive_state.FormattingEnabled = true;
             this.cb_Revive_state.Items.AddRange(new object[] {
-            "비활성화",
-            "활성화",
-            "세팅모드",
-            "상태확인",
-            "생명장치 봉쇄",
-            "자가부활 모드"});
+            "(A)장치연결",
+            "(R)장치활성화",
+            "(S)장치세팅",
+            "(C)장치 연결상태확인",
+            "(B)봉쇄 활성화",
+            "(E)자가부활모드"});
             this.cb_Revive_state.Location = new System.Drawing.Point(6, 50);
             this.cb_Revive_state.Name = "cb_Revive_state";
             this.cb_Revive_state.Size = new System.Drawing.Size(117, 23);
             this.cb_Revive_state.TabIndex = 11;
+            this.cb_Revive_state.Text = "(A)장치연결";
             // 
             // cb_Revive_name
             // 
@@ -1284,6 +1289,7 @@
             this.cb_Revive_name.Name = "cb_Revive_name";
             this.cb_Revive_name.Size = new System.Drawing.Size(55, 23);
             this.cb_Revive_name.TabIndex = 10;
+            this.cb_Revive_name.Text = "ALL";
             // 
             // lb_BR1_name
             // 
@@ -1340,6 +1346,7 @@
             this.btn_Escape_send.TabIndex = 38;
             this.btn_Escape_send.Text = "전송";
             this.btn_Escape_send.UseVisualStyleBackColor = true;
+            this.btn_Escape_send.Click += new System.EventHandler(this.btn_Escape_send_Click);
             // 
             // lb_TE_name
             // 
@@ -1356,15 +1363,17 @@
             this.cb_Escape_state.Font = new System.Drawing.Font("Helvetica75", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cb_Escape_state.FormattingEnabled = true;
             this.cb_Escape_state.Items.AddRange(new object[] {
-            "비활성화",
-            "활성화",
-            "세팅모드",
-            "상태확인",
-            "탈출성공"});
+            "(A)장치연결",
+            "(R)장치활성화",
+            "(S)장치세팅",
+            "(C)연결상태확인",
+            "(B)봉쇄 활성화",
+            "(E)탈출 완료"});
             this.cb_Escape_state.Location = new System.Drawing.Point(6, 50);
             this.cb_Escape_state.Name = "cb_Escape_state";
             this.cb_Escape_state.Size = new System.Drawing.Size(117, 23);
             this.cb_Escape_state.TabIndex = 37;
+            this.cb_Escape_state.Text = "(A)장치연결";
             // 
             // lb_TE_state
             // 
@@ -1393,6 +1402,7 @@
             this.cb_Escape_name.Name = "cb_Escape_name";
             this.cb_Escape_name.Size = new System.Drawing.Size(55, 23);
             this.cb_Escape_name.TabIndex = 36;
+            this.cb_Escape_name.Text = "ALL";
             // 
             // lb_SE_name
             // 
@@ -1525,6 +1535,7 @@
             this.btn_Itembox_send.TabIndex = 32;
             this.btn_Itembox_send.Text = "전송";
             this.btn_Itembox_send.UseVisualStyleBackColor = true;
+            this.btn_Itembox_send.Click += new System.EventHandler(this.btn_Itembox_send_Click);
             // 
             // lb_TI2_name
             // 
@@ -1541,16 +1552,17 @@
             this.cb_Itembox_state.Font = new System.Drawing.Font("Helvetica75", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cb_Itembox_state.FormattingEnabled = true;
             this.cb_Itembox_state.Items.AddRange(new object[] {
-            "비활성화",
-            "활성화",
-            "세팅모드",
-            "상태확인",
-            "아이템박스 봉쇄",
-            "아이템박스 오픈"});
+            "(A)장치연결",
+            "(R)장치활성화",
+            "(S)장치세팅",
+            "(C)연결상태확인",
+            "(B)봉쇄 활성화",
+            "(F)아이템박스 오픈"});
             this.cb_Itembox_state.Location = new System.Drawing.Point(6, 51);
             this.cb_Itembox_state.Name = "cb_Itembox_state";
             this.cb_Itembox_state.Size = new System.Drawing.Size(116, 23);
             this.cb_Itembox_state.TabIndex = 31;
+            this.cb_Itembox_state.Text = "(A)장치연결";
             // 
             // lb_TI2_state
             // 
@@ -1584,6 +1596,7 @@
             this.cb_Itembox_name.Name = "cb_Itembox_name";
             this.cb_Itembox_name.Size = new System.Drawing.Size(54, 23);
             this.cb_Itembox_name.TabIndex = 30;
+            this.cb_Itembox_name.Text = "ALL";
             // 
             // lb_TI1_name
             // 
@@ -1816,6 +1829,7 @@
             this.btn_Generator_send.TabIndex = 35;
             this.btn_Generator_send.Text = "전송";
             this.btn_Generator_send.UseVisualStyleBackColor = true;
+            this.btn_Generator_send.Click += new System.EventHandler(this.btn_Generator_send_Click);
             // 
             // lb_TG_name
             // 
@@ -1832,17 +1846,18 @@
             this.cb_Generator_state.Font = new System.Drawing.Font("Helvetica75", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cb_Generator_state.FormattingEnabled = true;
             this.cb_Generator_state.Items.AddRange(new object[] {
-            "비활성화",
-            "활성화",
-            "세팅모드",
-            "상태확인",
-            "배선수리 완료",
-            "전체수리 완료",
-            "발전기 봉쇄"});
+            "(A)장치연결",
+            "(R)장치활성화",
+            "(S)장치세팅",
+            "(C)연결상태확인",
+            "(B)봉쇄 활성화",
+            "(E4)배선수리 완료",
+            "(F)발전기수리 완료"});
             this.cb_Generator_state.Location = new System.Drawing.Point(6, 49);
             this.cb_Generator_state.Name = "cb_Generator_state";
             this.cb_Generator_state.Size = new System.Drawing.Size(116, 23);
             this.cb_Generator_state.TabIndex = 34;
+            this.cb_Generator_state.Text = "(A)장치연결";
             // 
             // lb_TG_state
             // 
@@ -1871,6 +1886,7 @@
             this.cb_Generator_name.Name = "cb_Generator_name";
             this.cb_Generator_name.Size = new System.Drawing.Size(54, 23);
             this.cb_Generator_name.TabIndex = 33;
+            this.cb_Generator_name.Text = "ALL";
             // 
             // lb_SG_name
             // 
@@ -2002,7 +2018,7 @@
             this.gp_Vent.Location = new System.Drawing.Point(282, 485);
             this.gp_Vent.Name = "gp_Vent";
             this.gp_Vent.Size = new System.Drawing.Size(866, 80);
-            this.gp_Vent.TabIndex = 43;
+            this.gp_Vent.TabIndex = 0;
             this.gp_Vent.TabStop = false;
             this.gp_Vent.Text = "덕트 (V)";
             // 
@@ -2091,6 +2107,7 @@
             this.btn_Vent_send.TabIndex = 41;
             this.btn_Vent_send.Text = "전송";
             this.btn_Vent_send.UseVisualStyleBackColor = true;
+            this.btn_Vent_send.Click += new System.EventHandler(this.btn_Vent_send_Click);
             // 
             // lb_BV2_state
             // 
@@ -2141,16 +2158,17 @@
             this.cb_Vent_state.Font = new System.Drawing.Font("Helvetica75", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cb_Vent_state.FormattingEnabled = true;
             this.cb_Vent_state.Items.AddRange(new object[] {
-            "비활성화",
-            "활성화",
-            "세팅모드",
-            "상태확인",
-            "덕트 봉쇄",
-            "덕트 오픈"});
+            "(A)장치연결",
+            "(R)장치활성화",
+            "(S)장치세팅",
+            "(C)연결상태확인",
+            "(B)봉쇄 활성화",
+            "(O)덕트 오픈"});
             this.cb_Vent_state.Location = new System.Drawing.Point(6, 51);
             this.cb_Vent_state.Name = "cb_Vent_state";
             this.cb_Vent_state.Size = new System.Drawing.Size(117, 23);
             this.cb_Vent_state.TabIndex = 40;
+            this.cb_Vent_state.Text = "(A)장치연결";
             // 
             // cb_Vent_name
             // 
@@ -2168,6 +2186,7 @@
             this.cb_Vent_name.Name = "cb_Vent_name";
             this.cb_Vent_name.Size = new System.Drawing.Size(55, 23);
             this.cb_Vent_name.TabIndex = 39;
+            this.cb_Vent_name.Text = "ALL";
             // 
             // lb_LV_state
             // 
@@ -2266,6 +2285,7 @@
             this.btn_Door_send.TabIndex = 41;
             this.btn_Door_send.Text = "전송";
             this.btn_Door_send.UseVisualStyleBackColor = true;
+            this.btn_Door_send.Click += new System.EventHandler(this.btn_Door_send_Click);
             // 
             // lb_GD_state
             // 
@@ -2294,17 +2314,17 @@
             this.cb_Door_state.Font = new System.Drawing.Font("Helvetica75", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cb_Door_state.FormattingEnabled = true;
             this.cb_Door_state.Items.AddRange(new object[] {
-            "술래결정 전",
-            "술래결정 후",
-            "게임 종료",
-            "테스트",
-            "생명장치 봉쇄",
-            "자가부활 모드",
-            ""});
+            "(A)장치연결",
+            "(R)장치활성화",
+            "(S)장치세팅",
+            "(C)연결상태확인",
+            "(B)봉쇄 활성화",
+            "(F)도어 오픈"});
             this.cb_Door_state.Location = new System.Drawing.Point(6, 51);
             this.cb_Door_state.Name = "cb_Door_state";
             this.cb_Door_state.Size = new System.Drawing.Size(117, 23);
             this.cb_Door_state.TabIndex = 40;
+            this.cb_Door_state.Text = "(A)장치연결";
             // 
             // cb_Door_name
             // 
@@ -2312,20 +2332,15 @@
             this.cb_Door_name.FormattingEnabled = true;
             this.cb_Door_name.Items.AddRange(new object[] {
             "ALL",
-            "BR1",
-            "BR2",
-            "LR1",
-            "LR2",
-            "CR1",
-            "CR2",
-            "SR1",
-            "SR2",
-            "TR1",
-            "TR2"});
+            "BD",
+            "CD",
+            "SD1",
+            "TD"});
             this.cb_Door_name.Location = new System.Drawing.Point(6, 22);
             this.cb_Door_name.Name = "cb_Door_name";
             this.cb_Door_name.Size = new System.Drawing.Size(55, 23);
             this.cb_Door_name.TabIndex = 39;
+            this.cb_Door_name.Text = "ALL";
             // 
             // lb_LD_state
             // 
@@ -2364,6 +2379,7 @@
             this.btn_Temple_send.TabIndex = 41;
             this.btn_Temple_send.Text = "전송";
             this.btn_Temple_send.UseVisualStyleBackColor = true;
+            this.btn_Temple_send.Click += new System.EventHandler(this.btn_Temple_send_Click);
             // 
             // lb_LT_name
             // 
@@ -2380,15 +2396,16 @@
             this.cb_Temple_state.Font = new System.Drawing.Font("Helvetica75", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cb_Temple_state.FormattingEnabled = true;
             this.cb_Temple_state.Items.AddRange(new object[] {
-            "비활성화",
-            "활성화",
-            "세팅모드",
-            "상태확인",
-            "제단 활성화"});
+            "(A)장치연결",
+            "(R)장치활성화",
+            "(S)장치세팅",
+            "(C)연결상태확인",
+            "(E)제단 활성화"});
             this.cb_Temple_state.Location = new System.Drawing.Point(6, 51);
             this.cb_Temple_state.Name = "cb_Temple_state";
             this.cb_Temple_state.Size = new System.Drawing.Size(117, 23);
             this.cb_Temple_state.TabIndex = 40;
+            this.cb_Temple_state.Text = "(A)장치연결";
             // 
             // cb_Temple_name
             // 
@@ -2400,6 +2417,7 @@
             this.cb_Temple_name.Name = "cb_Temple_name";
             this.cb_Temple_name.Size = new System.Drawing.Size(55, 23);
             this.cb_Temple_name.TabIndex = 39;
+            this.cb_Temple_name.Text = "LT";
             // 
             // lb_LT_state
             // 
@@ -2988,6 +3006,66 @@
             this.gp_IotSys.TabStop = false;
             this.gp_IotSys.Text = "IOT GLOVE SYSTEM";
             // 
+            // gp_IotSys_ManualMode
+            // 
+            this.gp_IotSys_ManualMode.Controls.Add(this.btn_IotTest);
+            this.gp_IotSys_ManualMode.Controls.Add(this.btn_TagSel);
+            this.gp_IotSys_ManualMode.Controls.Add(this.btn_WaitRmOn);
+            this.gp_IotSys_ManualMode.Controls.Add(this.btn_TagReSel);
+            this.gp_IotSys_ManualMode.Font = new System.Drawing.Font("타이포_쌍문동 B", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.gp_IotSys_ManualMode.Location = new System.Drawing.Point(499, 254);
+            this.gp_IotSys_ManualMode.Name = "gp_IotSys_ManualMode";
+            this.gp_IotSys_ManualMode.Size = new System.Drawing.Size(226, 110);
+            this.gp_IotSys_ManualMode.TabIndex = 68;
+            this.gp_IotSys_ManualMode.TabStop = false;
+            this.gp_IotSys_ManualMode.Text = "Manual Mode";
+            // 
+            // btn_IotTest
+            // 
+            this.btn_IotTest.BackColor = System.Drawing.Color.Red;
+            this.btn_IotTest.Font = new System.Drawing.Font("타이포_쌍문동 B", 8.999999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_IotTest.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.btn_IotTest.Location = new System.Drawing.Point(6, 29);
+            this.btn_IotTest.Name = "btn_IotTest";
+            this.btn_IotTest.Size = new System.Drawing.Size(100, 35);
+            this.btn_IotTest.TabIndex = 12;
+            this.btn_IotTest.Text = "IOT 테스트";
+            this.btn_IotTest.UseVisualStyleBackColor = false;
+            this.btn_IotTest.Click += new System.EventHandler(this.btn_IotTest_Click);
+            // 
+            // btn_TagSel
+            // 
+            this.btn_TagSel.Font = new System.Drawing.Font("타이포_쌍문동 B", 8.999999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_TagSel.Location = new System.Drawing.Point(120, 29);
+            this.btn_TagSel.Name = "btn_TagSel";
+            this.btn_TagSel.Size = new System.Drawing.Size(100, 35);
+            this.btn_TagSel.TabIndex = 13;
+            this.btn_TagSel.Text = "술래결정 (3분)";
+            this.btn_TagSel.UseVisualStyleBackColor = true;
+            this.btn_TagSel.Click += new System.EventHandler(this.btn_TagSel_Click);
+            // 
+            // btn_WaitRmOn
+            // 
+            this.btn_WaitRmOn.Font = new System.Drawing.Font("타이포_쌍문동 B", 8.999999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_WaitRmOn.Location = new System.Drawing.Point(6, 69);
+            this.btn_WaitRmOn.Name = "btn_WaitRmOn";
+            this.btn_WaitRmOn.Size = new System.Drawing.Size(100, 35);
+            this.btn_WaitRmOn.TabIndex = 14;
+            this.btn_WaitRmOn.Text = "대기공간 ON";
+            this.btn_WaitRmOn.UseVisualStyleBackColor = true;
+            this.btn_WaitRmOn.Click += new System.EventHandler(this.btn_WaitRmOn_Click);
+            // 
+            // btn_TagReSel
+            // 
+            this.btn_TagReSel.Font = new System.Drawing.Font("타이포_쌍문동 B", 8.999999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_TagReSel.Location = new System.Drawing.Point(120, 69);
+            this.btn_TagReSel.Name = "btn_TagReSel";
+            this.btn_TagReSel.Size = new System.Drawing.Size(100, 35);
+            this.btn_TagReSel.TabIndex = 15;
+            this.btn_TagReSel.Text = "술래 재결정 ";
+            this.btn_TagReSel.UseVisualStyleBackColor = true;
+            this.btn_TagReSel.Click += new System.EventHandler(this.btn_TagReSel_Click);
+            // 
             // lb_programmedbyBBangJun
             // 
             this.lb_programmedbyBBangJun.AutoSize = true;
@@ -3044,52 +3122,6 @@
             this.lb_IotSys_Clock.TabIndex = 16;
             this.lb_IotSys_Clock.Text = "3:00";
             this.lb_IotSys_Clock.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // btn_TagReSel
-            // 
-            this.btn_TagReSel.Font = new System.Drawing.Font("타이포_쌍문동 B", 8.999999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_TagReSel.Location = new System.Drawing.Point(120, 69);
-            this.btn_TagReSel.Name = "btn_TagReSel";
-            this.btn_TagReSel.Size = new System.Drawing.Size(100, 35);
-            this.btn_TagReSel.TabIndex = 15;
-            this.btn_TagReSel.Text = "술래 재결정 ";
-            this.btn_TagReSel.UseVisualStyleBackColor = true;
-            this.btn_TagReSel.Click += new System.EventHandler(this.btn_TagReSel_Click);
-            // 
-            // btn_WaitRmOn
-            // 
-            this.btn_WaitRmOn.Font = new System.Drawing.Font("타이포_쌍문동 B", 8.999999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_WaitRmOn.Location = new System.Drawing.Point(6, 69);
-            this.btn_WaitRmOn.Name = "btn_WaitRmOn";
-            this.btn_WaitRmOn.Size = new System.Drawing.Size(100, 35);
-            this.btn_WaitRmOn.TabIndex = 14;
-            this.btn_WaitRmOn.Text = "대기공간 ON";
-            this.btn_WaitRmOn.UseVisualStyleBackColor = true;
-            this.btn_WaitRmOn.Click += new System.EventHandler(this.btn_WaitRmOn_Click);
-            // 
-            // btn_TagSel
-            // 
-            this.btn_TagSel.Font = new System.Drawing.Font("타이포_쌍문동 B", 8.999999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_TagSel.Location = new System.Drawing.Point(120, 29);
-            this.btn_TagSel.Name = "btn_TagSel";
-            this.btn_TagSel.Size = new System.Drawing.Size(100, 35);
-            this.btn_TagSel.TabIndex = 13;
-            this.btn_TagSel.Text = "술래결정 (3분)";
-            this.btn_TagSel.UseVisualStyleBackColor = true;
-            this.btn_TagSel.Click += new System.EventHandler(this.btn_TagSel_Click);
-            // 
-            // btn_IotTest
-            // 
-            this.btn_IotTest.BackColor = System.Drawing.Color.Red;
-            this.btn_IotTest.Font = new System.Drawing.Font("타이포_쌍문동 B", 8.999999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_IotTest.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.btn_IotTest.Location = new System.Drawing.Point(6, 29);
-            this.btn_IotTest.Name = "btn_IotTest";
-            this.btn_IotTest.Size = new System.Drawing.Size(100, 35);
-            this.btn_IotTest.TabIndex = 12;
-            this.btn_IotTest.Text = "IOT 테스트";
-            this.btn_IotTest.UseVisualStyleBackColor = false;
-            this.btn_IotTest.Click += new System.EventHandler(this.btn_IotTest_Click);
             // 
             // tc_serialPort_IOT
             // 
@@ -3586,20 +3618,6 @@
             this.timer_ExerciseSys.Interval = 1000;
             this.timer_ExerciseSys.Tick += new System.EventHandler(this.timer_ExerciseSys_Tick);
             // 
-            // gp_IotSys_ManualMode
-            // 
-            this.gp_IotSys_ManualMode.Controls.Add(this.btn_IotTest);
-            this.gp_IotSys_ManualMode.Controls.Add(this.btn_TagSel);
-            this.gp_IotSys_ManualMode.Controls.Add(this.btn_WaitRmOn);
-            this.gp_IotSys_ManualMode.Controls.Add(this.btn_TagReSel);
-            this.gp_IotSys_ManualMode.Font = new System.Drawing.Font("타이포_쌍문동 B", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.gp_IotSys_ManualMode.Location = new System.Drawing.Point(499, 254);
-            this.gp_IotSys_ManualMode.Name = "gp_IotSys_ManualMode";
-            this.gp_IotSys_ManualMode.Size = new System.Drawing.Size(226, 110);
-            this.gp_IotSys_ManualMode.TabIndex = 68;
-            this.gp_IotSys_ManualMode.TabStop = false;
-            this.gp_IotSys_ManualMode.Text = "Manual Mode";
-            // 
             // MainControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -3649,6 +3667,7 @@
             this.gp_ExerciseSys_timer.PerformLayout();
             this.gp_IotSys.ResumeLayout(false);
             this.gp_IotSys.PerformLayout();
+            this.gp_IotSys_ManualMode.ResumeLayout(false);
             this.gp_IotSys_timer.ResumeLayout(false);
             this.gp_IotSys_timer.PerformLayout();
             this.tc_serialPort_IOT.ResumeLayout(false);
@@ -3658,7 +3677,6 @@
             this.tp_G2.PerformLayout();
             this.tp_G3.ResumeLayout(false);
             this.tp_G3.PerformLayout();
-            this.gp_IotSys_ManualMode.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -3935,6 +3953,9 @@
         private System.Windows.Forms.RadioButton rb_IOT_Group2;
         private System.Windows.Forms.RadioButton rb_IOT_Group1;
         private System.Windows.Forms.GroupBox gp_IotSys_ManualMode;
+        private System.IO.Ports.SerialPort serialPort_PCM;
+        private System.IO.Ports.SerialPort serialPort_IOT;
+        private System.IO.Ports.SerialPort serialPort_TRM;
     }
 }
 

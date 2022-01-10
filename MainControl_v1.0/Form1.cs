@@ -9,14 +9,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Ports;
+using System.Threading;
+using Timer = System.Threading.Timer;
 
 namespace MainControl_v1._0
 {
     public partial class MainControl : Form
     {
-        private SerialPort serialPort_PCM = new SerialPort();
-        private SerialPort serialPort_IOT = new SerialPort();
-        private SerialPort serialPort_TRM = new SerialPort();
+        //private SerialPort serialPort_PCM = new SerialPort();
+        //private SerialPort serialPort_IOT = new SerialPort();
+        //private SerialPort serialPort_TRM = new SerialPort();
+
         public MainControl()
         {
             InitializeComponent();
@@ -43,13 +46,59 @@ namespace MainControl_v1._0
         }
         private void MySerialReceived_PCM(object s, EventArgs e)                                    //여기에서 수신 데이타를 사용자의 용도에 따라 처리한다.
         {
-            string data_pcm = serialPort_PCM.ReadExisting();                                        //시리얼 통신으로 들어온 데이터 data_pcm에 저장
-            //char ReceiveData = (char)serialPort_PCM.ReadByte();                                   //시리얼 버터에 수신된 데이타를 ReceiveData 읽어오기
-            //textBox1.Text = "\r\n" + ReceiveData.ToString();
-            tb_serialPort_PCM.AppendText(data_pcm);                                                 //텍스트 박스에 시리얼 통신으로 받은 데이터 출력                                             
-            //textBox1.Text = textBox1.Text + string.Format("{0:X2}", ReceiveData);                 //int 형식을 string형식으로 변환하여 출력
+            string data_pcm = serialPort_PCM.ReadTo("\n");     //원래:ReadExisting 으로 사용햇음    //시리얼 통신으로 들어온 데이터 data_pcm에 저장
+            //tb_serialPort_PCM.AppendText("RAW: " + data_pcm+"why"+"\r\n");
+            if (data_pcm.StartsWith("lb"))
+            {
+                //Console.WriteLine(data_pcm);
+                lb_string_split(data_pcm);
+            }
+            else
+            {
+                if ((data_pcm.Substring(data_pcm.Length - 2)).Contains("\b"))
+                {
+                    tb_serialPort_PCM.AppendText(data_pcm.Substring(0,data_pcm.Length - 2));
+                }
+                else
+                {
+                    tb_serialPort_PCM.AppendText(data_pcm + "\r\n");
+                }//텍스트 박스에 시리얼 통신으로 받은 데이터 출력     
+            }
         }
+        private void lb_string_split(String PCM_STR)
+        {
+            String[] pcm_str = PCM_STR.Split('_');
+            String lb_name = "";
+            lb_name += pcm_str[0];
+            lb_name += '_';
+            lb_name += pcm_str[1];
+            lb_name += "_state";
 
+            switch (pcm_str[2][0])
+            {
+                case 'A':
+                    lb_color_change(lb_name, "장치 연결",Color.Red, Color.White);
+                    break;
+
+                case 'R':
+                    lb_color_change(lb_name, "장치 활성", Color.Yellow, Color.Black);
+                    break;
+
+                case 'S':
+                    lb_color_change(lb_name, "장치 세팅", Color.White, Color.Black);
+                    break;
+
+                case 'B':
+                    lb_color_change(lb_name, "봉쇄 가능", Color.Purple, Color.White);
+                    break;
+            }
+        }
+        private void lb_color_change(String lb_name, String text, Color lb_BackColor, Color lb_FontColor)
+        {
+            this.Controls.Find(lb_name, true).FirstOrDefault().Text = text;
+            this.Controls.Find(lb_name, true).FirstOrDefault().BackColor = lb_BackColor;
+            this.Controls.Find(lb_name, true).FirstOrDefault().ForeColor = lb_FontColor;
+        }
         private void btn_serialPort_PCM_conn_Click(object sender, EventArgs e)
         {
             if (!serialPort_PCM.IsOpen)                                                             //시리얼포트가 열려 있지 않으면
@@ -97,13 +146,13 @@ namespace MainControl_v1._0
             else
                 MessageBox.Show((String)"IOT 통신 연결을 먼저 진행해주세요!");
         }
-            private void serialPort_IOT_DataReceived(object sender, SerialDataReceivedEventArgs e)      //수신 이벤트가 발생하면 이 부분이 실행된다.
+        private void serialPort_IOT_DataReceived(object sender, SerialDataReceivedEventArgs e)      //수신 이벤트가 발생하면 이 부분이 실행된다.
         {
             this.Invoke(new EventHandler(MySerialReceived_IOT));                                    //메인 쓰레드와 수신 쓰레드의 충돌 방지를 위해 Invoke 사용. MySerialReceived로 이동하여 추가 작업 실행.
         }
         private void MySerialReceived_IOT(object s, EventArgs e)                                    //여기에서 수신 데이타를 사용자의 용도에 따라 처리한다.
         {
-            string data_iot = serialPort_IOT.ReadExisting();                                        //시리얼 통신으로 들어온 데이터 data_pcm에 저장
+            string data_iot = serialPort_IOT.ReadTo("\n");                                        //시리얼 통신으로 들어온 데이터 data_pcm에 저장
             //char ReceiveData = (char)serialPort_IOT.ReadByte();                                   //시리얼 버터에 수신된 데이타를 ReceiveData 읽어오기
             //textBox1.Text = "\r\n" + ReceiveData.ToString();
             tb_serialPort_IOT.AppendText(data_iot);                                                 //텍스트 박스에 시리얼 통신으로 받은 데이터 출력                                             
@@ -163,7 +212,7 @@ namespace MainControl_v1._0
         }
         private void MySerialReceived_TRM(object s, EventArgs e)                                    //여기에서 수신 데이타를 사용자의 용도에 따라 처리한다.
         {
-            string data_trm = serialPort_TRM.ReadExisting();                                        //시리얼 통신으로 들어온 데이터 data_pcm에 저장
+            string data_trm = serialPort_TRM.ReadTo("\n");                                  //시리얼 통신으로 들어온 데이터 data_pcm에 저장
             //char ReceiveData = (char)serialPort_TRM.ReadByte();                                   //시리얼 버터에 수신된 데이타를 ReceiveData 읽어오기
             //textBox1.Text = "\r\n" + ReceiveData.ToString();
             tb_serialPort_TRM.AppendText(data_trm);                                                 //텍스트 박스에 시리얼 통신으로 받은 데이터 출력                                             
@@ -226,6 +275,7 @@ namespace MainControl_v1._0
             lb_GameSys_Clock.Text = remaing_show;                                                   //남은 시간 출력
             Gamesys_TimeAction();
         }
+
         private void Gamesys_TimeAction()
         {
             if (OS_start == true)
@@ -233,7 +283,7 @@ namespace MainControl_v1._0
                 //처음 게임시작하고 나레이션if문
                 switch (game_remaing_time)
                 {
-                    case ((34 * 60) + 52):                              //34분 52초 일때
+                    case ( (34 * 60) + 52):                              //34분 52초 일때
                         serialPort_PCM.Write("VO2\n");                      //(나레이션) VO2; 술래등장 전 까지는 장치사용이 불가합니다.
                         break;
                     case ((34 * 60) + 43):                              //34분 43초 일때
@@ -259,9 +309,10 @@ namespace MainControl_v1._0
                         break;
                     case ((32 * 60) + 0):                               //32분 00초 일때
                         serialPort_PCM.Write("VO6\n");                      //(나레이션) VO6; 술래가 결정되었습니다. 
+                        serialPort_PCM.Write("AA _G\n");
                         break;
                     case ((30 * 60) + 0):                               //30분 00초 일때
-                        serialPort_PCM.Write("N30\n");                     //(나레이션) 30분 남았습니다. 
+                        serialPort_PCM.Write("VN30\n");                     //(나레이션) 30분 남았습니다. 
                         break;
                     case ((29 * 60) + 0):                                 //29분 00초 일때
                         serialPort_PCM.Write("R_on\n");                     //(통신) 생명장치 한개 활성화 
@@ -276,7 +327,7 @@ namespace MainControl_v1._0
                         serialPort_PCM.Write("R_on\n");                     //(통신) 생명장치 한개 활성화 
                         break;
                     case ((20 * 60) + 0):                               //20분 00초 일때
-                        serialPort_PCM.Write("N20\n");                      //(나레이션) 20분 남았습니다.
+                        serialPort_PCM.Write("VN20\n");                      //(나레이션) 20분 남았습니다.
                         serialPort_PCM.Write("R_on\n");                     //(통신) 생명장치 한개 활성화 
                         serialPort_PCM.Write("BLOCK_ON2\n");                //(통신) 술래의 2번째 능력 활성화 
                         break;
@@ -293,16 +344,16 @@ namespace MainControl_v1._0
                         serialPort_PCM.Write("R_on\n");                     //(통신) 생명장치 한개 활성화 
                         break;
                     case ((10 * 60) + 0):                               //10분 00초 일때
-                        serialPort_PCM.Write("N10\n");                      //(나레이션) 10분 남았습니다
+                        serialPort_PCM.Write("VN10\n");                      //(나레이션) 10분 남았습니다
                         break;
                     case ((5 * 60) + 0):                                //5분 00초 일때
-                        serialPort_PCM.Write("N5\n");                       //(나레이션) 5분 남았습니다
+                        serialPort_PCM.Write("VN5\n");                       //(나레이션) 5분 남았습니다
                         break;
                     case ((3 * 60) + 0):                                //3분 00초 일때
-                        serialPort_PCM.Write("N3\n");                       //(나레이션) 3분 남았습니다
+                        serialPort_PCM.Write("VN3\n");                       //(나레이션) 3분 남았습니다
                         break;
                     case ((1 * 60) + 0):                                //1분 00초 일때
-                        serialPort_PCM.Write("N1\n");                       //(나레이션) 1분 남았습니다
+                        serialPort_PCM.Write("VN1\n");                       //(나레이션) 1분 남았습니다
                         break;
                     case (0):                                           //0분 00초 일때
                         serialPort_PCM.Write("VO14\n");                     //(나레이션) 탈출제한 시간이 끝났습니다. 
@@ -336,18 +387,18 @@ namespace MainControl_v1._0
         {
             if (rb_GameSys_EasyMode.Checked == true)                    // 뉴비 모드가 선택되어있을때
             {
-                playmode = 0;                                               // 뉴비모드 = 0;
-                PCM_send("PM_0\n");                                         // (통신) 플레이 모드 PM_0으로 전송
+                playmode = 1;                                               // 뉴비모드 = 0;
+                PCM_send("PM_1\n");                                         // (통신) 플레이 모드 PM_0으로 전송
             }
             else if (rb_GameSys_NormalMode.Checked == true)             // 일반 모드가 선택되어있을때
             {
-                playmode = 1;                                               // 뉴비모드 = 1;
-                PCM_send("PM_1\n");                                         // (통신) 플레이 모드 PM_1으로 전송
+                playmode = 2;                                               // 뉴비모드 = 1;
+                PCM_send("PM_2\n");                                         // (통신) 플레이 모드 PM_1으로 전송
             }
             else if (rb_GameSys_HardMode.Checked == true)               // 고인물 모드가 선택되어있을때
             {
-                playmode = 2;                                               // 뉴비모드 = 2;
-                PCM_send("PM_2\n");                                         // (통신) 플레이 모드 PM_2으로 전송
+                playmode = 3;                                               // 뉴비모드 = 2;
+                PCM_send("PM_3\n");                                         // (통신) 플레이 모드 PM_2으로 전송
             }
         }
         private void Radiobutton_PlayGroup()
@@ -379,7 +430,18 @@ namespace MainControl_v1._0
                 Radiobutton_PlayGroup();                                        //(함수) iot그룹에서 술래 정해진것 통신 보는 함수
                 Radiobutton_PlayPeople();                                       //(함수) 플레이 인원 설정된데로 통신 보내기
                 Radiobutton_PlayMode();                                         //(함수) 플레이 모드 설정된데도 통신 보내기
-                serialPort_IOT.Write("LN\n");                                   //(IOT통신) iot글러브 3분 술래결정
+                switch (playgroup)
+                {
+                    case 1:
+                        serialPort_IOT.Write("P1GA_A\n");                                   //(IOT통신) iot글러브 3분 술래결정
+                        break;
+                    case 2:
+                        serialPort_IOT.Write("P2GA_A\n");                                   //(IOT통신) iot글러브 3분 술래결정
+                        break;
+                    case 3:
+                        serialPort_IOT.Write("P3GA_A\n");                                   //(IOT통신) iot글러브 3분 술래결정
+                        break;
+                }
                 serialPort_PCM.Write("VO1\n");                                  //(나레이션)탈출제한 시간이 끝났습니다.
                 timer_GameSys.Enabled = true;                                   //(타이머) 타이머 시작
                 OS_start = true;                                                //(변수) OS시작
@@ -394,7 +456,7 @@ namespace MainControl_v1._0
         {
             if (serialPort_PCM.IsOpen)
             {
-                serialPort_PCM.Write("AR\n");                                   //(통신) 전체장치 연결 (비활성화)
+                serialPort_PCM.Write("AA_R\n");                                   //(통신) 전체장치 연결 (비활성화)
                 game_remaing_time = GAMETIME * 60;                              //(변수) 남은시간 초기화
                 lb_GameSys_Clock.Text = "35:00";                                //남은시간 35:00로 출력
             }
@@ -403,19 +465,19 @@ namespace MainControl_v1._0
         }
         private void btn_GameSys_SetupMode_Click(object sender, EventArgs e)
         {
-            PCM_send("AF\n");                                                   //(통신) 전체장치 세팅 모드 (비활성화)
+            PCM_send("AA_S\n");                                                   //(통신) 전체장치 세팅 모드 (비활성화)
         }
 
         private void btn_GameSys_GameStop_Click(object sender, EventArgs e)
         {
-            serialPort_PCM.Write("AF\n");                                       //(통신) 전체장치 세팅 모드 (비활성화)
+            serialPort_PCM.Write("AA_S\n");                                       //(통신) 전체장치 세팅 모드 (비활성화)
             timer_GameSys.Enabled = false;                                      //(타이머) 타이머 정지
             OS_start = false;                                                   //(변수) OS종료
         }
 
         private void btn_GameSys_VideoPlay_Click(object sender, EventArgs e)
         {
-            PCM_send("VN\n");                                                   //(통신) 영상재생
+            PCM_send("WP_P\n");                                                   //(통신) 영상재생
         }
 
         private void btn_GameSys_OS_Start_Click(object sender, EventArgs e)
@@ -470,6 +532,214 @@ namespace MainControl_v1._0
             else
                 MessageBox.Show((String)"PCM 통신 연결을 먼저 진행해주세요!");
         }
+
+        private char one_itemforROOM(ComboBox cb_device_room)
+        {
+            switch (cb_device_room.SelectedIndex)
+            {
+                case 0: //ALL
+                    return 'A';
+
+                case 1: //BG
+                    return 'B';
+
+                case 2: //LG
+                    return 'L';
+
+                case 3: //CG
+                    return 'C';
+
+                case 4: //SG
+                    return 'S';
+
+                case 5: //TG
+                    return 'T';
+
+                default:
+                    return 'A';
+            }
+        }
+        private char two_itemforROOM(ComboBox cb_device_room)
+        {
+            switch (cb_device_room.SelectedIndex)
+            {
+                case 0: //ALL
+                    return 'A';
+
+                case 1: //BAMBOO
+                    return 'B';
+                case 2: //BAMBOO
+                    return 'B';
+
+                case 3: //LIVING
+                    return 'L';
+                case 4: //LIVING
+                    return 'L';
+
+                case 5: //CELLERAGE
+                    return 'C';
+                case 6: //CELLERAGE
+                    return 'C';
+
+                case 7: //SLEEPING
+                    return 'S';
+                case 8: //SLEEPING
+                    return 'S';
+
+                case 9: //TOILET
+                    return 'T';
+                case 10: //TOILET
+                    return 'T';
+
+                default:
+                    return 'A';
+            }
+        }
+        private char itemforState(ComboBox cb_device_state)
+        {
+            switch (cb_device_state.SelectedIndex)
+            {
+                case 0: //장치 연결
+                    return 'A';
+
+                case 1: //장치 활성화 
+                    return 'R';
+
+                case 2: //장치 세팅
+                    return 'S';
+
+                case 3: //장치 연결확인
+                    return 'C';
+
+                case 4: //봉쇄 활성화
+                    return 'B';
+
+                default:
+                    return 'A';
+            }
+        }
+        private void btn_Generator_send_Click(object sender, EventArgs e)
+        {
+            String send_Arduio = "";
+            send_Arduio += one_itemforROOM(cb_Generator_name);
+            send_Arduio += "G _";
+            send_Arduio += itemforState(cb_Generator_state);
+            send_Arduio += '\n';
+            PCM_send(send_Arduio);
+        }
+
+        private void btn_Escape_send_Click(object sender, EventArgs e)
+        {
+            String send_Arduio = "";
+            send_Arduio += one_itemforROOM(cb_Escape_name);
+            send_Arduio += "E _";
+            send_Arduio += itemforState(cb_Escape_state);
+            send_Arduio += '\n';
+            PCM_send(send_Arduio);
+        }
+
+        private void btn_Revive_send_Click(object sender, EventArgs e)
+        {
+            String send_Arduio = "";
+            send_Arduio += two_itemforROOM(cb_Revive_name);
+
+            Console.WriteLine(cb_Revive_name.SelectedIndex);
+
+            if (cb_Revive_name.SelectedIndex == 0)
+                send_Arduio += "R _";
+            else if(cb_Revive_name.SelectedIndex%2 == 1)
+                send_Arduio += "R1_";
+            else if (cb_Revive_name.SelectedIndex % 2 == 0)
+                send_Arduio += "R2_";
+            else
+                send_Arduio += "why_";
+            send_Arduio += itemforState(cb_Revive_state);
+            send_Arduio += '\n';
+            PCM_send(send_Arduio);
+        }
+
+        private void btn_Itembox_send_Click(object sender, EventArgs e)
+        {
+            String send_Arduio = "";
+            send_Arduio += two_itemforROOM(cb_Itembox_name);
+            if (cb_Itembox_name.SelectedIndex == 0)
+                send_Arduio += "I _";
+            else if (cb_Itembox_name.SelectedIndex % 2 == 1)
+                send_Arduio += "I1_";
+            else if (cb_Itembox_name.SelectedIndex % 2 == 0)
+                send_Arduio += "I2_";
+            send_Arduio += itemforState(cb_Itembox_state);
+            send_Arduio += '\n';
+            PCM_send(send_Arduio);
+        }
+
+        private void btn_Door_send_Click(object sender, EventArgs e)
+        {
+            String send_Arduio = "";
+            switch (cb_Door_name.SelectedIndex)
+            {
+                case 0:
+                    send_Arduio += 'A';
+                    break;
+                case 1:
+                    send_Arduio += 'B';
+                    break;
+                case 2:
+                    send_Arduio += 'L';
+                    break;
+                case 3:
+                    send_Arduio += 'S';
+                    break;
+                case 4:
+                    send_Arduio += 'T';
+                    break;
+            }
+            send_Arduio += "D _";
+            send_Arduio += itemforState(cb_Door_state);
+            send_Arduio += '\n';
+            PCM_send(send_Arduio);
+        }
+
+        private void btn_Vent_send_Click(object sender, EventArgs e)
+        {
+            String send_Arduio = "";
+            switch (cb_Vent_name.SelectedIndex)
+            {
+                case 0: //장치 연결
+                    send_Arduio += "AV _";
+                    break;
+                case 1: //장치 활성화 
+                    send_Arduio += "BV1_";
+                    break;
+                case 2: //장치 세팅
+                    send_Arduio += "BV2_";
+                    break;
+                case 3: //장치 연결확인
+                    send_Arduio += "LV _";
+                    break;
+                case 4: //봉쇄 활성화
+                    send_Arduio += "CV _";
+                    break;
+                case 5: //봉쇄 활성화
+                    send_Arduio += "SV _";
+                    break;
+                case 6: //봉쇄 활성화
+                    send_Arduio += "TV _";
+                    break;
+            }
+            send_Arduio += itemforState(cb_Vent_state);
+            send_Arduio += '\n';
+            PCM_send(send_Arduio);
+        }
+
+        private void btn_Temple_send_Click(object sender, EventArgs e)
+        {
+            String send_Arduio = "";
+            send_Arduio += "LT _";
+            send_Arduio += itemforState(cb_Temple_state);
+            send_Arduio += '\n';
+            PCM_send(send_Arduio);
+        }
         // **************************************************************       GAME sys MAIN CODE          *******************************************************************************************
         // **************************************************************       IOT sys MAIN CODE          *******************************************************************************************
         const int IOT_TIME = 3;                                                                             //3분;   총 IOT술래 결정까지 시간 저장 변수 
@@ -498,7 +768,7 @@ namespace MainControl_v1._0
         private void Radiobutton_Group1()                                                                   //(함수) RADIOBTN에서 IOT 그룹 1번중에 술래 찾는 함수
         {
             if (rb_G1P1.Checked == true)                                                                    // G1P1이 술래 일때
-            {   
+            {
                 playgroup1_tagger = 1;                                                                          // G1P1을 술래로 저장   
                 IOT_send("G1_P1\n");                                                                            //(IOT통신) G1P1으로 통신 전송
                 lb_G1P1_state.Text = "Tagger";
@@ -636,7 +906,7 @@ namespace MainControl_v1._0
             }
             else
                 MessageBox.Show((String)"IOT 통신 연결을 먼저 진행해주세요!");
-            
+
         }
 
         private void btn_TagSel_Click(object sender, EventArgs e)
@@ -653,7 +923,7 @@ namespace MainControl_v1._0
 
         private void btn_WaitRmOn_Click(object sender, EventArgs e)
         {
-            if(serialPort_IOT.IsOpen)
+            if (serialPort_IOT.IsOpen)
             {
                 serialPort_IOT.Write("AR_B\n");                                  //(나레이션)탈출제한 시간이 끝났습니다.
             }
@@ -719,7 +989,7 @@ namespace MainControl_v1._0
                     case 0:
                         break;
 
-                    case TRM_TIME*60:
+                    case TRM_TIME * 60:
                         TRM_start = false;
                         break;
                 }

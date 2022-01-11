@@ -187,13 +187,13 @@
             this.lb_TD_state = new System.Windows.Forms.Label();
             this.lb_SD_name = new System.Windows.Forms.Label();
             this.lb_SD_state = new System.Windows.Forms.Label();
-            this.lb_GD_name = new System.Windows.Forms.Label();
+            this.lb_BD_name = new System.Windows.Forms.Label();
             this.btn_Door_send = new System.Windows.Forms.Button();
-            this.lb_GD_state = new System.Windows.Forms.Label();
-            this.lb_LD_name = new System.Windows.Forms.Label();
+            this.lb_BD_state = new System.Windows.Forms.Label();
+            this.lb_CD_name = new System.Windows.Forms.Label();
             this.cb_Door_state = new System.Windows.Forms.ComboBox();
             this.cb_Door_name = new System.Windows.Forms.ComboBox();
-            this.lb_LD_state = new System.Windows.Forms.Label();
+            this.lb_CD_state = new System.Windows.Forms.Label();
             this.gp_Temple = new System.Windows.Forms.GroupBox();
             this.btn_Temple_send = new System.Windows.Forms.Button();
             this.lb_LT_name = new System.Windows.Forms.Label();
@@ -1471,7 +1471,7 @@
             // lb_LE_state
             // 
             this.lb_LE_state.AutoSize = true;
-            this.lb_LE_state.BackColor = System.Drawing.Color.Black;
+            this.lb_LE_state.BackColor = System.Drawing.Color.DimGray;
             this.lb_LE_state.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lb_LE_state.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.lb_LE_state.Location = new System.Drawing.Point(325, 42);
@@ -1483,7 +1483,7 @@
             // lb_BE_state
             // 
             this.lb_BE_state.AutoSize = true;
-            this.lb_BE_state.BackColor = System.Drawing.Color.Black;
+            this.lb_BE_state.BackColor = System.Drawing.Color.DimGray;
             this.lb_BE_state.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lb_BE_state.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.lb_BE_state.Location = new System.Drawing.Point(173, 44);
@@ -2207,13 +2207,13 @@
             this.gp_Door.Controls.Add(this.lb_TD_state);
             this.gp_Door.Controls.Add(this.lb_SD_name);
             this.gp_Door.Controls.Add(this.lb_SD_state);
-            this.gp_Door.Controls.Add(this.lb_GD_name);
+            this.gp_Door.Controls.Add(this.lb_BD_name);
             this.gp_Door.Controls.Add(this.btn_Door_send);
-            this.gp_Door.Controls.Add(this.lb_GD_state);
-            this.gp_Door.Controls.Add(this.lb_LD_name);
+            this.gp_Door.Controls.Add(this.lb_BD_state);
+            this.gp_Door.Controls.Add(this.lb_CD_name);
             this.gp_Door.Controls.Add(this.cb_Door_state);
             this.gp_Door.Controls.Add(this.cb_Door_name);
-            this.gp_Door.Controls.Add(this.lb_LD_state);
+            this.gp_Door.Controls.Add(this.lb_CD_state);
             this.gp_Door.Font = new System.Drawing.Font("타이포_쌍문동 B", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.gp_Door.Location = new System.Drawing.Point(282, 399);
             this.gp_Door.Name = "gp_Door";
@@ -2266,15 +2266,15 @@
             this.lb_SD_state.TabIndex = 40;
             this.lb_SD_state.Text = "OFFLINE";
             // 
-            // lb_GD_name
+            // lb_BD_name
             // 
-            this.lb_GD_name.AutoSize = true;
-            this.lb_GD_name.Font = new System.Drawing.Font("HelveticaInserat", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_GD_name.Location = new System.Drawing.Point(142, 22);
-            this.lb_GD_name.Name = "lb_GD_name";
-            this.lb_GD_name.Size = new System.Drawing.Size(123, 19);
-            this.lb_GD_name.TabIndex = 39;
-            this.lb_GD_name.Text = "_______GD_______";
+            this.lb_BD_name.AutoSize = true;
+            this.lb_BD_name.Font = new System.Drawing.Font("HelveticaInserat", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_BD_name.Location = new System.Drawing.Point(142, 22);
+            this.lb_BD_name.Name = "lb_BD_name";
+            this.lb_BD_name.Size = new System.Drawing.Size(123, 19);
+            this.lb_BD_name.TabIndex = 39;
+            this.lb_BD_name.Text = "_______BD_______";
             // 
             // btn_Door_send
             // 
@@ -2287,27 +2287,27 @@
             this.btn_Door_send.UseVisualStyleBackColor = true;
             this.btn_Door_send.Click += new System.EventHandler(this.btn_Door_send_Click);
             // 
-            // lb_GD_state
+            // lb_BD_state
             // 
-            this.lb_GD_state.AutoSize = true;
-            this.lb_GD_state.BackColor = System.Drawing.Color.Black;
-            this.lb_GD_state.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_GD_state.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.lb_GD_state.Location = new System.Drawing.Point(172, 42);
-            this.lb_GD_state.Name = "lb_GD_state";
-            this.lb_GD_state.Size = new System.Drawing.Size(64, 16);
-            this.lb_GD_state.TabIndex = 40;
-            this.lb_GD_state.Text = "OFFLINE";
+            this.lb_BD_state.AutoSize = true;
+            this.lb_BD_state.BackColor = System.Drawing.Color.Black;
+            this.lb_BD_state.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_BD_state.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.lb_BD_state.Location = new System.Drawing.Point(172, 42);
+            this.lb_BD_state.Name = "lb_BD_state";
+            this.lb_BD_state.Size = new System.Drawing.Size(64, 16);
+            this.lb_BD_state.TabIndex = 40;
+            this.lb_BD_state.Text = "OFFLINE";
             // 
-            // lb_LD_name
+            // lb_CD_name
             // 
-            this.lb_LD_name.AutoSize = true;
-            this.lb_LD_name.Font = new System.Drawing.Font("HelveticaInserat", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_LD_name.Location = new System.Drawing.Point(289, 22);
-            this.lb_LD_name.Name = "lb_LD_name";
-            this.lb_LD_name.Size = new System.Drawing.Size(129, 19);
-            this.lb_LD_name.TabIndex = 1;
-            this.lb_LD_name.Text = "________LD_______";
+            this.lb_CD_name.AutoSize = true;
+            this.lb_CD_name.Font = new System.Drawing.Font("HelveticaInserat", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_CD_name.Location = new System.Drawing.Point(434, 22);
+            this.lb_CD_name.Name = "lb_CD_name";
+            this.lb_CD_name.Size = new System.Drawing.Size(130, 19);
+            this.lb_CD_name.TabIndex = 1;
+            this.lb_CD_name.Text = "________CD_______";
             // 
             // cb_Door_state
             // 
@@ -2342,17 +2342,17 @@
             this.cb_Door_name.TabIndex = 39;
             this.cb_Door_name.Text = "ALL";
             // 
-            // lb_LD_state
+            // lb_CD_state
             // 
-            this.lb_LD_state.AutoSize = true;
-            this.lb_LD_state.BackColor = System.Drawing.Color.Black;
-            this.lb_LD_state.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_LD_state.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.lb_LD_state.Location = new System.Drawing.Point(326, 42);
-            this.lb_LD_state.Name = "lb_LD_state";
-            this.lb_LD_state.Size = new System.Drawing.Size(64, 16);
-            this.lb_LD_state.TabIndex = 6;
-            this.lb_LD_state.Text = "OFFLINE";
+            this.lb_CD_state.AutoSize = true;
+            this.lb_CD_state.BackColor = System.Drawing.Color.Black;
+            this.lb_CD_state.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_CD_state.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.lb_CD_state.Location = new System.Drawing.Point(470, 42);
+            this.lb_CD_state.Name = "lb_CD_state";
+            this.lb_CD_state.Size = new System.Drawing.Size(64, 16);
+            this.lb_CD_state.TabIndex = 6;
+            this.lb_CD_state.Text = "OFFLINE";
             // 
             // gp_Temple
             // 
@@ -3846,13 +3846,13 @@
         private System.Windows.Forms.Label lb_TD_state;
         private System.Windows.Forms.Label lb_SD_name;
         private System.Windows.Forms.Label lb_SD_state;
-        private System.Windows.Forms.Label lb_GD_name;
+        private System.Windows.Forms.Label lb_BD_name;
         private System.Windows.Forms.Button btn_Door_send;
-        private System.Windows.Forms.Label lb_GD_state;
-        private System.Windows.Forms.Label lb_LD_name;
+        private System.Windows.Forms.Label lb_BD_state;
+        private System.Windows.Forms.Label lb_CD_name;
         private System.Windows.Forms.ComboBox cb_Door_state;
         private System.Windows.Forms.ComboBox cb_Door_name;
-        private System.Windows.Forms.Label lb_LD_state;
+        private System.Windows.Forms.Label lb_CD_state;
         private System.Windows.Forms.Panel panel7;
         private System.Windows.Forms.Panel panel6;
         private System.Windows.Forms.GroupBox gp_GameSys_time;

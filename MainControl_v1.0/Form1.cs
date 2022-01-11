@@ -14,15 +14,24 @@ using Timer = System.Threading.Timer;
 
 namespace MainControl_v1._0
 {
+
     public partial class MainControl : Form
     {
+        System.Threading.Timer PCM_ThreadTimer;
+        System.Threading.Timer IOT_ThreadTimer;
+        delegate void TimerEventFiredDelegate_PCM();
+        delegate void TimerEventFiredDelegate_IOT();
+        //delegate void TimerEventFiredDelegate();
         //private SerialPort serialPort_PCM = new SerialPort();
         //private SerialPort serialPort_IOT = new SerialPort();
         //private SerialPort serialPort_TRM = new SerialPort();
-
         public MainControl()
         {
             InitializeComponent();
+            PCM_ThreadTimer = new System.Threading.Timer(PCM_timerCallBack);
+            IOT_ThreadTimer = new System.Threading.Timer(IOT_timerCallBack);
+            PCM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+            IOT_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
         }
         private void MainControl_Load(object sender, EventArgs e)
         {
@@ -44,6 +53,7 @@ namespace MainControl_v1._0
         {
             this.Invoke(new EventHandler(MySerialReceived_PCM));                                    //메인 쓰레드와 수신 쓰레드의 충돌 방지를 위해 Invoke 사용. MySerialReceived로 이동하여 추가 작업 실행.
         }
+        /*
         private void MySerialReceived_PCM(object s, EventArgs e)                                    //여기에서 수신 데이타를 사용자의 용도에 따라 처리한다.
         {
             string data_pcm = serialPort_PCM.ReadTo("\n");     //원래:ReadExisting 으로 사용햇음    //시리얼 통신으로 들어온 데이터 data_pcm에 저장
@@ -55,15 +65,25 @@ namespace MainControl_v1._0
             }
             else
             {
+                //tb_serialPort_PCM.AppendText(data_pcm + "\r\n");
                 if ((data_pcm.Substring(data_pcm.Length - 2)).Contains("\b"))
                 {
-                    tb_serialPort_PCM.AppendText(data_pcm.Substring(0,data_pcm.Length - 2));
+                    tb_serialPort_PCM.AppendText(data_pcm.Substring(0, data_pcm.Length - 2));
                 }
                 else
                 {
                     tb_serialPort_PCM.AppendText(data_pcm + "\r\n");
                 }//텍스트 박스에 시리얼 통신으로 받은 데이터 출력     
             }
+        }*/
+        private void MySerialReceived_PCM(object s, EventArgs e)                                    //여기에서 수신 데이타를 사용자의 용도에 따라 처리한다.
+        {
+            string data_temp = serialPort_PCM.ReadLine();
+            //data_pcm += data_temp;     //원래:ReadExisting 으로 사용햇음    //시리얼 통신으로 들어온 데이터 data_pcm에 저장
+            if (data_temp.StartsWith("lb"))
+                lb_string_split(data_temp);
+            else
+                tb_serialPort_PCM.AppendText(data_temp + "\r\n");
         }
         private void lb_string_split(String PCM_STR)
         {
@@ -266,6 +286,19 @@ namespace MainControl_v1._0
         uint headcount = 5;                                                                         //5;     몇명에서 플레이 하는지 저장하는 변수 기본세팅은 5명
         uint playmode = 1;                                                                          //1;     플레이 모드설정 easymode = 0; normalMode = 1; HardMode = 2; 
         uint playgroup = 1;                                                                         //1;     플레이 그룹설정 G1 = 1; G2 = 2; G3 = 3; 
+        void PCM_timerCallBack(Object state)
+        {
+            BeginInvoke(new TimerEventFiredDelegate_PCM(PCM_timerWork));
+        }
+        private void PCM_timerWork()
+        {
+            game_remaing_time -= 1;                                                                      //초 마다 타이머 함수 실행되면 -1해 남은시간 줄여줌
+            game_remaing_min = game_remaing_time / 60;                                                        //남은 시간 분과 초로 불리해주는 작업
+            game_remaing_sec = game_remaing_time % 60;                                                        //남은 시간 분과 초로 불리해주는 작업
+            string remaing_show = game_remaing_min.ToString("00") + ":" + game_remaing_sec.ToString("00");    //남은 시간 uint -> String으로 변환하는 작업
+            lb_GameSys_Clock.Text = remaing_show;                                                   //남은 시간 출력
+            Gamesys_TimeAction();
+        }
         private void timer_GameSys_Tick(object sender, EventArgs e)
         {
             game_remaing_time -= 1;                                                                      //초 마다 타이머 함수 실행되면 -1해 남은시간 줄여줌
@@ -359,7 +392,7 @@ namespace MainControl_v1._0
                         serialPort_PCM.Write("VO14\n");                     //(나레이션) 탈출제한 시간이 끝났습니다. 
                         serialPort_PCM.Write("AF\n");                       //(통신) 전체 장치 세팅모드로 전환
                         OS_start = false;                                   // OS_START BOOL변수 종료
-                        timer_GameSys.Enabled = false;                      // 게임 타이머 정지
+                        PCM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);   //timer_GameSys.Enabled = false;// 게임 타이머 정지
                         MessageBox.Show((String)"TIME OVER");               // 타임 오버 메세지창 출력
                         break;
                 }
@@ -403,7 +436,7 @@ namespace MainControl_v1._0
         }
         private void Radiobutton_PlayGroup()
         {
-            timer_IotSys.Enabled = true;                                //(타이머) iot타이머 시작
+            IOT_ThreadTimer.Change(0,1000);                             //timer_IotSys.Enabled = true; //(타이머) iot타이머 시작
             if (rb_IOT_Group1.Checked == true)                          // IOT그룹 G1이 선택되었을때
             {
                 playgroup = 1;                                              // IOT GROUP 1번으로 저장
@@ -443,7 +476,7 @@ namespace MainControl_v1._0
                         break;
                 }
                 serialPort_PCM.Write("VO1\n");                                  //(나레이션)탈출제한 시간이 끝났습니다.
-                timer_GameSys.Enabled = true;                                   //(타이머) 타이머 시작
+                PCM_ThreadTimer.Change(0,1000);                                 //timer_GameSys.Enabled = true;//(타이머) 타이머 시작
                 OS_start = true;                                                //(변수) OS시작
                 game_remaing_time = GAMETIME * 60;                              //(변수) 남은시간 초기화
             }
@@ -456,7 +489,7 @@ namespace MainControl_v1._0
         {
             if (serialPort_PCM.IsOpen)
             {
-                serialPort_PCM.Write("AA_R\n");                                   //(통신) 전체장치 연결 (비활성화)
+                serialPort_PCM.Write("AA _R\n");                                   //(통신) 전체장치 연결 (비활성화)
                 game_remaing_time = GAMETIME * 60;                              //(변수) 남은시간 초기화
                 lb_GameSys_Clock.Text = "35:00";                                //남은시간 35:00로 출력
             }
@@ -471,7 +504,7 @@ namespace MainControl_v1._0
         private void btn_GameSys_GameStop_Click(object sender, EventArgs e)
         {
             serialPort_PCM.Write("AA_S\n");                                       //(통신) 전체장치 세팅 모드 (비활성화)
-            timer_GameSys.Enabled = false;                                      //(타이머) 타이머 정지
+            PCM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //timer_GameSys.Enabled = false;                                      //(타이머) 타이머 정지
             OS_start = false;                                                   //(변수) OS종료
         }
 
@@ -488,7 +521,7 @@ namespace MainControl_v1._0
                 Radiobutton_PlayPeople();                                       //(함수) 플레이 인원 설정된데로 통신 보내기
                 Radiobutton_PlayMode();                                         //(함수) 플레이 모드 설정된데도 통신 보내기
                 serialPort_PCM.Write("VO1\n");                                  //(나레이션)탈출제한 시간이 끝났습니다.
-                timer_GameSys.Enabled = true;                                   //(타이머) 타이머 시작
+                PCM_ThreadTimer.Change(0,1000); //timer_GameSys.Enabled = true;                                   //(타이머) 타이머 시작
                 OS_start = true;                                                //(변수) OS시작
                 game_remaing_time = GAMETIME * 60;                              //(변수) 남은시간 초기화
             }
@@ -520,15 +553,17 @@ namespace MainControl_v1._0
         private void btn_GameSys_timerStart_Click(object sender, EventArgs e)
         {
             if (serialPort_PCM.IsOpen)
-                timer_GameSys.Enabled = true;                                   //(타이머) 타이머 시작
+                PCM_ThreadTimer.Change(0, 1000);                                //timer_GameSys.Enabled = true; //(타이머) 타이머 시작
             else
                 MessageBox.Show((String)"PCM 통신 연결을 먼저 진행해주세요!");
+            
+
         }
 
         private void btn_GameSys_timerStop_Click(object sender, EventArgs e)
         {
             if (serialPort_PCM.IsOpen)
-                timer_GameSys.Enabled = false;                                   //(타이머) 타이머 정지
+                PCM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //timer_GameSys.Enabled = false;//(타이머) 타이머 정지
             else
                 MessageBox.Show((String)"PCM 통신 연결을 먼저 진행해주세요!");
         }
@@ -749,6 +784,26 @@ namespace MainControl_v1._0
         uint playgroup1_tagger = 1;
         uint playgroup2_tagger = 2;
         uint playgroup3_tagger = 3;
+        void IOT_timerCallBack(Object state)
+        {
+            BeginInvoke(new TimerEventFiredDelegate_IOT(IOT_timerWork));
+        }
+        private void IOT_timerWork()
+        {
+            iot_remaing_time -= 1;                                                                          //초 마다 타이머 함수 실행되면 -1해 남은시간 줄여줌
+            iot_remaing_min = iot_remaing_time / 60;                                                        //남은 시간 분과 초로 불리해주는 작업
+            iot_remaing_sec = iot_remaing_time % 60;                                                        //남은 시간 분과 초로 불리해주는 작업
+            string remaing_show = iot_remaing_min.ToString("0") + ":" + iot_remaing_sec.ToString("00");     //남은 시간 uint -> String으로 변환하는 작업
+            lb_IotSys_Clock.Text = remaing_show;                                                            //남은 시간 출력
+            switch (iot_remaing_time)
+            {
+                case 0:
+                    IOT_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //timer_IotSys.Enabled = false;                                                           //(타이머) iot타이머 정지
+                    iot_remaing_time = IOT_TIME * 60;
+                    lb_IotSys_Clock.Text = "3:00";
+                    break;
+            }
+        }
         private void timer_IotSys_Tick(object sender, EventArgs e)
         {
             iot_remaing_time -= 1;                                                                          //초 마다 타이머 함수 실행되면 -1해 남은시간 줄여줌
@@ -914,7 +969,7 @@ namespace MainControl_v1._0
             if (serialPort_IOT.IsOpen)
             {
                 Radiobutton_PlayGroup();                                        //(함수) iot그룹에서 술래 정해진것 통신 보는 함수
-                timer_IotSys.Enabled = true;                                    //(타이머) iot타이머 시작
+                IOT_ThreadTimer.Change(0, 1000);                                //timer_IotSys.Enabled = true;  //(타이머) iot타이머 시작
                 serialPort_IOT.Write("LN\n");                                   //(통신) IOT 글러브 술래결정 통신 보냄
             }
             else
@@ -946,7 +1001,7 @@ namespace MainControl_v1._0
         {
             if (serialPort_IOT.IsOpen)
             {
-                timer_IotSys.Enabled = true;                                    //(타이머) iot타이머 시작
+                IOT_ThreadTimer.Change(0,1000);                                 //timer_IotSys.Enabled = true;//(타이머) iot타이머 시작
                 iot_remaing_time = IOT_TIME * 60;                               //(변수) iot타이머 시간 리셋
             }
             else
@@ -957,7 +1012,7 @@ namespace MainControl_v1._0
         {
             if (serialPort_IOT.IsOpen)
             {
-                timer_IotSys.Enabled = false;                                    //(타이머) iot타이머 정지
+                IOT_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //timer_IotSys.Enabled = false; //(타이머) iot타이머 정지
             }
             else
                 MessageBox.Show((String)"IOT 통신 연결을 먼저 진행해주세요!");

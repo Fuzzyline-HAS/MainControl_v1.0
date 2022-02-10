@@ -143,7 +143,8 @@ namespace MainControl_v1._0
             switch (pcm_str[2][0])
             {
                 case 'A':   lb_color_change(lb_name, "장치 준비", Color.Red, Color.White);                                                      break;
-                case 'R':   lb_color_change(lb_name, "장치 활성", Color.Yellow, Color.Black);                                                   break;
+                case 'R':   lb_color_change(lb_name, "장치 활성", Color.Yellow, Color.Black);                                                  
+                            revivalOpenShow(pcm_str[1], lb_name);                                                                                         break;
                 case 'S':   lb_color_change(lb_name, "장치 세팅", Color.White, Color.Black);
                             lb_name_color_change(block_name, Color.LightGray, Color.Black);                                                     break;
                 case 'B':   lb_name_color_change(block_name, Color.Purple, Color.WhiteSmoke);                                                   break;
@@ -176,7 +177,7 @@ namespace MainControl_v1._0
                     
             }
         }
-        private void revivalOpenChk(string reviveName)
+        private void revivalOpenChk(string reviveName)  //생명장치 열렸는지 확인하는 함수 부분
         {
             for (int i = 0; i < 10; i++)
             {
@@ -188,6 +189,19 @@ namespace MainControl_v1._0
                         open_revive_cnt += 1;
                         selfrevive_cnt = headcount + open_revive_cnt;
                         lb_GameSys_UsedRevive_cnt.Text = open_revive_cnt.ToString();
+                    }
+                }
+            }
+        }
+        private void revivalOpenShow(string reviveName, string label_name)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                if (reviveName.Contains(revivalMachine[i].deviceName))
+                {
+                    if (revivalMachine[i].deviceState == true)
+                    {
+                        lb_color_change(label_name, "장치 열림", Color.Blue, Color.White);
                     }
                 }
             }
@@ -238,8 +252,8 @@ namespace MainControl_v1._0
                 serialPort_PCM.Parity = Parity.None;
                 serialPort_PCM.DataReceived += new SerialDataReceivedEventHandler(serialPort_PCM_DataReceived); //PCM 시리얼 데이터가 들어오면 "serialPort_PCM_DataReceived"함수로 전송
                 serialPort_PCM.Open();                                                              //시리얼포트 열기
+                //serialPort_PCM.Write("\n");
 
-                PCM_send(" ");
                 lb_serialPort_PCM.Text = "포트가 열렸습니다.";
                 tb_serialPort_PCM.Text = "FuzzyLine Studio presents \r\nHIDE AND SEEK OS v1.0 \r\nprogramed by BBangJun\r\n";
                 cb_serialPort_PCM.Enabled = false;                                                  //COM포트설정 콤보박스 비활성화
@@ -333,8 +347,12 @@ namespace MainControl_v1._0
         // **************************************************************TRM CONTORL 시리얼 통신 셋팅 부분 *******************************************************************************************
         private void TRM_send(string data_input)                                                    //
         {
-            if (serialPort_TRM.IsOpen)  serialPort_TRM.Write(data_input);                           //텍스트박스의 텍스트를 시리얼통신으로 송신
-            else                        MessageBox.Show((String)"TRM 통신 연결을 먼저 진행해주세요!");
+            if (serialPort_TRM.IsOpen)
+            {
+                serialPort_TRM.Write(data_input + "\n");                           //텍스트박스의 텍스트를 시리얼통신으로 송신
+            }
+            else 
+                MessageBox.Show((String)"TRM 통신 연결을 먼저 진행해주세요!");
         }
         private void serialPort_TRM_DataReceived(object sender, SerialDataReceivedEventArgs e)      //수신 이벤트가 발생하면 이 부분이 실행된다.
         {
@@ -352,19 +370,21 @@ namespace MainControl_v1._0
                 tb_serialPort_TRM.AppendText(data_temp.Substring(0, data_temp.Length - 2));
             }
             else if (data_temp.Contains("waiting show"))
-            { 
-                ExerciseSys_PlayGroup("SHOW");
+            {
+                Radiobutton_PlayGroup("SHOW");
+                //ExerciseSys_PlayGroup("SHOW");
                 //iotSys_PlayGroup("SHOW");
             }
-            else if (data_temp.Contains("IOT START"))
+            else if (data_temp.Contains("VIDEO CLOSE"))
             {
-                ExerciseSys_PlayGroup("LN");
-                MessageBox.Show((String)"GAME START 늘러주세요!");
-                //iotSys_PlayGroup("LN");
+                //ExerciseSys_PlayGroup("LN");
+                //MessageBox.Show((String)"GAME START 늘러주세요!");
             }
-            else if (data_temp.Contains("IOT READY"))
+            else if (data_temp.Contains("SCREEN UP"))
             {
-                ExerciseSys_PlayGroup("LR");
+                Radiobutton_PlayGroup("LR");
+                TRM_send("ES _U");
+                //ExerciseSys_PlayGroup("LR");
                 //iotSys_PlayGroup("LR");
             }
             else if (data_temp.Contains("waiting lightoff"))
@@ -513,6 +533,8 @@ namespace MainControl_v1._0
                     case ((34 * 60) + 59):  PCM_send("VO1");      break;  //34분 59초 일때    //(나레이션) VO1; 술래등장 전 까지는 장치사용이 불가합니다.
                     case ((34 * 60) + 52):  PCM_send("VO2");      break;  //34분 52초 일때    //(나레이션) VO2; 술래등장 전 까지는 장치사용이 불가합니다.
                     case ((34 * 60) + 43):  PCM_send("VO3");      break;  //34분 43초 일때    //(나레이션) VO3; 흩어져서 경계하세요
+                    case ((34 * 60) + 30):  TRM_send("ES _C");    break;
+                    case ((34 * 60) + 27):  TRM_send("ES _D");    break;
                     case ((33 * 60) + 52):  PCM_send("VO2");      break;  //33분 52초 일때    //(나레이션) VO2; 술래등장 전 까지는 장치사용이 불가합니다.
                     case ((33 * 60) + 43):  PCM_send("VO3");      break;  //33분 43초 일때    //(나레이션) VO3; 흩어져서 경계하세요
                     case ((32 * 60) + 52):  PCM_send("VO2");      break;  //32분 52초 일때    //(나레이션) VO2; 술래등장 전 까지는 장치사용이 불가합니다.
@@ -598,7 +620,6 @@ namespace MainControl_v1._0
         private void Radiobutton_PlayGroup(String iotData)
         {
             String iotSend = "";
-            IOT_ThreadTimer.Change(0,1000);                             //timer_IotSys.Enabled = true; //(타이머) iot타이머 시작
             if (rb_IOT_Group1.Checked == true)                          // IOT그룹 G1이 선택되었을때
             {
                 playgroup = 1;                                              // IOT GROUP 1번으로 저장
@@ -628,9 +649,11 @@ namespace MainControl_v1._0
                 Radiobutton_PlayPeople();                                       //(함수) 플레이 인원 설정된데로 통신 보내기
                 Radiobutton_PlayMode();                                         //(함수) 플레이 모드 설정된데도 통신 보내기
                 PCM_ThreadTimer.Change(0,1000);                                 //timer_GameSys.Enabled = true;//(타이머) 타이머 시작
+                IOT_ThreadTimer.Change(0, 1000);                                //timer_IotSys.Enabled = true; //(타이머) iot타이머 시작
                 Radiobutton_PlayGroup("LN");                                    //(함수) iot그룹에서 술래 정해진것 통신 보는 함수
                 OS_start = true;                                                //(변수) OS시작
                 game_remaing_time = GAMETIME * 60;                              //(변수) 남은시간 초기화
+                TRM_send("ES _O");
             }
             else
                 MessageBox.Show((String)"PCM 통신 연결을 먼저 진행해주세요!");
@@ -1205,17 +1228,14 @@ namespace MainControl_v1._0
             String iotSend = "";
             if (rb_ExerciseSys_iotG1.Checked == true)                          // IOT그룹 G1이 선택되었을때
             {
-                Radiobutton_Group1();
                 iotSend = "G1_";                                            //(IOT통신) IOT통신으로 PG1 전송
             }
             else if (rb_ExerciseSys_iotG2.Checked == true)                     // IOT그룹 G2이 선택되었을때
             {
-                Radiobutton_Group2();
                 iotSend = "G2_";                                         //(IOT통신) IOT통신으로 PG2 전송
             }
             else if (rb_ExerciseSys_iotG3.Checked == true)                     // IOT그룹 G3이 선택되었을때
             {
-                Radiobutton_Group3();
                 iotSend = "G3_"; ;                                         //(IOT통신) IOT통신으로 PG2 전송
             }
             iotSend += iotData;
@@ -1269,7 +1289,7 @@ namespace MainControl_v1._0
             {
                 if (ExerciseRm_status.Contains("Revival Open") && trm_device_time < 60)
                 {
-                    TRM_send("EC _OFF\n");
+                    TRM_send("EC _OFF");
                     TRM_ThreadTimer.Change(0, 1000);                                    // timer_ExerciseSys.Enabled = true;//(타이머) TRM타이머 시작
                     TRM_DeviceTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //decivetimer 동작 정지
                     ExerciseSys_cbScenrio_sel(16);
@@ -1278,14 +1298,14 @@ namespace MainControl_v1._0
                 switch (trm_device_time)
                 {
                     case ((0 * 60) + 1): ExerciseSys_cbScenrio_sel(13); break;
-                    case ((0 * 60) + 6): TRM_send("ER _R\n"); break;
+                    case ((0 * 60) + 6): TRM_send("ER _R"); break;
                     case ((1 * 60)):
-                        TRM_send("ER _O\n"); ExerciseSys_cbScenrio_sel(14); Console.Write("1분경과");
+                        TRM_send("ER _O"); ExerciseSys_cbScenrio_sel(14); Console.Write("1분경과");
                         break;
                     case ((1 * 60) + 10):
                         ExerciseSys_cbScenrio_sel(15); trm_device_time = 0;
-                        TRM_send("ER _S\n");
-                        TRM_send("EC _OFF\n");
+                        TRM_send("ER _S");
+                        TRM_send("EC _OFF");
                         using_device = ' ';
                         TRM_ThreadTimer.Change(0, 1000);                                    // timer_ExerciseSys.Enabled = true;//(타이머) TRM타이머 시작
                         TRM_DeviceTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //decivetimer 동작 정지
@@ -1313,7 +1333,7 @@ namespace MainControl_v1._0
                     case ((0 * 60) + 26): ExerciseSys_cbScenrio_sel(22); break;
                     case ((3 * 60)): ExerciseSys_cbScenrio_sel(23); break;
                     case ((3 * 60) + 10):
-                        trm_device_time = 0; TRM_send("EI1_S\n");   TRM_send("EI2_S\n");
+                        trm_device_time = 0; TRM_send("EI1_S");   TRM_send("EI2_S");
                         using_device = ' ';
                         TRM_ThreadTimer.Change(0, 1000);                                    // timer_ExerciseSys.Enabled = true;//(타이머) TRM타이머 시작
                         TRM_DeviceTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //decivetimer 동작 정지
@@ -1326,7 +1346,7 @@ namespace MainControl_v1._0
                 {
                     TRM_ThreadTimer.Change(0, 1000);                                    // timer_ExerciseSys.Enabled = true;//(타이머) TRM타이머 시작
                     TRM_DeviceTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //decivetimer 동작 정지
-                    ExerciseSys_cbScenrio_sel(31); TRM_send("EE _O\n");
+                    ExerciseSys_cbScenrio_sel(31); TRM_send("EE _O");
                     trm_device_time = 0;
                 }
                 switch (trm_device_time)
@@ -1335,7 +1355,7 @@ namespace MainControl_v1._0
                     case ((0 * 60) + 16): ExerciseSys_cbScenrio_sel(28); break;
                     case ((0 * 60) + 23): ExerciseSys_cbScenrio_sel(29); break;
                     case ((3 * 60)):
-                        ExerciseSys_cbScenrio_sel(30); trm_device_time = 0; TRM_send("EG _F\n"); TRM_send("EE _O\n");
+                        ExerciseSys_cbScenrio_sel(30); trm_device_time = 0; TRM_send("EG _F"); TRM_send("EE _O");
                         using_device = ' ';
                         TRM_ThreadTimer.Change(0, 1000);                                    // timer_ExerciseSys.Enabled = true;//(타이머) TRM타이머 시작
                         TRM_DeviceTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //decivetimer 동작 정지
@@ -1357,13 +1377,13 @@ namespace MainControl_v1._0
                     case ((0 * 60) + 16): ExerciseSys_cbScenrio_sel(100); break;
                     case ((0 * 60) + 31): ExerciseSys_cbScenrio_sel(35); break;
                     case ((0 * 60) + 46): ExerciseSys_cbScenrio_sel(100); break;
-                    case ((1 * 60) + 1): ExerciseSys_cbScenrio_sel(36); TRM_send("ER _A\n"); break;
+                    case ((1 * 60) + 1): ExerciseSys_cbScenrio_sel(36); TRM_send("ER _A"); break;
                     case ((1 * 60) + 16): ExerciseSys_cbScenrio_sel(100); break;
 
                     case ((1 * 60) + 30):
                         ExerciseSys_cbScenrio_sel(37); break;
                     case ((1 * 60) + 38):
-                        trm_device_time = 0; TRM_send("ED _L\n");
+                        trm_device_time = 0; TRM_send("ED _L");
                         using_device = ' ';
                         TRM_ThreadTimer.Change(0, 1000);                                    // timer_ExerciseSys.Enabled = true;//(타이머) TRM타이머 시작
                         TRM_DeviceTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //decivetimer 동작 정지
@@ -1418,8 +1438,8 @@ namespace MainControl_v1._0
                     case ((0 * 60) + 56):   ExerciseSys_cbScenrio_sel(100);     break;
                     case ((0 * 60) + 57):   ExerciseSys_cbScenrio_sel(6);       break;
                     case ((1 * 60) + 4):    ExerciseSys_cbScenrio_sel(7);       break;
-                    case ((1 * 60) + 7):    break;  //ExerciseSys_PlayGroup("KILLER_COLOR"); break;
-                    case ((1 * 60) + 11):   ExerciseSys_cbScenrio_sel(100); break;  //ExerciseSys_cbScenrio_sel(100); iotSys_PlayGroup("LR"); break;
+                    case ((1 * 60) + 7):    ExerciseSys_PlayGroup("KILLER_COLOR"); break;
+                    case ((1 * 60) + 11):   ExerciseSys_cbScenrio_sel(100); ExerciseSys_PlayGroup("LR"); break;
                     case ((1 * 60) + 13):   ExerciseSys_cbScenrio_sel(8);       break;
                     case ((1 * 60) + 18):   ExerciseSys_cbScenrio_sel(100);     break;
                     case ((1 * 60) + 19):   ExerciseSys_cbScenrio_sel(9);       break;
@@ -1432,17 +1452,17 @@ namespace MainControl_v1._0
                                             TRM_DeviceTimer.Change(0, 1000); // 다른 타이머 동작 Device_timerWork
                                                                                 break;
                     //아이템상자 동작
-                    case ((2 * 60) + 22):   ExerciseSys_cbScenrio_sel(17); TRM_send("ER _A\n"); break;
+                    case ((2 * 60) + 22):   ExerciseSys_cbScenrio_sel(17); TRM_send("ER _A"); break;
                     case ((2 * 60) + 31):   break;//ExerciseSys_cbScenrio_sel(100);     
                     case ((2 * 60) + 32):   ExerciseSys_cbScenrio_sel(18);      break;
-                    case ((2 * 60) + 39):   using_device = 'I';  TRM_send("EI1_R\n"); TRM_send("EI2_R\n");
+                    case ((2 * 60) + 39):   using_device = 'I';  TRM_send("EI1_R"); TRM_send("EI2_R");
                                             TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false; //(타이머) TRM타이머 정지
                                             TRM_DeviceTimer.Change(0, 1000); // 다른 타이머 동작 Device_timerWork
                                                                                 break;
                     //발전기
-                    case ((2 * 60) + 55):   ExerciseSys_cbScenrio_sel(25); TRM_send("EI1_S\n"); TRM_send("EI2_S\n"); break;
-                    case ((3 * 60) + 5):    ExerciseSys_cbScenrio_sel(26); TRM_send("EI1_A\n"); TRM_send("EI2_A\n");
-                                            using_device = 'G'; TRM_send("EG _R\n");
+                    case ((2 * 60) + 55):   ExerciseSys_cbScenrio_sel(25); TRM_send("EI1_S"); TRM_send("EI2_S"); break;
+                    case ((3 * 60) + 5):    ExerciseSys_cbScenrio_sel(26); TRM_send("EI1_A"); TRM_send("EI2_A");
+                                            using_device = 'G'; TRM_send("EG _R");
                                             TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false; //(타이머) TRM타이머 정지
                                             TRM_DeviceTimer.Change(0, 1000); // 다른 타이머 동작 Device_timerWork
                                                                                 break;
@@ -1450,39 +1470,39 @@ namespace MainControl_v1._0
                     case ((3 * 60) + 13):   ExerciseSys_cbScenrio_sel(32);      break;
                     case ((3 * 60) + 19):   ExerciseSys_cbScenrio_sel(100);     break;
                     case ((3 * 60) + 23):   ExerciseSys_cbScenrio_sel(33);      break;
-                    case ((3 * 60) + 29):   ExerciseSys_cbScenrio_sel(100); TRM_send("ED _R\n"); using_device = 'D';
+                    case ((3 * 60) + 29):   ExerciseSys_cbScenrio_sel(100); TRM_send("ED _R"); using_device = 'D';
                                             TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false; //(타이머) TRM타이머 정지
                                             TRM_DeviceTimer.Change(0, 1000); // 다른 타이머 동작 Device_timerWork
                                                                                 break;
 
                     //탈출장치
-                    case ((3 * 60) + 42):   ExerciseSys_cbScenrio_sel(39); TRM_send("EE _R\n"); break;
+                    case ((3 * 60) + 42):   ExerciseSys_cbScenrio_sel(39); TRM_send("EE _R"); break;
                     case ((3 * 60) + 52):   TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false; //(타이머) TRM타이머 정지
-                                            TRM_DeviceTimer.Change(0, 1000); using_device = 'E'; TRM_send("EE _R\n"); // 다른 타이머 동작 Device_timerWork
+                                            TRM_DeviceTimer.Change(0, 1000); using_device = 'E'; TRM_send("EE _R"); // 다른 타이머 동작 Device_timerWork
                                                                                 break;
 
                     case ((3 * 60) + 59):   ExerciseSys_cbScenrio_sel(41);      break;
-                    case ((4 * 60) + 1):    TRM_send("ED _K\n"); TRM_send("EL _EOFF\n"); break;
+                    case ((4 * 60) + 1):    TRM_send("ED _K"); TRM_send("EL _EOFF"); break;
                     case ((4 * 60) + 8):    ExerciseSys_cbScenrio_sel(42);      break;
                     case ((4 * 60) + 9):    ExerciseSys_cbScenrio_sel(100);     break;
 
                     //덕트
-                    case ((4 * 60) + 12):   TRM_send("ED _V\n");                break;
+                    case ((4 * 60) + 12):   TRM_send("ED _V");                break;
                     case ((4 * 60) + 14):   ExerciseSys_cbScenrio_sel(43);      break;
                     case ((4 * 60) + 16):   //ExerciseSys_cbScenrio_sel(100); 
-                                            TRM_send("ED _V\n"); TRM_send("EM _M12\n"); break;
-                    case ((4 * 60) + 21):   TRM_send("ED _V\n");                break;
+                                            TRM_send("ED _V"); TRM_send("EM _M12"); break;
+                    case ((4 * 60) + 21):   TRM_send("ED _V");                break;
                     case ((4 * 60) + 23):   ExerciseSys_cbScenrio_sel(44);      break;
                     case ((4 * 60) + 30):   //ExerciseSys_cbScenrio_sel(100); 
                                             //TRM_send("EM _M13\n");
                                             TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false; //(타이머) TRM타이머 정지
-                                            TRM_DeviceTimer.Change(0, 1000); using_device = 'V'; TRM_send("EV _R\n"); // 다른 타이머 동작 Device_timerWork
+                                            TRM_DeviceTimer.Change(0, 1000); using_device = 'V'; TRM_send("EV _R"); // 다른 타이머 동작 Device_timerWork
                                                                                 break;
 
                     case ((4 * 60) + 38):   ExerciseSys_cbScenrio_sel(46);      break;
                     case ((4 * 60) + 48):   ExerciseSys_cbScenrio_sel(100);     break;
-                    case ((4 * 60) + 49):   ExerciseSys_cbScenrio_sel(47); TRM_send("EL _EON\n"); TRM_send("EA _S\n"); break;
-                    case ((4 * 60) + 56):   TRM_send("EA _R\n");
+                    case ((4 * 60) + 49):   ExerciseSys_cbScenrio_sel(47); TRM_send("EL _EON"); TRM_send("EA _S"); break;
+                    case ((4 * 60) + 56):   TRM_send("EA _R"); TRM_send("EE _A"); TRM_send("ED _testing");
                                             TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false;
                                                                                 break;
                 }
@@ -1491,7 +1511,6 @@ namespace MainControl_v1._0
 
         private void btn_ExerciseSys_Start_Click(object sender, EventArgs e)        //'훈련소 시작' 버튼 클릭
         {
-            
             if (serialPort_TRM.IsOpen)
             {
                 TRM_start = true;
@@ -1499,7 +1518,7 @@ namespace MainControl_v1._0
                 trm_time = 0;                                                       //  (타이머) TRM 장치 타이머 시간 초기화    
                 TRM_MainTimer.Change(0, 1000);                                      //  timer_ExerciseSys.Enabled = true;//(타이머) TRM 전체 시간타이머 시작    
                 TRM_ThreadTimer.Change(0, 1000);                                    //  timer_ExerciseSys.Enabled = true;//(타이머) TRM 장치 타이머 시작    
-                TRM_send("EL _WON\n");
+                TRM_send("EL _WON");
             }
             else
                 MessageBox.Show((String)"TRM 통신 연결을 먼저 진행해주세요!");
@@ -1509,8 +1528,8 @@ namespace MainControl_v1._0
         {
             if (serialPort_TRM.IsOpen)
             {
-                TRM_send("EA _A\n");
-                TRM_send("EL _EOFF\n");
+                TRM_send("EA _A");
+                TRM_send("EL _EOFF");
                 //TRM_send("EL _WON\n");
             }
             else
@@ -1521,7 +1540,7 @@ namespace MainControl_v1._0
         {
             if (serialPort_TRM.IsOpen)
             {
-                TRM_send("EA _S\n");
+                TRM_send("EA _S");
             }
             else
                 MessageBox.Show((String)"TRM 통신 연결을 먼저 진행해주세요!");
@@ -1531,6 +1550,7 @@ namespace MainControl_v1._0
         {
             if (serialPort_TRM.IsOpen)
             {
+                ExerciseRm_status = "";
                 TRM_ThreadTimer.Change(0, 1000);                                    // timer_ExerciseSys.Enabled = true;//(타이머) TRM 장치 타이머 시작   
                 TRM_MainTimer.Change(0, 1000);                                      // timer_ExerciseSys.Enabled = true;//(타이머) TRM 전체 시간타이머 시작 
             }
@@ -1552,12 +1572,14 @@ namespace MainControl_v1._0
 
         private void btn_ExerciseSys_Stop_Click(object sender, EventArgs e)         //'훈련소 정지' 버튼 클릭
         {
+            ExerciseRm_status = "";
             TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false; //(타이머 TRM 장치 타이머 정지
             TRM_MainTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false; //(타이머) TRM 전체 시간타이머 정지
             TRM_DeviceTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //decivetimer 동작 정지
             lb_ExerciseSys_Clock.Text = "00:00";                                                      //남은 시간 출력
             lb_ExerciseSys_maintime.Text = "0:00";
             lb_ExerciseSys_subtime.Text = "0:00";
+             
             trm_main_time = 0;                                                                      //0*60;     남은시간 전체 초로 카운팅 저장하고 있는 변수
             trm_time = 0;                                                                           //0*60;     남은시간 전체 초로 카운팅 저장하고 있는 변수
             trm_device_time = 0;                                                                    //0*60;     남은시간 전체 초로 카운팅 저장하고 있는 변수
@@ -1606,21 +1628,21 @@ namespace MainControl_v1._0
         {
             switch (cb_ExerciseSys_DeivceState.SelectedIndex)
             {
-                case 0: return "A\n"; //장치 연결
-                case 1: return "R\n"; //장치 활성화
-                case 2: return "S\n"; //장치 세팅
-                case 3: return "C\n"; //장치 연결확인
-                case 4: return "B\n"; //봉쇄 활성화
-                case 5: return "O\n"; //장치 오픈
-                case 6: return "L\n"; //장치 세팅
-                case 7: return "V\n"; //장치 연결확인
-                case 8: return "E\n"; //봉쇄 활성화
-                case 9: return "F\n"; //장치 오픈
-                case 10: return "E\n"; //장치 오픈
-                case 11: return "scenario\n";
-                case 12: return "testing\n";
-                case 13: return "K\n";
-                default:return "A\n";
+                case 0: return "A"; //장치 연결
+                case 1: return "R"; //장치 활성화
+                case 2: return "S"; //장치 세팅
+                case 3: return "C"; //장치 연결확인
+                case 4: return "B"; //봉쇄 활성화
+                case 5: return "O"; //장치 오픈
+                case 6: return "L"; //장치 세팅
+                case 7: return "V"; //장치 연결확인
+                case 8: return "E"; //봉쇄 활성화
+                case 9: return "F"; //장치 오픈
+                case 10: return "E"; //장치 오픈
+                case 11: return "scenario";
+                case 12: return "testing";
+                case 13: return "K";
+                default:return "A";
             }
         }
 
@@ -1636,56 +1658,56 @@ namespace MainControl_v1._0
         {
             switch (ScenarioIndex)
             {
-                case 0: TRM_send("VE1\n");      TRM_send("EA _A\n"); TRM_send("EL _EOFF\n"); TRM_send("EL _WON\n"); TRM_send("ED _scenario\n");     break;  //#1
-                case 1: TRM_send("VE2\n");      TRM_send("ED _scenario\n");                                                                         break;  //#2
-                case 2: TRM_send("VE3\n");      TRM_send("EM _M1\n"); TRM_send("ED _scenario\n");                                                   break;  //#3
-                case 3: TRM_send("VE4\n");      TRM_send("EM _M2\n");                                                                               break;  //#4
-                case 4: TRM_send("VE5\n");                                                                                                          break;  //#5
-                case 5: TRM_send("VE6\n");      TRM_send("EM _M3\n");                                                                               break;  //#6
-                case 6: TRM_send("VE7_1\n");                                                                                                        break;  //#7-1
-                case 7: TRM_send("VE7_2\n");                                                                                                        break;  //#7-2
-                case 8: TRM_send("VE7_3\n");                                                                                                        break;  //#7-3
-                case 9: TRM_send("VE8\n");      TRM_send("EM _M4\n");                                                                               break;  //#8
-                case 10: TRM_send("VE9_1\n");   TRM_send("EM _M4-2\n"); TRM_send("EC _ON\n");                                                       break;  //#9-1
-                case 11: TRM_send("VE9_2\n");   TRM_send("EM _M4-3\n"); TRM_send("EL _EON\n");                                                      break;  //#9-2
-                case 12: TRM_send("VE9_3\n");   TRM_send("EL _EOFF\n"); TRM_send("EM _M4-4\n"); using_device = 'R';                                 break;  //#9-3
-                case 13: TRM_send("VE9_4\n");   TRM_send("EM _M4-5\n"); TRM_send("EL _EON\n");                                                      break;  //#9-4
-                case 14: TRM_send("VE9_5\n");                                                                                                       break;  //#9-5
-                case 15: TRM_send("VE9_6\n");                                                                                                       break;  //#9-6
-                case 16: TRM_send("VE9_7\n");                                                                                                       break;  //#9-7
-                case 17: TRM_send("VE10\n");    TRM_send("EL _EOFF\n"); TRM_send("EM _M5\n");                                                       break;  //#10
-                case 18: TRM_send("VE11\n");                                                                                                        break;  //#11
-                case 19: TRM_send("VE12\n");                                                                                                        break;  //#12
-                case 20: TRM_send("VE13\n");    TRM_send("EL _EON\n");                                                                              break;  //#13
-                case 21: TRM_send("VE14\n");                                                                                                        break;  //#14
-                case 22: TRM_send("VE15\n");                                                                                                        break;  //#15
-                case 23: TRM_send("VE16_1\n");  TRM_send("EM _M6\n");                                                                               break;  //#16-1
-                case 24: TRM_send("VE16_2\n");  TRM_send("EM _M6\n");                                                                               break;  //#16-2
-                case 25: TRM_send("VE17\n");                                                                                                        break;  //#17
-                case 26: TRM_send("VE18\n");    TRM_send("EL _EOFF\n"); TRM_send("EM _M7\n");                                                       break;  //#18
-                case 27: TRM_send("VE19\n");                                                                                                        break;  //#19
-                case 28: TRM_send("VE20\n");    TRM_send("EL _EON\n");                                                                              break;  //#20
-                case 29: TRM_send("VE21\n");                                                                                                        break;  //#21
-                case 30: TRM_send("VE22_1\n");                                                                                                      break;  //#22-1
-                case 31: TRM_send("VE22_2\n");  TRM_send("EL _EOFF\n"); TRM_send("EM _M8\n");                                                       break;  //#22-2
-                case 32: TRM_send("VE23\n");    TRM_send("EM _M9\n");                                                                               break;  //#23
-                case 33: TRM_send("VE24\n");    TRM_send("EM _M9-2\n");                                                                             break;  //#24
-                case 34: TRM_send("VE25_1\n");  TRM_send("EL _EON\n"); TRM_send("EM _M9-3\n");                                                      break;  //#25-1
-                case 35: TRM_send("VE25_2\n");  TRM_send("EM _M9-3\n");                                                                             break;  //#25-2
-                case 36: TRM_send("VE25_3\n");  TRM_send("EM _M9-3\n");                                                                             break;  //#25-3
-                case 37: TRM_send("VE26_1\n");  TRM_send("EL _EON\n");                                                                              break;  //#26-1
-                case 38: TRM_send("VE26_2\n");  TRM_send("EM _M9-4\n");                                                                             break;  //#26-2
-                case 39: TRM_send("VE27\n");    TRM_send("EM _M10\n");                                                                              break;  //#27
-                case 40: TRM_send("VE28\n");                                                                                                        break;  //#28
-                case 41: TRM_send("VE29\n");                                                                                                        break;  //#29
-                case 42: TRM_send("VE30\n");    TRM_send("EM _M11\n");                                                                              break;  //#30
-                case 43: TRM_send("VE31\n");                                                                                                        break;  //#31
-                case 44: TRM_send("VE32\n");                                                                                                        break;  //#32
-                case 45: TRM_send("VE33\n");    TRM_send("EM _M12-2\n");                                                                            break;  //#33
-                case 46: TRM_send("VE34\n");    TRM_send("EM _M13\n");                                                                              break;  //#34
-                case 47: TRM_send("VE35\n");                                                                                                        break;  //#35
-                case 48: TRM_send("VE36\n");                                                                                                        break;  //#36
-                case 100: TRM_send("EM _OFF\n");                                                                                                    break; //#1000
+                case 0: TRM_send("VE1");      TRM_send("EA _A"); TRM_send("EL _EOFF"); TRM_send("EL _WON"); TRM_send("ED _scenario");     break;  //#1
+                case 1: TRM_send("VE2");      TRM_send("ED _scenario");                                                                         break;  //#2
+                case 2: TRM_send("VE3");      TRM_send("EM _M1"); TRM_send("ED _scenario");                                                   break;  //#3
+                case 3: TRM_send("VE4");      TRM_send("EM _M2");                                                                               break;  //#4
+                case 4: TRM_send("VE5");                                                                                                          break;  //#5
+                case 5: TRM_send("VE6");      TRM_send("EM _M3");                                                                               break;  //#6
+                case 6: TRM_send("VE7_1");                                                                                                        break;  //#7-1
+                case 7: TRM_send("VE7_2");                                                                                                        break;  //#7-2
+                case 8: TRM_send("VE7_3");                                                                                                        break;  //#7-3
+                case 9: TRM_send("VE8");      TRM_send("EM _M4");                                                                               break;  //#8
+                case 10: TRM_send("VE9_1");   TRM_send("EM _M4-2"); TRM_send("EC _ON");                                                       break;  //#9-1
+                case 11: TRM_send("VE9_2");   TRM_send("EM _M4-3"); TRM_send("EL _EON");                                                      break;  //#9-2
+                case 12: TRM_send("VE9_3");   TRM_send("EL _EOFF"); TRM_send("EM _M4-4"); using_device = 'R';                                 break;  //#9-3
+                case 13: TRM_send("VE9_4");   TRM_send("EM _M4-5"); TRM_send("EL _EON");                                                      break;  //#9-4
+                case 14: TRM_send("VE9_5");                                                                                                       break;  //#9-5
+                case 15: TRM_send("VE9_6");                                                                                                       break;  //#9-6
+                case 16: TRM_send("VE9_7");                                                                                                       break;  //#9-7
+                case 17: TRM_send("VE10");    TRM_send("EL _EOFF"); TRM_send("EM _M5");                                                       break;  //#10
+                case 18: TRM_send("VE11");                                                                                                        break;  //#11
+                case 19: TRM_send("VE12");                                                                                                        break;  //#12
+                case 20: TRM_send("VE13");    TRM_send("EL _EON");                                                                              break;  //#13
+                case 21: TRM_send("VE14");                                                                                                        break;  //#14
+                case 22: TRM_send("VE15");                                                                                                        break;  //#15
+                case 23: TRM_send("VE16_1");  TRM_send("EM _M6");                                                                               break;  //#16-1
+                case 24: TRM_send("VE16_2");  TRM_send("EM _M6");                                                                               break;  //#16-2
+                case 25: TRM_send("VE17");                                                                                                        break;  //#17
+                case 26: TRM_send("VE18");    TRM_send("EL _EOFF"); TRM_send("EM _M7");                                                       break;  //#18
+                case 27: TRM_send("VE19");                                                                                                        break;  //#19
+                case 28: TRM_send("VE20");    TRM_send("EL _EON");                                                                              break;  //#20
+                case 29: TRM_send("VE21");                                                                                                        break;  //#21
+                case 30: TRM_send("VE22_1");                                                                                                      break;  //#22-1
+                case 31: TRM_send("VE22_2");  TRM_send("EL _EOFF"); TRM_send("EM _M8");                                                       break;  //#22-2
+                case 32: TRM_send("VE23");    TRM_send("EM _M9");                                                                               break;  //#23
+                case 33: TRM_send("VE24");    TRM_send("EM _M9-2");                                                                             break;  //#24
+                case 34: TRM_send("VE25_1");  TRM_send("EL _EON"); TRM_send("EM _M9-3");                                                      break;  //#25-1
+                case 35: TRM_send("VE25_2");  TRM_send("EM _M9-3");                                                                             break;  //#25-2
+                case 36: TRM_send("VE25_3");  TRM_send("EM _M9-3");                                                                             break;  //#25-3
+                case 37: TRM_send("VE26_1");  TRM_send("EL _EON");                                                                              break;  //#26-1
+                case 38: TRM_send("VE26_2");  TRM_send("EM _M9-4");                                                                             break;  //#26-2
+                case 39: TRM_send("VE27");    TRM_send("EM _M10");                                                                              break;  //#27
+                case 40: TRM_send("VE28");                                                                                                        break;  //#28
+                case 41: TRM_send("VE29");                                                                                                        break;  //#29
+                case 42: TRM_send("VE30");    TRM_send("EM _M11");                                                                              break;  //#30
+                case 43: TRM_send("VE31");                                                                                                        break;  //#31
+                case 44: TRM_send("VE32");                                                                                                        break;  //#32
+                case 45: TRM_send("VE33");    TRM_send("EM _M12-2");                                                                            break;  //#33
+                case 46: TRM_send("VE34");    TRM_send("EM _M13");                                                                              break;  //#34
+                case 47: TRM_send("VE35");                                                                                                        break;  //#35
+                case 48: TRM_send("VE36");                                                                                                        break;  //#36
+                case 100: TRM_send("EM _OFF");                                                                                                    break; //#1000
             }
         }
         private void btn_ExerciseSys_ScenarioSend_Click(object sender, EventArgs e)
@@ -1700,23 +1722,17 @@ namespace MainControl_v1._0
 
         private void btn_ExerciseSys_VideoOn_Click(object sender, EventArgs e)
         {
-            TRM_send("ES _P");
+            TRM_send("EP _P");
         }
 
         private void btn_ExerciseSys_AnimationOn_Click(object sender, EventArgs e)
         {
-            TRM_send("ES _F");
-        }
-
-        private void btn_ExerciseSys_VideoTReStart_Click(object sender, EventArgs e)
-        {
-            TRM_send("ES _R");
+            TRM_send("EP _F");
         }
 
         private void btn_ExerciseSys_VideoStop_Click(object sender, EventArgs e)
         {
-            TRM_send("ES _S");
+            TRM_send("EP _R");
         }
-
     }
 }

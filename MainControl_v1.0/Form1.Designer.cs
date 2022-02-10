@@ -54,12 +54,13 @@
             this.lb_revive_20min = new System.Windows.Forms.Label();
             this.lb_revive_32min = new System.Windows.Forms.Label();
             this.gp_IotSys_Animation = new System.Windows.Forms.GroupBox();
+            this.lb_ExerciseSys_ES = new System.Windows.Forms.Label();
             this.btn_ExerciseSys_AnimationOn = new System.Windows.Forms.Button();
-            this.btn_ExerciseSys_VideoTReStart = new System.Windows.Forms.Button();
+            this.lb_ExerciseSys_ES_State = new System.Windows.Forms.Label();
             this.btn_ExerciseSys_VideoStop = new System.Windows.Forms.Button();
             this.btn_ExerciseSys_VideoOn = new System.Windows.Forms.Button();
-            this.lb_ExerciseSys_ES = new System.Windows.Forms.Label();
-            this.lb_ExerciseSys_ES_State = new System.Windows.Forms.Label();
+            this.lb_ExerciseSys_EP = new System.Windows.Forms.Label();
+            this.lb_ExerciseSys_EP_State = new System.Windows.Forms.Label();
             this.gb_BlockTree = new System.Windows.Forms.GroupBox();
             this.lb_block_4 = new System.Windows.Forms.Label();
             this.lb_block_15min = new System.Windows.Forms.Label();
@@ -687,12 +688,13 @@
             // 
             // gp_IotSys_Animation
             // 
+            this.gp_IotSys_Animation.Controls.Add(this.lb_ExerciseSys_ES);
             this.gp_IotSys_Animation.Controls.Add(this.btn_ExerciseSys_AnimationOn);
-            this.gp_IotSys_Animation.Controls.Add(this.btn_ExerciseSys_VideoTReStart);
+            this.gp_IotSys_Animation.Controls.Add(this.lb_ExerciseSys_ES_State);
             this.gp_IotSys_Animation.Controls.Add(this.btn_ExerciseSys_VideoStop);
             this.gp_IotSys_Animation.Controls.Add(this.btn_ExerciseSys_VideoOn);
-            this.gp_IotSys_Animation.Controls.Add(this.lb_ExerciseSys_ES);
-            this.gp_IotSys_Animation.Controls.Add(this.lb_ExerciseSys_ES_State);
+            this.gp_IotSys_Animation.Controls.Add(this.lb_ExerciseSys_EP);
+            this.gp_IotSys_Animation.Controls.Add(this.lb_ExerciseSys_EP_State);
             this.gp_IotSys_Animation.Font = new System.Drawing.Font("타이포_쌍문동 B", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.gp_IotSys_Animation.Location = new System.Drawing.Point(939, 867);
             this.gp_IotSys_Animation.Name = "gp_IotSys_Animation";
@@ -700,6 +702,16 @@
             this.gp_IotSys_Animation.TabIndex = 72;
             this.gp_IotSys_Animation.TabStop = false;
             this.gp_IotSys_Animation.Text = "영상관리";
+            // 
+            // lb_ExerciseSys_ES
+            // 
+            this.lb_ExerciseSys_ES.AutoSize = true;
+            this.lb_ExerciseSys_ES.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lb_ExerciseSys_ES.Location = new System.Drawing.Point(108, 24);
+            this.lb_ExerciseSys_ES.Name = "lb_ExerciseSys_ES";
+            this.lb_ExerciseSys_ES.Size = new System.Drawing.Size(26, 16);
+            this.lb_ExerciseSys_ES.TabIndex = 74;
+            this.lb_ExerciseSys_ES.Text = "ES";
             // 
             // btn_ExerciseSys_AnimationOn
             // 
@@ -712,16 +724,17 @@
             this.btn_ExerciseSys_AnimationOn.UseVisualStyleBackColor = true;
             this.btn_ExerciseSys_AnimationOn.Click += new System.EventHandler(this.btn_ExerciseSys_AnimationOn_Click);
             // 
-            // btn_ExerciseSys_VideoTReStart
+            // lb_ExerciseSys_ES_State
             // 
-            this.btn_ExerciseSys_VideoTReStart.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btn_ExerciseSys_VideoTReStart.Location = new System.Drawing.Point(109, 89);
-            this.btn_ExerciseSys_VideoTReStart.Name = "btn_ExerciseSys_VideoTReStart";
-            this.btn_ExerciseSys_VideoTReStart.Size = new System.Drawing.Size(90, 33);
-            this.btn_ExerciseSys_VideoTReStart.TabIndex = 70;
-            this.btn_ExerciseSys_VideoTReStart.Text = "영상재시작\r\n";
-            this.btn_ExerciseSys_VideoTReStart.UseVisualStyleBackColor = true;
-            this.btn_ExerciseSys_VideoTReStart.Click += new System.EventHandler(this.btn_ExerciseSys_VideoTReStart_Click);
+            this.lb_ExerciseSys_ES_State.AutoSize = true;
+            this.lb_ExerciseSys_ES_State.BackColor = System.Drawing.Color.Black;
+            this.lb_ExerciseSys_ES_State.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lb_ExerciseSys_ES_State.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.lb_ExerciseSys_ES_State.Location = new System.Drawing.Point(140, 22);
+            this.lb_ExerciseSys_ES_State.Name = "lb_ExerciseSys_ES_State";
+            this.lb_ExerciseSys_ES_State.Size = new System.Drawing.Size(55, 16);
+            this.lb_ExerciseSys_ES_State.TabIndex = 73;
+            this.lb_ExerciseSys_ES_State.Text = "Offline";
             // 
             // btn_ExerciseSys_VideoStop
             // 
@@ -745,27 +758,27 @@
             this.btn_ExerciseSys_VideoOn.UseVisualStyleBackColor = true;
             this.btn_ExerciseSys_VideoOn.Click += new System.EventHandler(this.btn_ExerciseSys_VideoOn_Click);
             // 
-            // lb_ExerciseSys_ES
+            // lb_ExerciseSys_EP
             // 
-            this.lb_ExerciseSys_ES.AutoSize = true;
-            this.lb_ExerciseSys_ES.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lb_ExerciseSys_ES.Location = new System.Drawing.Point(6, 26);
-            this.lb_ExerciseSys_ES.Name = "lb_ExerciseSys_ES";
-            this.lb_ExerciseSys_ES.Size = new System.Drawing.Size(26, 16);
-            this.lb_ExerciseSys_ES.TabIndex = 69;
-            this.lb_ExerciseSys_ES.Text = "ES";
+            this.lb_ExerciseSys_EP.AutoSize = true;
+            this.lb_ExerciseSys_EP.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lb_ExerciseSys_EP.Location = new System.Drawing.Point(6, 26);
+            this.lb_ExerciseSys_EP.Name = "lb_ExerciseSys_EP";
+            this.lb_ExerciseSys_EP.Size = new System.Drawing.Size(26, 16);
+            this.lb_ExerciseSys_EP.TabIndex = 69;
+            this.lb_ExerciseSys_EP.Text = "EP";
             // 
-            // lb_ExerciseSys_ES_State
+            // lb_ExerciseSys_EP_State
             // 
-            this.lb_ExerciseSys_ES_State.AutoSize = true;
-            this.lb_ExerciseSys_ES_State.BackColor = System.Drawing.Color.Black;
-            this.lb_ExerciseSys_ES_State.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lb_ExerciseSys_ES_State.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.lb_ExerciseSys_ES_State.Location = new System.Drawing.Point(38, 24);
-            this.lb_ExerciseSys_ES_State.Name = "lb_ExerciseSys_ES_State";
-            this.lb_ExerciseSys_ES_State.Size = new System.Drawing.Size(55, 16);
-            this.lb_ExerciseSys_ES_State.TabIndex = 68;
-            this.lb_ExerciseSys_ES_State.Text = "Offline";
+            this.lb_ExerciseSys_EP_State.AutoSize = true;
+            this.lb_ExerciseSys_EP_State.BackColor = System.Drawing.Color.Black;
+            this.lb_ExerciseSys_EP_State.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lb_ExerciseSys_EP_State.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.lb_ExerciseSys_EP_State.Location = new System.Drawing.Point(38, 24);
+            this.lb_ExerciseSys_EP_State.Name = "lb_ExerciseSys_EP_State";
+            this.lb_ExerciseSys_EP_State.Size = new System.Drawing.Size(55, 16);
+            this.lb_ExerciseSys_EP_State.TabIndex = 68;
+            this.lb_ExerciseSys_EP_State.Text = "Offline";
             // 
             // gb_BlockTree
             // 
@@ -3789,9 +3802,9 @@
             // 
             // btn_IotTest
             // 
-            this.btn_IotTest.BackColor = System.Drawing.Color.Red;
+            this.btn_IotTest.BackColor = System.Drawing.Color.Gold;
             this.btn_IotTest.Font = new System.Drawing.Font("타이포_쌍문동 B", 8.999999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_IotTest.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.btn_IotTest.ForeColor = System.Drawing.Color.Black;
             this.btn_IotTest.Location = new System.Drawing.Point(6, 29);
             this.btn_IotTest.Name = "btn_IotTest";
             this.btn_IotTest.Size = new System.Drawing.Size(100, 35);
@@ -4806,10 +4819,9 @@
         private System.Windows.Forms.Button btn_ExerciseSys_VideoOn;
         private System.Windows.Forms.Label lb_ExerciseSys_subtime;
         private System.Windows.Forms.Label lb_ExerciseSys_maintime;
-        private System.Windows.Forms.Label lb_ExerciseSys_ES;
-        private System.Windows.Forms.Label lb_ExerciseSys_ES_State;
+        private System.Windows.Forms.Label lb_ExerciseSys_EP;
+        private System.Windows.Forms.Label lb_ExerciseSys_EP_State;
         private System.Windows.Forms.Button btn_ExerciseSys_VideoStop;
-        private System.Windows.Forms.Button btn_ExerciseSys_VideoTReStart;
         private System.Windows.Forms.Label lb_Exercise_device_time;
         private System.Windows.Forms.Label lb_Exercise_trm_time;
         private System.Windows.Forms.RadioButton rb_ExerciseSys_iotG3;
@@ -4874,6 +4886,8 @@
         private System.Windows.Forms.Label lb_revive_11min;
         private System.Windows.Forms.Label lb_revive_7;
         private System.Windows.Forms.Label lb_revive_17min;
+        private System.Windows.Forms.Label lb_ExerciseSys_ES;
+        private System.Windows.Forms.Label lb_ExerciseSys_ES_State;
     }
 }
 

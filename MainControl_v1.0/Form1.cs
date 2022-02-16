@@ -153,8 +153,18 @@ namespace MainControl_v1._0
                     {
                         lb_color_change(lb_name, "수리 완료", Color.Blue, Color.White);
                         generatorFixedChk(pcm_str[1]);
+                        if (rb_GameSys_NightMode.Checked == true)
+                        { 
+                            switch (pcm_str[1][0])
+                            {
+                                case 'B': PCM_send("BL _Z"); break;
+                                case 'L': PCM_send("LL _Z"); break;
+                                case 'C': PCM_send("CL _Z"); break;
+                                case 'S': PCM_send("SL _Z"); break;
+                            }
+                        }
                     }
-                    else if (pcm_str[1].Contains('L'))
+                    else if (pcm_str[1][1] == 'L')
                     {
                         if (pcm_str[1].Contains('A'))
                         {
@@ -168,7 +178,7 @@ namespace MainControl_v1._0
                         else
                             lb_color_change(lb_name, "조명OFF", Color.Gray, Color.White);
                     }
-                    else if (pcm_str[1].Contains('T'))
+                    else if (pcm_str[1][1] == 'T')
                     {
                         PCM_send("VO13"); PCM_send("AA _S");
                         lb_color_change(lb_name, "탈출 완료", Color.Blue, Color.White);
@@ -187,6 +197,8 @@ namespace MainControl_v1._0
                 case 'O':   lb_color_change(lb_name, "장치 열림", Color.Blue, Color.White);    
                             revivalOpenChk(pcm_str[1]);                                                                                         break;
                 case 'I':   temple_collected_chip = Convert.ToInt32(pcm_str[2][1]-48);  lb_GameSys_CollectedTemple_cnt.Text = temple_collected_chip.ToString();
+                            if(rb_GameSys_NightMode.Checked == true)
+                                PCM_send("LL _Z");
                             if (selfrevive_cnt == temple_collected_chip)
                             {
                                 MessageBox.Show((String)"!자가부활모드 확인!");
@@ -203,8 +215,9 @@ namespace MainControl_v1._0
                     }
                     else
                         lb_color_change(lb_name, "조명ON", Color.Yellow, Color.Black);
-                                                                                                                                                  break;
-                case 'X':   lb_color_change(lb_name, "OFFLINE", Color.Black, Color.White);                                                        break;
+                                                                                                                                                break;
+                //case 'Z': lb_color_change(lb_name, "BLINK", Color.Purple, Color.White);                                                         break;
+                case 'X': lb_color_change(lb_name, "OFFLINE", Color.Black, Color.White);                                                        break;
                     
             }
         }
@@ -561,52 +574,76 @@ namespace MainControl_v1._0
                 //처음 게임시작하고 나레이션if문
                 switch (game_remaing_time)
                 {
-                    case ((34 * 60) + 59):  PCM_send("VO1");      break;  //34분 59초 일때    //(나레이션) VO1; 술래등장 전 까지는 장치사용이 불가합니다.
-                    case ((34 * 60) + 52):  PCM_send("VO2");      break;  //34분 52초 일때    //(나레이션) VO2; 술래등장 전 까지는 장치사용이 불가합니다.
-                    case ((34 * 60) + 43):  PCM_send("VO3");      break;  //34분 43초 일때    //(나레이션) VO3; 흩어져서 경계하세요
-                    case ((34 * 60) + 30):  TRM_send("ES _C");    break;
-                    case ((34 * 60) + 27):  TRM_send("ES _D");    break;
-                    case ((33 * 60) + 52):  PCM_send("VO2");      break;  //33분 52초 일때    //(나레이션) VO2; 술래등장 전 까지는 장치사용이 불가합니다.
-                    case ((33 * 60) + 43):  PCM_send("VO3");      break;  //33분 43초 일때    //(나레이션) VO3; 흩어져서 경계하세요
-                    case ((32 * 60) + 52):  PCM_send("VO2");      break;  //32분 52초 일때    //(나레이션) VO2; 술래등장 전 까지는 장치사용이 불가합니다.
-                    case ((32 * 60) + 43):  PCM_send("VO3");      break;  //32분 43초 일때    //(나레이션) VO3; 흩어져서 경계하세요
-                    case ((32 * 60) + 30):  PCM_send("VO4");      break;  //32분 30초 일때    //(나레이션) VO4; 술래결정까지 30초 남았습니다.
-                    case ((32 * 60) + 7):   PCM_send("VO5");      break;  //32분 07초 일때    //(나레이션) VO5; 술래결정까지 5초 남았습니다.
-                    case ((32 * 60) + 0):   PCM_send("VO6");              //32분 00초 일때    //(나레이션) VO6; 술래가 결정되었습니다. 
-                                            PCM_send("PG _R");
-                                            PCM_send(revivalMachine[revive_arr[revive_rnd, 0]].deviceName + "_R");
-                                            PCM_send(revivalMachine[revive_arr[revive_rnd, 1]].deviceName + "_R");
-                                            PCM_send(revivalMachine[revive_arr[revive_rnd, 2]].deviceName + "_R");  break;
-                    case ((30 * 60) + 0):   PCM_send("VN30");     break;  //30분 00초 일때    //(나레이션) 30분 남았습니다.
-                    case ((29 * 60) + 0):   PCM_send(revivalMachine[revive_arr[revive_rnd, 3]].deviceName + "_R"); PCM_send("VO24"); break;  //29분 00초 일때    //(통신) 생명장치 한개 활성화 
+                    case ((34 * 60) + 59): PCM_send("VO1"); break;  //34분 59초 일때    //(나레이션) VO1; 술래등장 전 까지는 장치사용이 불가합니다.
+                    case ((34 * 60) + 52): PCM_send("VO2"); break;  //34분 52초 일때    //(나레이션) VO2; 술래등장 전 까지는 장치사용이 불가합니다.
+                    case ((34 * 60) + 43): PCM_send("VO3"); break;  //34분 43초 일때    //(나레이션) VO3; 흩어져서 경계하세요
+                    case ((34 * 60) + 30): TRM_send("ES _C"); break;
+                    case ((34 * 60) + 27): TRM_send("ES _D"); break;
+                    case ((33 * 60) + 52): PCM_send("VO2"); break;  //33분 52초 일때    //(나레이션) VO2; 술래등장 전 까지는 장치사용이 불가합니다.
+                    case ((33 * 60) + 43): PCM_send("VO3"); break;  //33분 43초 일때    //(나레이션) VO3; 흩어져서 경계하세요
+                    case ((32 * 60) + 52): PCM_send("VO2"); break;  //32분 52초 일때    //(나레이션) VO2; 술래등장 전 까지는 장치사용이 불가합니다.
+                    case ((32 * 60) + 43): PCM_send("VO3"); break;  //32분 43초 일때    //(나레이션) VO3; 흩어져서 경계하세요
+                    case ((32 * 60) + 30): PCM_send("VO4"); break;  //32분 30초 일때    //(나레이션) VO4; 술래결정까지 30초 남았습니다.
+                    case ((32 * 60) + 7): PCM_send("VO5"); break;  //32분 07초 일때    //(나레이션) VO5; 술래결정까지 5초 남았습니다.
+                    case ((32 * 60) + 0):
+                        PCM_send("VO6");              //32분 00초 일때    //(나레이션) VO6; 술래가 결정되었습니다. 
+                        PCM_send("PG _R");
+                        PCM_send(revivalMachine[revive_arr[revive_rnd, 0]].deviceName + "_R");
+                        PCM_send(revivalMachine[revive_arr[revive_rnd, 1]].deviceName + "_R");
+                        PCM_send(revivalMachine[revive_arr[revive_rnd, 2]].deviceName + "_R"); break;
+                    case ((30 * 60) + 0): PCM_send("VN30"); break;  //30분 00초 일때    //(나레이션) 30분 남았습니다.
+                    case ((29 * 60) + 0): PCM_send(revivalMachine[revive_arr[revive_rnd, 3]].deviceName + "_R"); PCM_send("VO24"); break;  //29분 00초 일때    //(통신) 생명장치 한개 활성화 
                     case ((27 * 60) + 0):
                         switch (rand.Next(0, 2))
                         {
                             case 0: PCM_send("AI _B"); PCM_send("VO31"); lb_block_1.Text = "아이템박스"; break;
-                            case 1: PCM_send("AR _B"); PCM_send("VO32"); lb_block_1.Text = "생명장치";  break;
+                            case 1: PCM_send("AR _B"); PCM_send("VO32"); lb_block_1.Text = "생명장치"; break;
                         }
-                                                                                                                    break;  //27분 00초 일떄    //봉쇄 LV.0
-                    case ((26 * 60) + 0):   PCM_send(revivalMachine[revive_arr[revive_rnd, 4]].deviceName + "_R"); PCM_send("VO24"); break;  //26분 00초 일때    //(통신) 생명장치 한개 활성화 
-                    case ((25 * 60) + 0):                                                                           break;  //25분 00초 일때 
-                    case ((23 * 60) + 0):   PCM_send(revivalMachine[revive_arr[revive_rnd, 5]].deviceName + "_R"); PCM_send("VO24"); break;  //23분 00초 일때    //(통신) 생명장치 한개 활성화 
-                    case ((22 * 60) + 0):   PCM_send("AG _B"); PCM_send("VO33");                                    break;
-                    case ((20 * 60) + 0):   PCM_send("VN20");             //20분 00초 일때    //(나레이션) 20분 남았습니다.
-                                            PCM_send(revivalMachine[revive_arr[revive_rnd, 6]].deviceName + "_R"); PCM_send("VO24"); break;                       //(통신) 생명장치 한개 활성화 
-                    case ((17 * 60) + 0):   PCM_send(revivalMachine[revive_arr[revive_rnd, 7]].deviceName + "_R"); PCM_send("VO24");         //17분 00초 일때     //(통신) 생명장치 한개 활성화
-                                            PCM_send("AV _B"); PCM_send("VO34");                                    break;
-                    case ((15 * 60) + 0):                                                                           break;  //15분 00초 일때    //(통신) 술래의 3번째 능력 활성화
-                    case ((14 * 60) + 0):   PCM_send(revivalMachine[revive_arr[revive_rnd, 8]].deviceName + "_R"); PCM_send("VO24"); break;  //14분 00초 일때    //(통신) 생명장치 한개 활성화
-                    case ((12 * 60) + 0):   PCM_send("AD _B"); PCM_send("VO36");                                    break;                      //(통신) 봉쇄 LV.3
-                    case ((11 * 60) + 0):   PCM_send(revivalMachine[revive_arr[revive_rnd, 9]].deviceName + "_R"); PCM_send("VO24"); break;  //11분 00초 일때    //(통신) 생명장치 한개 활성화 
-                    case ((10 * 60) + 0):   PCM_send("VN10");                                                       break;  //10분 00초 일때    //(나레이션) 10분 남았습니다
-                    case ((7 * 60) + 0):    PCM_send("AE _B"); PCM_send("VO35");                                    break;
-                    case ((3 * 60) + 0):    PCM_send("VN3");                                                        break;  //3분 00초 일때     //(나레이션) 3분 남았습니다
-                    case ((1 * 60) + 0):    PCM_send("VN1");                                                        break;  //1분 00초 일때     //(나레이션) 1분 남았습니다
-                    case (0):               PCM_send("VO14");                                                               //0분 00초 일때     //(나레이션) 탈출제한 시간이 끝났습니다
-                                            PCM_send("AA _S");                                                                                  //(통신) 전체 장치 세팅모드로 전환
-                                            OS_start = false;                                                                                   // OS_START BOOL변수 종료
-                                            PCM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);       //timer_GameSys.Enabled = false;// 게임 타이머 정지
-                                            MessageBox.Show((String)"TIME OVER");                                   break;                      // 타임 오버 메세지창 출력
+                        break;  //27분 00초 일떄    //봉쇄 LV.0
+                    case ((26 * 60) + 0): PCM_send(revivalMachine[revive_arr[revive_rnd, 4]].deviceName + "_R"); PCM_send("VO24"); break;  //26분 00초 일때    //(통신) 생명장치 한개 활성화 
+                    case ((25 * 60) + 0): break;  //25분 00초 일때 
+                    case ((23 * 60) + 0): PCM_send(revivalMachine[revive_arr[revive_rnd, 5]].deviceName + "_R"); PCM_send("VO24"); break;  //23분 00초 일때    //(통신) 생명장치 한개 활성화 
+                    case ((22 * 60) + 0): PCM_send("AG _B"); PCM_send("VO33"); break;
+                    case ((20 * 60) + 0):
+                        PCM_send("VN20");             //20분 00초 일때    //(나레이션) 20분 남았습니다.
+                        PCM_send(revivalMachine[revive_arr[revive_rnd, 6]].deviceName + "_R"); PCM_send("VO24"); break;                       //(통신) 생명장치 한개 활성화 
+                    case ((17 * 60) + 0):
+                        PCM_send(revivalMachine[revive_arr[revive_rnd, 7]].deviceName + "_R"); PCM_send("VO24");         //17분 00초 일때     //(통신) 생명장치 한개 활성화
+                        PCM_send("AV _B"); PCM_send("VO34"); break;
+                    case ((15 * 60) + 0): break;  //15분 00초 일때    //(통신) 술래의 3번째 능력 활성화
+                    case ((14 * 60) + 0): PCM_send(revivalMachine[revive_arr[revive_rnd, 8]].deviceName + "_R"); PCM_send("VO24"); break;  //14분 00초 일때    //(통신) 생명장치 한개 활성화
+                    case ((12 * 60) + 0): PCM_send("AD _B"); PCM_send("VO36"); break;                      //(통신) 봉쇄 LV.3
+                    case ((11 * 60) + 0): PCM_send(revivalMachine[revive_arr[revive_rnd, 9]].deviceName + "_R"); PCM_send("VO24"); break;  //11분 00초 일때    //(통신) 생명장치 한개 활성화 
+                    case ((10 * 60) + 0): PCM_send("VN10"); break;  //10분 00초 일때    //(나레이션) 10분 남았습니다
+                    case ((7 * 60) + 0): PCM_send("AE _B"); PCM_send("VO35"); break;
+                    case ((3 * 60) + 0): PCM_send("VN3"); break;  //3분 00초 일때     //(나레이션) 3분 남았습니다
+                    case ((1 * 60) + 0): PCM_send("VN1"); break;  //1분 00초 일때     //(나레이션) 1분 남았습니다
+                    case (0):
+                        PCM_send("VO14");                                                               //0분 00초 일때     //(나레이션) 탈출제한 시간이 끝났습니다
+                        PCM_send("AA _S");                                                                                  //(통신) 전체 장치 세팅모드로 전환
+                        OS_start = false;                                                                                   // OS_START BOOL변수 종료
+                        PCM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);       //timer_GameSys.Enabled = false;// 게임 타이머 정지
+                        MessageBox.Show((String)"TIME OVER"); break;                      // 타임 오버 메세지창 출력
+                }
+                if (rb_GameSys_NightMode.Checked == true)
+                {
+                    switch (game_remaing_time)
+                    {
+                        case ((34 * 60) + 30): PCM_send("BL _Z"); break;
+                        case ((34 * 60) + 00): PCM_send("LL _Z"); break;
+                        case ((33 * 60) + 30): PCM_send("CL _Z"); break;
+                        case ((33 * 60) + 00): PCM_send("SL _Z"); break;
+                        case ((32 * 60) + 03): PCM_send("AL _Z"); break;
+
+                        case ((30 * 60) + 30): PCM_send("SL _Z"); break;
+                        case ((25 * 60) + 30): PCM_send("BL _Z"); break;
+                        case ((20 * 60) + 30): PCM_send("CL _Z"); break;
+                        case ((15 * 60) + 30): PCM_send("CL _Z"); break;
+                        case ((10 * 60) + 30): PCM_send("LL _Z"); break;
+                        case ((5 * 60) + 30): PCM_send("SL _Z"); break;
+                        case ((3 * 60) + 30): PCM_send("BL _Z"); break;
+                        case ((1 * 60) + 30): PCM_send("LL _Z"); break;
+                    }
                 }
             }
         }
@@ -720,6 +757,11 @@ namespace MainControl_v1._0
                     revivalMachine[i].deviceState = false;
                 for (int i = 0; i < 5; i++)
                     generatorMachine[i].deviceState = false;
+
+                if (rb_GameSys_NightMode.Checked == true)
+                    PCM_send("AL _F");
+                else 
+                    PCM_send("AL _N");
             }
             else
                 MessageBox.Show((String)"PCM 통신 연결을 먼저 진행해주세요!");

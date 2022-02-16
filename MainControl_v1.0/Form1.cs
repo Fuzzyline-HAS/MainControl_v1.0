@@ -144,17 +144,36 @@ namespace MainControl_v1._0
             {
                 case 'A':   lb_color_change(lb_name, "장치 준비", Color.Red, Color.White);                                                      break;
                 case 'R':   lb_color_change(lb_name, "장치 활성", Color.Yellow, Color.Black);                                                  
-                            revivalOpenShow(pcm_str[1], lb_name);                                                                                         break;
+                            revivalOpenShow(pcm_str[1], lb_name);                                                                               break;
                 case 'S':   lb_color_change(lb_name, "장치 세팅", Color.White, Color.Black);
                             lb_name_color_change(block_name, Color.LightGray, Color.Black);                                                     break;
                 case 'B':   lb_name_color_change(block_name, Color.Purple, Color.WhiteSmoke);                                                   break;
-                case 'F':   lb_color_change(lb_name, "수리 완료", Color.Blue, Color.White);
-                    if (pcm_str[1].Contains('G')) generatorFixedChk(pcm_str[1]);
+                case 'F':
+                    if (pcm_str[1].Contains('G'))
+                    {
+                        lb_color_change(lb_name, "수리 완료", Color.Blue, Color.White);
+                        generatorFixedChk(pcm_str[1]);
+                    }
+                    else if (pcm_str[1].Contains('L'))
+                    {
+                        if (pcm_str[1].Contains('A'))
+                        {
+                            lb_color_change("lb_BL_state", "조명OFF", Color.Gray, Color.White);
+                            lb_color_change("lb_LL_state", "조명OFF", Color.Gray, Color.White);
+                            lb_color_change("lb_CL_state", "조명OFF", Color.Gray, Color.White);
+                            lb_color_change("lb_SL_state", "조명OFF", Color.Gray, Color.White);
+                            lb_color_change("lb_TL_state", "조명OFF", Color.Gray, Color.White);
+
+                        }
+                        else
+                            lb_color_change(lb_name, "조명OFF", Color.Gray, Color.White);
+                    }
                     else if (pcm_str[1].Contains('T'))
                     {
                         PCM_send("VO13"); PCM_send("AA _S");
+                        lb_color_change(lb_name, "탈출 완료", Color.Blue, Color.White);
                         PCM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
-                    } break;
+                    }                                                                                                                           break;
                 case 'L':   lb_color_change(lb_name, "도어 잠금", Color.Green, Color.White);                                                    break;
                 case 'T':   lb_color_change(lb_name, "장치 봉쇄", Color.Purple, Color.White);
                             lb_name_color_change(block_name, Color.LightGray, Color.Black);                                                     break;
@@ -173,7 +192,19 @@ namespace MainControl_v1._0
                                 MessageBox.Show((String)"!자가부활모드 확인!");
                             }
                                                                                                                                                 break;
-                case 'X':   lb_color_change(lb_name, "OFFLINE", Color.Black, Color.White);                                                      break;
+                case 'N':
+                    if (pcm_str[1].Contains('A'))
+                    {
+                        lb_color_change("lb_BL_state", "조명ON", Color.Yellow, Color.Black);
+                        lb_color_change("lb_LL_state", "조명ON", Color.Yellow, Color.Black);
+                        lb_color_change("lb_CL_state", "조명ON", Color.Yellow, Color.Black);
+                        lb_color_change("lb_SL_state", "조명ON", Color.Yellow, Color.Black);
+                        lb_color_change("lb_TL_state", "조명ON", Color.Yellow, Color.Black);
+                    }
+                    else
+                        lb_color_change(lb_name, "조명ON", Color.Yellow, Color.Black);
+                                                                                                                                                  break;
+                case 'X':   lb_color_change(lb_name, "OFFLINE", Color.Black, Color.White);                                                        break;
                     
             }
         }
@@ -610,7 +641,7 @@ namespace MainControl_v1._0
                 playmode = 2;                                               // 뉴비모드 = 1;
                 PCM_send("PM _2");                                         // (통신) 플레이 모드 PM_1으로 전송
             }
-            else if (rb_GameSys_HardMode.Checked == true)               // 고인물 모드가 선택되어있을때
+            else if (rb_GameSys_NightMode.Checked == true)               // 고인물 모드가 선택되어있을때
             {
                 playmode = 3;                                               // 뉴비모드 = 2;
                 PCM_send("PM _3");                                         // (통신) 플레이 모드 PM_2으로 전송
@@ -711,7 +742,7 @@ namespace MainControl_v1._0
 
         private void btn_GameSys_VideoPlay_Click(object sender, EventArgs e)
         {
-
+            PCM_send("PT");
         }
 
         private void btn_GameSys_OS_Start_Click(object sender, EventArgs e)
@@ -739,7 +770,7 @@ namespace MainControl_v1._0
         private void btn_GameSys_5min_add_Click(object sender, EventArgs e)
         {
             if (serialPort_PCM.IsOpen)
-                game_remaing_time += (5 * 60);                                  //(타이머) 타이머 5분 추가 
+                game_remaing_time += (1 * 60);                                  //(타이머) 타이머 5분 추가 
             else
                 MessageBox.Show((String)"PCM 통신 연결을 먼저 진행해주세요!");
         }
@@ -813,7 +844,8 @@ namespace MainControl_v1._0
                 case 2: return 'S'; //장치 세팅
                 case 3: return 'C'; //장치 연결확인
                 case 4: return 'B'; //봉쇄 활성화
-                case 5: return 'E'; //E모드
+                case 5: return 'O'; //봉쇄 활성화
+                case 6: return 'E'; //E모드
                 default:return 'A';
             }
         }
@@ -900,6 +932,7 @@ namespace MainControl_v1._0
                 case 1: send_Arduio += "BV1_";  break;  //대나무 숲 덕트1
                 case 2: send_Arduio += "CV _";  break;  //지하실 덕트
                 case 3: send_Arduio += "TV _";  break;  //화장실 덕트
+                case 4: send_Arduio += "BV2_"; break;  //화장실 덕트
             }
             send_Arduio += itemforState(cb_Vent_state);
             PCM_send(send_Arduio);
@@ -1528,6 +1561,8 @@ namespace MainControl_v1._0
         {
             if (serialPort_TRM.IsOpen)
             {
+                itembox1 = false;
+                itembox2 = false;                        
                 TRM_send("EA _A");
                 TRM_send("EL _EOFF");
                 //TRM_send("EL _WON\n");
@@ -1540,7 +1575,10 @@ namespace MainControl_v1._0
         {
             if (serialPort_TRM.IsOpen)
             {
+                itembox1 = false;
+                itembox2 = false;
                 TRM_send("EA _S");
+                TRM_send("EC _OFF");
             }
             else
                 MessageBox.Show((String)"TRM 통신 연결을 먼저 진행해주세요!");
@@ -1579,7 +1617,8 @@ namespace MainControl_v1._0
             lb_ExerciseSys_Clock.Text = "00:00";                                                      //남은 시간 출력
             lb_ExerciseSys_maintime.Text = "0:00";
             lb_ExerciseSys_subtime.Text = "0:00";
-             
+            itembox1 = false;
+            itembox2 = false;
             trm_main_time = 0;                                                                      //0*60;     남은시간 전체 초로 카운팅 저장하고 있는 변수
             trm_time = 0;                                                                           //0*60;     남은시간 전체 초로 카운팅 저장하고 있는 변수
             trm_device_time = 0;                                                                    //0*60;     남은시간 전체 초로 카운팅 저장하고 있는 변수
@@ -1719,12 +1758,18 @@ namespace MainControl_v1._0
             else
                 MessageBox.Show((String)"TRM 통신 연결을 먼저 진행해주세요!");
         }
-
-        private void btn_ExerciseSys_VideoOn_Click(object sender, EventArgs e)
+        private void btn_ExerciseSys_VideoStart_Click(object sender, EventArgs e)
         {
-            TRM_send("EP _P");
-        }
 
+            if (rb_GameSys_NormalMode.Checked == true)
+            {
+                TRM_send("EP _D");
+            }
+            else if (rb_GameSys_NightMode.Checked == true)
+            {
+                TRM_send("EP _N");
+            }
+        }
         private void btn_ExerciseSys_AnimationOn_Click(object sender, EventArgs e)
         {
             TRM_send("EP _F");
@@ -1733,6 +1778,36 @@ namespace MainControl_v1._0
         private void btn_ExerciseSys_VideoStop_Click(object sender, EventArgs e)
         {
             TRM_send("EP _R");
+        }
+
+        private void btn_ExerciseSys_ScreenUp_Click(object sender, EventArgs e)
+        {
+            TRM_send("ES _U");
+        }
+
+        private void btn_ExerciseSys_ScreenDown_Click(object sender, EventArgs e)
+        {
+            TRM_send("ES _D");
+        }
+
+        private void btn_ExerciseSys_DoorOpen_Click(object sender, EventArgs e)
+        {
+            TRM_send("ES _O");
+        }
+
+        private void btn_ExerciseSys_DoorClose_Click(object sender, EventArgs e)
+        {
+            TRM_send("ES _C");
+        }
+
+        private void btn_GameSys_AL_ON_Click(object sender, EventArgs e)
+        {
+            PCM_send("AL _N");
+        }
+
+        private void btn_GameSys_AL_Off_Click(object sender, EventArgs e)
+        {
+            PCM_send("AL _F");
         }
     }
 }

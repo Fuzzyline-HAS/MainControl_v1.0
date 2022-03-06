@@ -153,16 +153,6 @@ namespace MainControl_v1._0
                     {
                         lb_color_change(lb_name, "수리 완료", Color.Blue, Color.White);
                         generatorFixedChk(pcm_str[1]);
-                        if (rb_GameSys_NightMode.Checked == true)
-                        { 
-                            switch (pcm_str[1][0])
-                            {
-                                case 'B': PCM_send("BL _Z"); break;
-                                case 'L': PCM_send("LL _Z"); break;
-                                case 'C': PCM_send("CL _Z"); break;
-                                case 'S': PCM_send("SL _Z"); break;
-                            }
-                        }
                     }
                     else if (pcm_str[1][1] == 'L')
                     {
@@ -180,20 +170,30 @@ namespace MainControl_v1._0
                     }
                     else if (pcm_str[1][1] == 'T')
                     {
-                        PCM_send("VO13"); PCM_send("AA _S");
+                        PCM_send("VO13"); PCM_send("AD _S");
                         lb_color_change(lb_name, "탈출 완료", Color.Blue, Color.White);
                         PCM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
-                    }                                                                                                                           break;
+                        if (cb_iotAUTO.Checked == true)
+                            Radiobutton_PlayGroup("LR");                                             //(함수) iot그룹에서 술래 정해진것 통신 보는 함수
+                    }
+                    else if (pcm_str[1][1] == 'I')
+                    {
+                        lb_color_change(lb_name, "해제중", Color.Pink, Color.White);
+                    }
+                        break;
                 case 'L':   lb_color_change(lb_name, "도어 잠금", Color.Green, Color.White);                                                    break;
                 case 'T':   lb_color_change(lb_name, "장치 봉쇄", Color.Purple, Color.White);
                             lb_name_color_change(block_name, Color.LightGray, Color.Black);                                                     break;
                 case 'E':   if (pcm_str[1].Contains('G')) lb_color_change(lb_name, "배선 수리", Color.Green, Color.WhiteSmoke);
                     else if (pcm_str[1].Contains('E'))
                     {
-                        PCM_send("VO25"); PCM_send("AA _S");
+                        PCM_send("VO25"); PCM_send("AD _S"); 
                         lb_color_change(lb_name, "탈출 성공", Color.Blue, Color.WhiteSmoke);
                         PCM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //timer_GameSys.Enabled = false;                                      //(타이머) 타이머 정지
-                    }break;
+                        if (cb_iotAUTO.Checked == true)
+                            Radiobutton_PlayGroup("LR");                                             //(함수) iot그룹에서 술래 정해진것 통신 보는 함수
+                    }
+                    break;
                 case 'O':   lb_color_change(lb_name, "장치 열림", Color.Blue, Color.White);    
                             revivalOpenChk(pcm_str[1]);                                                                                         break;
                 case 'I':   temple_collected_chip = Convert.ToInt32(pcm_str[2][1]-48);  lb_GameSys_CollectedTemple_cnt.Text = temple_collected_chip.ToString();
@@ -201,7 +201,10 @@ namespace MainControl_v1._0
                                 PCM_send("LL _Z");
                             if (selfrevive_cnt == temple_collected_chip)
                             {
+                                if (cb_selfRevive_auto.Checked == true)
+                                    btn_GameSys_SelfRevive.PerformClick();
                                 MessageBox.Show((String)"!자가부활모드 확인!");
+                                
                             }
                                                                                                                                                 break;
                 case 'N':
@@ -453,7 +456,16 @@ namespace MainControl_v1._0
                 case 'S':   lb_color_change(lb_name, "장치 세팅", Color.White, Color.Black);                                                            break;
                 case 'B':   lb_color_change(block_name, pcm_str[1], Color.Purple, Color.LightGray);                                                     break;
                 case 'F':   lb_color_change(lb_name, "수리 완료", Color.Blue, Color.White);        
-                            if (pcm_str[1].Contains("EG"))ExerciseRm_status = "Generator Fix";                                                          break;
+                            if (pcm_str[1].Contains("EG"))ExerciseRm_status = "Generator Fix";                                                        
+                            else if(pcm_str[1].Contains("EI1"))
+                            {
+                                lb_color_change("lb_ExerciseSys_EI1_State", "해제 중", Color.Pink, Color.White);
+                            }
+                            else if (pcm_str[1].Contains("EI2"))
+                            {
+                                lb_color_change("lb_ExerciseSys_EI2_State", "해제 중", Color.Pink, Color.White);
+                            }
+                    break;
                 case 'L':   lb_color_change(lb_name, "도어 잠금", Color.Green, Color.White);
                             if (pcm_str[1].Contains("ED")) ExerciseRm_status = "Door Lock";                                                             break;
                 case 'T':   lb_color_change(lb_name, "장치 봉쇄", Color.Purple, Color.White);                                                           
@@ -603,16 +615,16 @@ namespace MainControl_v1._0
                     case ((26 * 60) + 0): PCM_send(revivalMachine[revive_arr[revive_rnd, 4]].deviceName + "_R"); PCM_send("VO24"); break;  //26분 00초 일때    //(통신) 생명장치 한개 활성화 
                     case ((25 * 60) + 0): break;  //25분 00초 일때 
                     case ((23 * 60) + 0): PCM_send(revivalMachine[revive_arr[revive_rnd, 5]].deviceName + "_R"); PCM_send("VO24"); break;  //23분 00초 일때    //(통신) 생명장치 한개 활성화 
-                    case ((22 * 60) + 0): PCM_send("AG _B"); PCM_send("VO33"); break;
+                    case ((22 * 60) + 0): break;//PCM_send("AG _B2"); PCM_send("VO33"); break;
                     case ((20 * 60) + 0):
                         PCM_send("VN20");             //20분 00초 일때    //(나레이션) 20분 남았습니다.
                         PCM_send(revivalMachine[revive_arr[revive_rnd, 6]].deviceName + "_R"); PCM_send("VO24"); break;                       //(통신) 생명장치 한개 활성화 
                     case ((17 * 60) + 0):
                         PCM_send(revivalMachine[revive_arr[revive_rnd, 7]].deviceName + "_R"); PCM_send("VO24");         //17분 00초 일때     //(통신) 생명장치 한개 활성화
-                        PCM_send("AV _B"); PCM_send("VO34"); break;
+                        PCM_send("AV _B2"); PCM_send("VO34"); break;
                     case ((15 * 60) + 0): break;  //15분 00초 일때    //(통신) 술래의 3번째 능력 활성화
                     case ((14 * 60) + 0): PCM_send(revivalMachine[revive_arr[revive_rnd, 8]].deviceName + "_R"); PCM_send("VO24"); break;  //14분 00초 일때    //(통신) 생명장치 한개 활성화
-                    case ((12 * 60) + 0): PCM_send("AD _B"); PCM_send("VO36"); break;                      //(통신) 봉쇄 LV.3
+                    case ((12 * 60) + 0): PCM_send("AD _B2"); PCM_send("VO36"); break;                      //(통신) 봉쇄 LV.3
                     case ((11 * 60) + 0): PCM_send(revivalMachine[revive_arr[revive_rnd, 9]].deviceName + "_R"); PCM_send("VO24"); break;  //11분 00초 일때    //(통신) 생명장치 한개 활성화 
                     case ((10 * 60) + 0): PCM_send("VN10"); break;  //10분 00초 일때    //(나레이션) 10분 남았습니다
                     case ((7 * 60) + 0): PCM_send("AE _B"); PCM_send("VO35"); break;
@@ -620,29 +632,23 @@ namespace MainControl_v1._0
                     case ((1 * 60) + 0): PCM_send("VN1"); break;  //1분 00초 일때     //(나레이션) 1분 남았습니다
                     case (0):
                         PCM_send("VO14");                                                               //0분 00초 일때     //(나레이션) 탈출제한 시간이 끝났습니다
-                        PCM_send("AA _S");                                                                                  //(통신) 전체 장치 세팅모드로 전환
+                        PCM_send("AD _S");
                         OS_start = false;                                                                                   // OS_START BOOL변수 종료
                         PCM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);       //timer_GameSys.Enabled = false;// 게임 타이머 정지
-                        MessageBox.Show((String)"TIME OVER"); break;                      // 타임 오버 메세지창 출력
+                        
+                        if(cb_iotAUTO.Checked == true)
+                            Radiobutton_PlayGroup("LR");                                             //(함수) iot그룹에서 술래 정해진것 통신 보는 함수
+                                                                                                                                    break;                      // 타임 오버 메세지창 출력
                 }
                 if (rb_GameSys_NightMode.Checked == true)
                 {
                     switch (game_remaing_time)
                     {
-                        case ((34 * 60) + 30): PCM_send("BL _Z"); break;
-                        case ((34 * 60) + 00): PCM_send("LL _Z"); break;
-                        case ((33 * 60) + 30): PCM_send("CL _Z"); break;
-                        case ((33 * 60) + 00): PCM_send("SL _Z"); break;
-                        case ((32 * 60) + 03): PCM_send("AL _Z"); break;
-
-                        case ((30 * 60) + 30): PCM_send("SL _Z"); break;
-                        case ((25 * 60) + 30): PCM_send("BL _Z"); break;
-                        case ((20 * 60) + 30): PCM_send("CL _Z"); break;
-                        case ((15 * 60) + 30): PCM_send("CL _Z"); break;
-                        case ((10 * 60) + 30): PCM_send("LL _Z"); break;
-                        case ((5 * 60) + 30): PCM_send("SL _Z"); break;
-                        case ((3 * 60) + 30): PCM_send("BL _Z"); break;
-                        case ((1 * 60) + 30): PCM_send("LL _Z"); break;
+                        //case ((34 * 60) + 30): PCM_send("BL _Z"); break;
+                        //case ((34 * 60) + 00): PCM_send("LL _Z"); break;
+                        //case ((33 * 60) + 30): PCM_send("CL _Z"); break;
+                        //case ((33 * 60) + 00): PCM_send("SL _Z"); break;
+                        //case ((32 * 60) + 03): PCM_send("AL _Z"); break;
                     }
                 }
             }
@@ -730,10 +736,30 @@ namespace MainControl_v1._0
 
         private void btn_GameSys_ReadyMode_Click(object sender, EventArgs e)
         {
+
+            if(rb_GameSys_NormalMode.Checked == true)
+            {
+                PCM_send("AG _D");
+                PCM_send("AI _D");
+                PCM_send("AR _D");
+                PCM_send("AD _D");
+                PCM_send("AL _N");
+            }
+            else if(rb_GameSys_EasyMode.Checked == true)
+            {
+
+            }
+            if (rb_GameSys_NightMode.Checked == true)
+            {
+                PCM_send("AG _N");
+                PCM_send("AI _N");
+                PCM_send("AR _N");
+                PCM_send("AD _N");
+                PCM_send("AL _F");
+            }
             if (serialPort_PCM.IsOpen)
             {
-                serialPort_PCM.Write("AG _S\n");
-                serialPort_PCM.Write("AA _A\n");                                   //(통신) 전체장치 연결 (비활성화)
+                serialPort_PCM.Write("AA _A\n");                                //(통신) 전체장치 연결 (비활성화)
                 game_remaing_time = GAMETIME * 60;                              //(변수) 남은시간 초기화
                 lb_GameSys_Clock.Text = "35:00";                                //남은시간 35:00로 출력
                 revive_rnd = rand.Next(0, 9);
@@ -757,11 +783,6 @@ namespace MainControl_v1._0
                     revivalMachine[i].deviceState = false;
                 for (int i = 0; i < 5; i++)
                     generatorMachine[i].deviceState = false;
-
-                if (rb_GameSys_NightMode.Checked == true)
-                    PCM_send("AL _F");
-                else 
-                    PCM_send("AL _N");
             }
             else
                 MessageBox.Show((String)"PCM 통신 연결을 먼저 진행해주세요!");
@@ -773,7 +794,6 @@ namespace MainControl_v1._0
         private void btn_GameSys_SetupMode_Click(object sender, EventArgs e)
         {
             PCM_send("AA _S");                                                   //(통신) 전체장치 세팅 모드 (비활성화)
-            PCM_send("AG _R");
         }
 
         private void btn_GameSys_GameStop_Click(object sender, EventArgs e)
@@ -789,18 +809,7 @@ namespace MainControl_v1._0
 
         private void btn_GameSys_OS_Start_Click(object sender, EventArgs e)
         {
-            if (serialPort_PCM.IsOpen)
-            {
-                Radiobutton_PlayGroup("LN");                                        //(함수) iot그룹에서 술래 정해진것 통신 보는 함수
-                Radiobutton_PlayPeople();                                       //(함수) 플레이 인원 설정된데로 통신 보내기
-                Radiobutton_PlayMode();                                         //(함수) 플레이 모드 설정된데도 통신 보내기
-                serialPort_PCM.Write("VO1\n");                                  //(나레이션)탈출제한 시간이 끝났습니다.
-                PCM_ThreadTimer.Change(0,1000); //timer_GameSys.Enabled = true;                                   //(타이머) 타이머 시작
-                OS_start = true;                                                //(변수) OS시작
-                game_remaing_time = GAMETIME * 60;                              //(변수) 남은시간 초기화
-            }
-            else
-                MessageBox.Show((String)"PCM 통신 연결을 먼저 진행해주세요!");
+            PCM_send("AI _O");
         }
 
         private void btn_GameSys_SelfRevive_Click(object sender, EventArgs e)
@@ -877,35 +886,28 @@ namespace MainControl_v1._0
                 default:return 'A';
             }
         }
-        private char itemforState(ComboBox cb_device_state)
-        {
-            switch (cb_device_state.SelectedIndex)
-            {
-                case 0: return 'A'; //장치 연결
-                case 1: return 'R'; //장치 활성화
-                case 2: return 'S'; //장치 세팅
-                case 3: return 'C'; //장치 연결확인
-                case 4: return 'B'; //봉쇄 활성화
-                case 5: return 'O'; //봉쇄 활성화
-                case 6: return 'E'; //E모드
-                default:return 'A';
-            }
-        }
         private void btn_Generator_send_Click(object sender, EventArgs e)
         {
             String send_Arduio = "";
             send_Arduio += one_itemforROOM(cb_Generator_name);
             send_Arduio += "G _";
-            //send_Arduio += itemforState(cb_Generator_state);
             switch (cb_Generator_state.SelectedIndex)
             {
-                case 0: send_Arduio += 'A'; break;   //장치 연결
-                case 1: send_Arduio += 'R'; break;   //장치 활성화
-                case 2: send_Arduio += 'S'; break;   //장치 세팅
-                case 3: send_Arduio += 'C'; break;   //장치 연결확인
-                case 4: send_Arduio += 'B'; break;   //봉쇄 활성화
-                case 5: send_Arduio += 'E'; break;   //장치 연결확인
-                case 6: send_Arduio += 'F'; break;   //봉쇄 활성화     
+                case 0: send_Arduio += 'A';     break;   //장치 연결
+                case 1: send_Arduio += 'R';     break;   //장치 활성화
+                case 2: send_Arduio += 'S';     break;   //장치 세팅
+                case 3: send_Arduio += 'C';     break;   //장치 연결확인
+                case 4: send_Arduio += "B1";    break;   //봉쇄1단계
+                case 5: send_Arduio += "B2";    break;   //봉쇄2단계
+                case 6: send_Arduio += "B3";    break;   //봉쇄3단계     
+                case 7: send_Arduio += 'O';     break;   //장치 오픈  
+                case 8: send_Arduio += "M1_1";  break;   //뉴비모드
+                case 9: send_Arduio += "M2_60,90,120";    break;   //뉴비모드 
+                case 10: send_Arduio += 'E';    break;   //발전기 배선수리 완료  
+                case 11: send_Arduio += 'F';    break;   //발전기 수리 완료
+                case 12: send_Arduio += 'N';    break;   //발전기 수리 완료
+                case 13: send_Arduio += 'D';    break;   //발전기 수리 완료
+                default: send_Arduio += 'A';    break;
             }
             PCM_send(send_Arduio);
         }
@@ -915,7 +917,16 @@ namespace MainControl_v1._0
             String send_Arduio = "";
             send_Arduio += one_itemforROOM(cb_Escape_name);
             send_Arduio += "E _";
-            send_Arduio += itemforState(cb_Escape_state);
+            switch (cb_Escape_state.SelectedIndex)
+            {
+                case 0: send_Arduio += 'A';     break;   //장치 연결
+                case 1: send_Arduio += 'R';     break;   //장치 활성화
+                case 2: send_Arduio += 'S';     break;   //장치 세팅
+                case 3: send_Arduio += 'C';     break;   //장치 연결확인
+                case 4: send_Arduio += 'B';     break;   //봉쇄 활성화
+                case 5: send_Arduio += 'E';     break;   //탈출 성공
+                default: send_Arduio += 'A';    break;   //봉쇄 활성화     
+            }
             PCM_send(send_Arduio);
         }
 
@@ -930,8 +941,19 @@ namespace MainControl_v1._0
                 send_Arduio += "R1_";
             else if (cb_Revive_name.SelectedIndex % 2 == 0)
                 send_Arduio += "R2_";
-
-            send_Arduio += itemforState(cb_Revive_state);
+            switch (cb_Revive_state.SelectedIndex)
+            {
+                case 0: send_Arduio += 'A';     break;   //장치 연결
+                case 1: send_Arduio += 'R';     break;   //장치 활성화
+                case 2: send_Arduio += 'S';     break;   //장치 세팅
+                case 3: send_Arduio += 'C';     break;   //장치 연결확인
+                case 4: send_Arduio += 'B';     break;   //봉쇄 활성화
+                case 5: send_Arduio += 'O';     break;   //장치 오픈
+                case 6: send_Arduio += 'E';     break;   //자가부활 모드
+                case 7: send_Arduio += 'N';     break;   //나이트 모드
+                case 8: send_Arduio += 'D';     break;   //데이모드
+                default: send_Arduio += 'A';    break;
+            }
             PCM_send(send_Arduio);
         }
 
@@ -945,7 +967,21 @@ namespace MainControl_v1._0
                 send_Arduio += "I1_";
             else if (cb_Itembox_name.SelectedIndex % 2 == 0)
                 send_Arduio += "I2_";
-            send_Arduio += itemforState(cb_Itembox_state);
+            switch (cb_Itembox_state.SelectedIndex)
+            {
+                case 0: send_Arduio += 'A';     break;   //장치 연결
+                case 1: send_Arduio += 'R';     break;   //장치 활성화
+                case 2: send_Arduio += 'S';     break;   //장치 세팅
+                case 3: send_Arduio += 'C';     break;   //장치 연결확인
+                case 4: send_Arduio += 'B';     break;   //봉쇄 활성화
+                case 5: send_Arduio += 'O';     break;   //장치 연결확인
+                case 6: send_Arduio += "M1_200,0,0,0,0";    break;   //봉쇄 활성화     
+                case 7: send_Arduio += "M2_5,10,15,20,25";    break;   //나이트 모드
+                case 8: send_Arduio += "M3_5,2,30,0,0";    break;   //데이 모드
+                case 9: send_Arduio += 'N';     break;   //나이트 모드
+                case 10: send_Arduio += 'D';    break;   //데이 모드
+                default: send_Arduio += 'A';    break;
+            }
             PCM_send(send_Arduio);
         }
 
@@ -954,14 +990,27 @@ namespace MainControl_v1._0
             String send_Arduio = "";
             switch (cb_Door_name.SelectedIndex)
             {
-                case 0: send_Arduio += 'A'; break;  //전체
-                case 1: send_Arduio += 'B'; break;  //대나무숲
-                case 2: send_Arduio += 'L'; break;  //거실
-                case 3: send_Arduio += 'S'; break;  //침실
-                case 4: send_Arduio += 'T'; break;  //화장실
+                case 0: send_Arduio += "AD _";  break;  //전체 장치
+                case 1: send_Arduio += "BD _";  break;  //대나무숲 
+                case 2: send_Arduio += "CD _";  break;  //지하실
+                case 3: send_Arduio += "SD _";  break;  //침실
+                case 4: send_Arduio += "TD _";  break;  //화장실
             }
-            send_Arduio += "D _";
-            send_Arduio += itemforState(cb_Door_state);
+            switch (cb_Door_state.SelectedIndex)
+            {
+                case 0: send_Arduio += 'A';     break;  //장치 연결
+                case 1: send_Arduio += 'R';     break;  //장치 활성화
+                case 2: send_Arduio += 'S';     break;  //장치 세팅
+                case 3: send_Arduio += 'C';     break;  //장치 연결확인
+                case 4: send_Arduio += "B1";    break;  //봉쇄1단계
+                case 5: send_Arduio += "B2";    break;  //봉쇄2단계
+                case 6: send_Arduio += "B3";    break;  //봉쇄3단계     
+                case 7: send_Arduio += 'O';     break;  //장치 오픈 
+                case 8: send_Arduio += 'L';     break;  //도어 잠금
+                case 9: send_Arduio += 'N';     break;  //나이트 모드
+                case 10: send_Arduio += 'D';    break;  //데이 모드
+                default: send_Arduio += 'A';    break;
+            }
             PCM_send(send_Arduio);
         }
 
@@ -974,9 +1023,25 @@ namespace MainControl_v1._0
                 case 1: send_Arduio += "BV1_";  break;  //대나무 숲 덕트1
                 case 2: send_Arduio += "CV _";  break;  //지하실 덕트
                 case 3: send_Arduio += "TV _";  break;  //화장실 덕트
-                case 4: send_Arduio += "BV2_"; break;  //화장실 덕트
+                case 4: send_Arduio += "BV2_";  break;  //화장실 덕트
+                case 5: send_Arduio += "LV _";  break;  //화장실 덕트
+                case 6: send_Arduio += "SV _";  break;  //화장실 덕트
+
             }
-            send_Arduio += itemforState(cb_Vent_state);
+            switch (cb_Vent_state.SelectedIndex)
+            {
+                case 0: send_Arduio += 'A';     break;  //장치 연결
+                case 1: send_Arduio += 'R';     break;  //장치 활성화
+                case 2: send_Arduio += 'S';     break;  //장치 세팅
+                case 3: send_Arduio += 'C';     break;  //장치 연결확인
+                case 4: send_Arduio += "B1";    break;  //봉쇄 1단계
+                case 5: send_Arduio += "B2";    break;  //봉쇄 2단계
+                case 6: send_Arduio += "B3";    break;  //봉쇄 3단계
+                case 7: send_Arduio += 'O';     break;  //장치 오픈
+                case 8: send_Arduio += "M1_10"; break;  //뉴비1 모드
+                case 9: send_Arduio += "M2_0";  break;  //뉴비2 모드
+                default: send_Arduio += 'A';    break;
+            }
             PCM_send(send_Arduio);
         }
 
@@ -984,7 +1049,16 @@ namespace MainControl_v1._0
         {
             String send_Arduio = "";
             send_Arduio += "LT _";
-            send_Arduio += itemforState(cb_Temple_state);
+            switch (cb_Temple_state.SelectedIndex)
+            {
+                case 0: send_Arduio += 'A';     break;   //장치 연결
+                case 1: send_Arduio += 'R';     break;   //장치 활성화
+                case 2: send_Arduio += 'S';     break;   //장치 세팅
+                case 3: send_Arduio += 'C';     break;   //장치 연결확인
+                case 4: send_Arduio += 'N';     break;   //나이트 모드
+                case 5: send_Arduio += 'D';     break;   //데이 모드
+                default: send_Arduio += 'A';    break;    
+            }
             PCM_send(send_Arduio);
         }
         private void btn_GameSys_OSReset_Click(object sender, EventArgs e)
@@ -1256,7 +1330,17 @@ namespace MainControl_v1._0
                 MessageBox.Show((String)"IOT 통신 연결을 먼저 진행해주세요!");
         }
 
-        
+        private void btn_IotSys_timerReset_Click(object sender, EventArgs e)
+        {
+            if (serialPort_IOT.IsOpen)
+            {
+                IOT_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //timer_IotSys.Enabled = false; //(타이머) iot타이머 정지
+                iot_remaing_time = IOT_TIME * 60;                               //(변수) iot타이머 시간 리셋
+                lb_IotSys_Clock.Text = "3:00";
+            }
+            else
+                MessageBox.Show((String)"IOT 통신 연결을 먼저 진행해주세요!");
+        }
 
         private void btn_IotSys_timerStart_Click(object sender, EventArgs e)
         {
@@ -1408,7 +1492,7 @@ namespace MainControl_v1._0
                     case ((0 * 60) + 26): ExerciseSys_cbScenrio_sel(22); break;
                     case ((3 * 60)): ExerciseSys_cbScenrio_sel(23); break;
                     case ((3 * 60) + 10):
-                        trm_device_time = 0; TRM_send("EI1_S");   TRM_send("EI2_S");
+                        trm_device_time = 0; TRM_send("EI1_O");   TRM_send("EI2_O");
                         using_device = ' ';
                         TRM_ThreadTimer.Change(0, 1000);                                    // timer_ExerciseSys.Enabled = true;//(타이머) TRM타이머 시작
                         TRM_DeviceTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //decivetimer 동작 정지
@@ -1535,7 +1619,7 @@ namespace MainControl_v1._0
                                             TRM_DeviceTimer.Change(0, 1000); // 다른 타이머 동작 Device_timerWork
                                                                                 break;
                     //발전기
-                    case ((2 * 60) + 55):   ExerciseSys_cbScenrio_sel(25); TRM_send("EI1_S"); TRM_send("EI2_S"); break;
+                    case ((2 * 60) + 55):   ExerciseSys_cbScenrio_sel(25); TRM_send("EI1_O"); TRM_send("EI2_O"); break;
                     case ((3 * 60) + 5):    ExerciseSys_cbScenrio_sel(26); TRM_send("EI1_A"); TRM_send("EI2_A");
                                             using_device = 'G'; TRM_send("EG _R");
                                             TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false; //(타이머) TRM타이머 정지
@@ -1577,8 +1661,8 @@ namespace MainControl_v1._0
                     case ((4 * 60) + 38):   ExerciseSys_cbScenrio_sel(46);      break;
                     case ((4 * 60) + 48):   ExerciseSys_cbScenrio_sel(100);     break;
                     case ((4 * 60) + 49):   ExerciseSys_cbScenrio_sel(47); TRM_send("EL _EON"); TRM_send("EA _S"); break;
-                    case ((4 * 60) + 56):   TRM_send("EA _R"); TRM_send("EE _A"); TRM_send("ED _testing");
-                                            TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false;
+                    case ((4 * 60) + 56):   TRM_send("EA _R"); TRM_send("EE _A"); TRM_send("ED _S"); TRM_send("ED _R");
+                        TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false;
                                                                                 break;
                 }
             }
@@ -1615,6 +1699,19 @@ namespace MainControl_v1._0
 
         private void btn_ExerciseSys_SetupMode_Click(object sender, EventArgs e)    //'훈련소 장치 정비' 버튼 클릭
         {
+            ExerciseRm_status = "";
+            TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false; //(타이머 TRM 장치 타이머 정지
+            TRM_MainTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false; //(타이머) TRM 전체 시간타이머 정지
+            TRM_DeviceTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //decivetimer 동작 정지
+            lb_ExerciseSys_Clock.Text = "00:00";                                                      //남은 시간 출력
+            lb_ExerciseSys_maintime.Text = "0:00";
+            lb_ExerciseSys_subtime.Text = "0:00";
+            itembox1 = false;
+            itembox2 = false;
+            trm_main_time = 0;                                                                      //0*60;     남은시간 전체 초로 카운팅 저장하고 있는 변수
+            trm_time = 0;                                                                           //0*60;     남은시간 전체 초로 카운팅 저장하고 있는 변수
+            trm_device_time = 0;                                                                    //0*60;     남은시간 전체 초로 카운팅 저장하고 있는 변수
+
             if (serialPort_TRM.IsOpen)
             {
                 itembox1 = false;
@@ -1647,7 +1744,8 @@ namespace MainControl_v1._0
 
         private void btn_ExerciseSys_MovingOn_Click(object sender, EventArgs e)     //'훈련소 MOVING ON' 버튼 클릭
         {
-            ExerciseSys_PlayGroup("KILLER_COLOR");
+            TRM_send("EI1_O");
+            TRM_send("EI2_O");
         }
 
         private void btn_ExerciseSys_Stop_Click(object sender, EventArgs e)         //'훈련소 정지' 버튼 클릭
@@ -1719,10 +1817,15 @@ namespace MainControl_v1._0
                 case 7: return "V"; //장치 연결확인
                 case 8: return "E"; //봉쇄 활성화
                 case 9: return "F"; //장치 오픈
-                case 10: return "E"; //장치 오픈
-                case 11: return "scenario";
-                case 12: return "testing";
-                case 13: return "K";
+                case 10: return "E";//장치 오픈
+                case 11: return "K";//
+                case 12:
+                    TRM_send("EI1_M1_200,0,0,0,0");
+                    TRM_send("EI1_M2_5,10,15,20,25");
+                    TRM_send("EI1_M3_5,2,30,0,0");
+                    return "A";
+                case 13: return "N";//
+                case 14: return "D";//
                 default:return "A";
             }
         }
@@ -1739,9 +1842,9 @@ namespace MainControl_v1._0
         {
             switch (ScenarioIndex)
             {
-                case 0: TRM_send("VE1");      TRM_send("EA _A"); TRM_send("EL _EOFF"); TRM_send("EL _WON"); TRM_send("ED _scenario");     break;  //#1
-                case 1: TRM_send("VE2");      TRM_send("ED _scenario");                                                                         break;  //#2
-                case 2: TRM_send("VE3");      TRM_send("EM _M1"); TRM_send("ED _scenario");                                                   break;  //#3
+                case 0: TRM_send("VE1");      TRM_send("EA _A"); TRM_send("EL _EOFF"); TRM_send("EL _WON"); TRM_send("ED _E");     break;  //#1
+                case 1: TRM_send("VE2");      TRM_send("ED _E");                                                                         break;  //#2
+                case 2: TRM_send("VE3");      TRM_send("EM _M1"); TRM_send("ED _E");                                                   break;  //#3
                 case 3: TRM_send("VE4");      TRM_send("EM _M2");                                                                               break;  //#4
                 case 4: TRM_send("VE5");                                                                                                          break;  //#5
                 case 5: TRM_send("VE6");      TRM_send("EM _M3");                                                                               break;  //#6
@@ -1803,7 +1906,7 @@ namespace MainControl_v1._0
         private void btn_ExerciseSys_VideoStart_Click(object sender, EventArgs e)
         {
 
-            if (rb_GameSys_NormalMode.Checked == true)
+            if (rb_GameSys_DayMode.Checked == true)
             {
                 TRM_send("EP _D");
             }

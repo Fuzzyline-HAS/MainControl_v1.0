@@ -1,16 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Drawing.Text;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.IO.Ports;
-using System.Threading;
-using Timer = System.Threading.Timer;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace MainControl_v1._0
 {
@@ -32,7 +24,8 @@ namespace MainControl_v1._0
         delegate void TimerEventFiredDelegate_SelfRevive();
 
         Random rand = new Random();
-
+        bool modeSetting = false;
+        int modeSettingCnt = 0;
         public struct machine
         {
             public string deviceName;
@@ -101,7 +94,7 @@ namespace MainControl_v1._0
         {
             if (serialPort_PCM.IsOpen)
             {
-                serialPort_PCM.Write(data_input+"\n");                                                   //텍스트박스의 텍스트를 시리얼통신으로 송신
+                serialPort_PCM.Write(data_input + "\n");                                                   //텍스트박스의 텍스트를 시리얼통신으로 송신
             }
             else
                 MessageBox.Show((String)"PCM 통신 연결을 먼저 진행해주세요!");
@@ -142,12 +135,12 @@ namespace MainControl_v1._0
 
             switch (pcm_str[2][0])
             {
-                case 'A':   lb_color_change(lb_name, "장치 준비", Color.Red, Color.White);                                                      break;
-                case 'R':   lb_color_change(lb_name, "장치 활성", Color.Yellow, Color.Black);                                                  
-                            revivalOpenShow(pcm_str[1], lb_name);                                                                               break;
-                case 'S':   lb_color_change(lb_name, "장치 세팅", Color.White, Color.Black);
-                            lb_name_color_change(block_name, Color.LightGray, Color.Black);                                                     break;
-                case 'B':   lb_name_color_change(block_name, Color.Purple, Color.WhiteSmoke);                                                   break;
+                case 'A': lb_color_change(lb_name, "장치 준비", Color.Red, Color.White); break;
+                case 'R': lb_color_change(lb_name, "장치 활성", Color.Yellow, Color.Black);
+                    revivalOpenShow(pcm_str[1], lb_name); break;
+                case 'S': lb_color_change(lb_name, "장치 세팅", Color.White, Color.Black);
+                    lb_name_color_change(block_name, Color.LightGray, Color.Black); break;
+                case 'B': lb_name_color_change(block_name, Color.Purple, Color.WhiteSmoke); break;
                 case 'F':
                     if (pcm_str[1].Contains('G'))
                     {
@@ -180,33 +173,33 @@ namespace MainControl_v1._0
                     {
                         lb_color_change(lb_name, "해제중", Color.Pink, Color.White);
                     }
-                        break;
-                case 'L':   lb_color_change(lb_name, "도어 잠금", Color.Green, Color.White);                                                    break;
-                case 'T':   lb_color_change(lb_name, "장치 봉쇄", Color.Purple, Color.White);
-                            lb_name_color_change(block_name, Color.LightGray, Color.Black);                                                     break;
-                case 'E':   if (pcm_str[1].Contains('G')) lb_color_change(lb_name, "배선 수리", Color.Green, Color.WhiteSmoke);
+                    break;
+                case 'L': lb_color_change(lb_name, "도어 잠금", Color.Green, Color.White); break;
+                case 'T': lb_color_change(lb_name, "장치 봉쇄", Color.Purple, Color.White);
+                    lb_name_color_change(block_name, Color.LightGray, Color.Black); break;
+                case 'E': if (pcm_str[1].Contains('G')) lb_color_change(lb_name, "배선 수리", Color.Green, Color.WhiteSmoke);
                     else if (pcm_str[1].Contains('E'))
                     {
-                        PCM_send("VO25"); PCM_send("AD _S"); 
+                        PCM_send("VO25"); PCM_send("AD _S");
                         lb_color_change(lb_name, "탈출 성공", Color.Blue, Color.WhiteSmoke);
                         PCM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //timer_GameSys.Enabled = false;                                      //(타이머) 타이머 정지
                         if (cb_iotAUTO.Checked == true)
                             Radiobutton_PlayGroup("LR");                                             //(함수) iot그룹에서 술래 정해진것 통신 보는 함수
                     }
                     break;
-                case 'O':   lb_color_change(lb_name, "장치 열림", Color.Blue, Color.White);    
-                            revivalOpenChk(pcm_str[1]);                                                                                         break;
-                case 'I':   temple_collected_chip = Convert.ToInt32(pcm_str[2][1]-48);  lb_GameSys_CollectedTemple_cnt.Text = temple_collected_chip.ToString();
-                            if(rb_GameSys_NightMode.Checked == true)
-                                PCM_send("LL _Z");
-                            if (selfrevive_cnt == temple_collected_chip)
-                            {
-                                if (cb_selfRevive_auto.Checked == true)
-                                    btn_GameSys_SelfRevive.PerformClick();
-                                MessageBox.Show((String)"!자가부활모드 확인!");
-                                
-                            }
-                                                                                                                                                break;
+                case 'O': lb_color_change(lb_name, "장치 열림", Color.Blue, Color.White);
+                    revivalOpenChk(pcm_str[1]); break;
+                case 'I': temple_collected_chip = Convert.ToInt32(pcm_str[2][1] - 48); lb_GameSys_CollectedTemple_cnt.Text = temple_collected_chip.ToString();
+                    if (rb_GameSys_NightMode.Checked == true)
+                        PCM_send("LL _Z");
+                    if (selfrevive_cnt == temple_collected_chip)
+                    {
+                        if (cb_selfRevive_auto.Checked == true)
+                            btn_GameSys_SelfRevive.PerformClick();
+                        MessageBox.Show((String)"!자가부활모드 확인!");
+
+                    }
+                    break;
                 case 'N':
                     if (pcm_str[1].Contains('A'))
                     {
@@ -218,17 +211,17 @@ namespace MainControl_v1._0
                     }
                     else
                         lb_color_change(lb_name, "조명ON", Color.Yellow, Color.Black);
-                                                                                                                                                break;
+                    break;
                 //case 'Z': lb_color_change(lb_name, "BLINK", Color.Purple, Color.White);                                                         break;
-                case 'X': lb_color_change(lb_name, "OFFLINE", Color.Black, Color.White);                                                        break;
-                    
+                case 'X': lb_color_change(lb_name, "OFFLINE", Color.Black, Color.White); break;
+
             }
         }
         private void revivalOpenChk(string reviveName)  //생명장치 열렸는지 확인하는 함수 부분
         {
             for (int i = 0; i < 10; i++)
             {
-                if (reviveName.Contains(revivalMachine[i].deviceName) )
+                if (reviveName.Contains(revivalMachine[i].deviceName))
                 {
                     if (revivalMachine[i].deviceState == false)
                     {
@@ -264,13 +257,13 @@ namespace MainControl_v1._0
                         generatorMachine[i].deviceState = true;
                         fixed_generator_cnt++;
                         lb_GameSys_FixedGenerator_cnt.Text = fixed_generator_cnt.ToString();
-                        switch (fixed_generator_cnt) 
-                        { 
-                            case 1: PCM_send("VO38");                                          break;
-                            case 2: PCM_send("VO37");                                          break;
+                        switch (fixed_generator_cnt)
+                        {
+                            case 1: PCM_send("VO38"); break;
+                            case 2: PCM_send("VO37"); break;
                             case 3: PCM_send("VO22"); PCM_send("VO23");
                                 PCM_send("TE _R");
-                                PCM_send(escapeMachine[rand.Next(0, 2)].deviceName + " _R");    break;
+                                PCM_send(escapeMachine[rand.Next(0, 2)].deviceName + " _R"); break;
                         }
                     }
                 }
@@ -352,7 +345,7 @@ namespace MainControl_v1._0
             else
             {
                 tb_serialPort_IOT.AppendText(data_temp + "\r\n");
-            } 
+            }
         }
         private void btn_serialPort_IOT_conn_Click(object sender, EventArgs e)
         {
@@ -398,7 +391,7 @@ namespace MainControl_v1._0
             {
                 serialPort_TRM.Write(data_input + "\n");                           //텍스트박스의 텍스트를 시리얼통신으로 송신
             }
-            else 
+            else
                 MessageBox.Show((String)"TRM 통신 연결을 먼저 진행해주세요!");
         }
         private void serialPort_TRM_DataReceived(object sender, SerialDataReceivedEventArgs e)      //수신 이벤트가 발생하면 이 부분이 실행된다.
@@ -409,7 +402,7 @@ namespace MainControl_v1._0
         {
             string data_temp = serialPort_TRM.ReadLine();//원래:ReadExisting 으로 사용햇음    //시리얼 통신으로 들어온 데이터 data_pcm에 저장
             if (data_temp.StartsWith("lb"))
-            { 
+            {
                 lb_TRMstring_split(data_temp);
             }
             else if ((data_temp.Substring(data_temp.Length - 2)).Contains("\b"))
@@ -441,46 +434,46 @@ namespace MainControl_v1._0
             else
             {
                 tb_serialPort_TRM.AppendText(data_temp + "\r\n");
-            } 
+            }
         }
         private void lb_TRMstring_split(String TRM_STR)
         {
             //lb_ExerciseSys_EG_State 꼴로 만들기
             String[] pcm_str = TRM_STR.Split('_');
-            String lb_name = "lb_ExerciseSys_";     lb_name += pcm_str[1];      lb_name += "_State";
-            String block_name = "lb_ExerciseSys_";  block_name += pcm_str[1];
+            String lb_name = "lb_ExerciseSys_"; lb_name += pcm_str[1]; lb_name += "_State";
+            String block_name = "lb_ExerciseSys_"; block_name += pcm_str[1];
             switch (pcm_str[2][0])
             {
-                case 'A':   lb_color_change(lb_name, "장치 연결", Color.Red, Color.White);                                                              break;
-                case 'R':   lb_color_change(lb_name, "장치 활성", Color.Yellow, Color.Black);                                                           break;
-                case 'S':   lb_color_change(lb_name, "장치 세팅", Color.White, Color.Black);                                                            break;
-                case 'B':   lb_color_change(block_name, pcm_str[1], Color.Purple, Color.LightGray);                                                     break;
-                case 'F':   lb_color_change(lb_name, "수리 완료", Color.Blue, Color.White);        
-                            if (pcm_str[1].Contains("EG"))ExerciseRm_status = "Generator Fix";                                                        
-                            else if(pcm_str[1].Contains("EI1"))
-                            {
-                                lb_color_change("lb_ExerciseSys_EI1_State", "해제 중", Color.Pink, Color.White);
-                            }
-                            else if (pcm_str[1].Contains("EI2"))
-                            {
-                                lb_color_change("lb_ExerciseSys_EI2_State", "해제 중", Color.Pink, Color.White);
-                            }
+                case 'A': lb_color_change(lb_name, "장치 연결", Color.Red, Color.White); break;
+                case 'R': lb_color_change(lb_name, "장치 활성", Color.Yellow, Color.Black); break;
+                case 'S': lb_color_change(lb_name, "장치 세팅", Color.White, Color.Black); break;
+                case 'B': lb_color_change(block_name, pcm_str[1], Color.Purple, Color.LightGray); break;
+                case 'F': lb_color_change(lb_name, "수리 완료", Color.Blue, Color.White);
+                    if (pcm_str[1].Contains("EG")) ExerciseRm_status = "Generator Fix";
+                    else if (pcm_str[1].Contains("EI1"))
+                    {
+                        lb_color_change("lb_ExerciseSys_EI1_State", "해제 중", Color.Pink, Color.White);
+                    }
+                    else if (pcm_str[1].Contains("EI2"))
+                    {
+                        lb_color_change("lb_ExerciseSys_EI2_State", "해제 중", Color.Pink, Color.White);
+                    }
                     break;
-                case 'L':   lb_color_change(lb_name, "도어 잠금", Color.Green, Color.White);
-                            if (pcm_str[1].Contains("ED")) ExerciseRm_status = "Door Lock";                                                             break;
-                case 'T':   lb_color_change(lb_name, "장치 봉쇄", Color.Purple, Color.White);                                                           
-                            lb_color_change(block_name, pcm_str[1], Color.WhiteSmoke, Color.Black);                                                     break;
-                case 'E':   if (pcm_str[2].Contains("EON")) lb_color_change("lb_ExerciseSys_ELE_State", "E조명ON", Color.Yellow, Color.Black);
-                            else if (pcm_str[1].Contains("EG")) lb_color_change("lb_ExerciseSys_EG_State", "배선 수리", Color.Green, Color.White);
-                            else if (pcm_str[1].Contains("EE")) ExerciseRm_status = "Escape Open";
-                            else lb_color_change("lb_ExerciseSys_ELE_State", "E조명OFF", Color.Gray, Color.Black);                                      break;
-                case 'W':   if (pcm_str[2].Contains("WON")) lb_color_change("lb_ExerciseSys_ELW_State", "W조명ON", Color.Yellow, Color.Black);
-                            else lb_color_change("lb_ExerciseSys_ELW_State", "W조명OFF", Color.Gray, Color.Black);                                      break;
-                case 'O':   lb_color_change(lb_name, "장치 열림", Color.Blue, Color.White);
-                            if (pcm_str[1].Contains("ER"))       ExerciseRm_status = "Revival Open"; //if(ExerciseRm_status.Contains("Revival Open"))
-                            else if (pcm_str[1].Contains("EI1")) ExerciseRm_status = "Itembox1 Open";
-                            else if (pcm_str[1].Contains("EI2")) ExerciseRm_status = "Itembox2 Open";
-                            else if (pcm_str[1].Contains("EV"))  ExerciseRm_status = "Duct Open";                                                       break;
+                case 'L': lb_color_change(lb_name, "도어 잠금", Color.Green, Color.White);
+                    if (pcm_str[1].Contains("ED")) ExerciseRm_status = "Door Lock"; break;
+                case 'T': lb_color_change(lb_name, "장치 봉쇄", Color.Purple, Color.White);
+                    lb_color_change(block_name, pcm_str[1], Color.WhiteSmoke, Color.Black); break;
+                case 'E': if (pcm_str[2].Contains("EON")) lb_color_change("lb_ExerciseSys_ELE_State", "E조명ON", Color.Yellow, Color.Black);
+                    else if (pcm_str[1].Contains("EG")) lb_color_change("lb_ExerciseSys_EG_State", "배선 수리", Color.Green, Color.White);
+                    else if (pcm_str[1].Contains("EE")) ExerciseRm_status = "Escape Open";
+                    else lb_color_change("lb_ExerciseSys_ELE_State", "E조명OFF", Color.Gray, Color.Black); break;
+                case 'W': if (pcm_str[2].Contains("WON")) lb_color_change("lb_ExerciseSys_ELW_State", "W조명ON", Color.Yellow, Color.Black);
+                    else lb_color_change("lb_ExerciseSys_ELW_State", "W조명OFF", Color.Gray, Color.Black); break;
+                case 'O': lb_color_change(lb_name, "장치 열림", Color.Blue, Color.White);
+                    if (pcm_str[1].Contains("ER")) ExerciseRm_status = "Revival Open"; //if(ExerciseRm_status.Contains("Revival Open"))
+                    else if (pcm_str[1].Contains("EI1")) ExerciseRm_status = "Itembox1 Open";
+                    else if (pcm_str[1].Contains("EI2")) ExerciseRm_status = "Itembox2 Open";
+                    else if (pcm_str[1].Contains("EV")) ExerciseRm_status = "Duct Open"; break;
             }
         }
         private void btn_serialPort_TRM_conn_Click(object sender, EventArgs e)
@@ -535,7 +528,7 @@ namespace MainControl_v1._0
         int fixed_generator_cnt = 0;                                                                //0;     수리된 발전기의 개수 저장하는 변수
         int open_revive_cnt = 0;                                                                    //0;     열린 생명장치 개수 확인하는 변수
         int revive_rnd = 0;                                                                         //0;     랜덤 부활장치 변수
-        int[ , ] revive_arr = new int[10, 10]{  {1,7,0,5,2,9,6,4,8,3},
+        int[,] revive_arr = new int[10, 10]{  {1,7,0,5,2,9,6,4,8,3},
                                                 {2,1,8,4,7,5,0,3,6,9},
                                                 {7,3,8,1,9,2,4,6,5,0},
                                                 {9,2,7,3,5,1,8,6,0,4},
@@ -556,8 +549,8 @@ namespace MainControl_v1._0
             switch (selfrevival_remaing_time)
             {
                 case 60: PCM_send("AR _E"); break;
-                case 0:  SelfRevive_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
-                         PCM_send("AD _R"); selfrevival_remaing_time = 90; lb_GameSys_SelfReviveTime.Text = "1:30";  break;
+                case 0: SelfRevive_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+                    PCM_send("AD _R"); selfrevival_remaing_time = 90; lb_GameSys_SelfReviveTime.Text = "1:30"; break;
 
             }
         }
@@ -635,10 +628,10 @@ namespace MainControl_v1._0
                         PCM_send("AD _S");
                         OS_start = false;                                                                                   // OS_START BOOL변수 종료
                         PCM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);       //timer_GameSys.Enabled = false;// 게임 타이머 정지
-                        
-                        if(cb_iotAUTO.Checked == true)
+
+                        if (cb_iotAUTO.Checked == true)
                             Radiobutton_PlayGroup("LR");                                             //(함수) iot그룹에서 술래 정해진것 통신 보는 함수
-                                                                                                                                    break;                      // 타임 오버 메세지창 출력
+                        break;                      // 타임 오버 메세지창 출력
                 }
                 if (rb_GameSys_NightMode.Checked == true)
                 {
@@ -722,7 +715,7 @@ namespace MainControl_v1._0
             {
                 Radiobutton_PlayPeople();                                       //(함수) 플레이 인원 설정된데로 통신 보내기
                 Radiobutton_PlayMode();                                         //(함수) 플레이 모드 설정된데도 통신 보내기
-                PCM_ThreadTimer.Change(0,1000);                                 //timer_GameSys.Enabled = true;//(타이머) 타이머 시작
+                PCM_ThreadTimer.Change(0, 1000);                                 //timer_GameSys.Enabled = true;//(타이머) 타이머 시작
                 IOT_ThreadTimer.Change(0, 1000);                                //timer_IotSys.Enabled = true; //(타이머) iot타이머 시작
                 Radiobutton_PlayGroup("LN");                                    //(함수) iot그룹에서 술래 정해진것 통신 보는 함수
                 OS_start = true;                                                //(변수) OS시작
@@ -736,20 +729,17 @@ namespace MainControl_v1._0
 
         private void btn_GameSys_ReadyMode_Click(object sender, EventArgs e)
         {
-
-            if(rb_GameSys_NormalMode.Checked == true)
-            {
+            //modeChange();
+            //PCM_send("PS");
+            if (rb_GameSys_DayMode.Checked == true)
+            { 
                 PCM_send("AG _D");
                 PCM_send("AI _D");
                 PCM_send("AR _D");
                 PCM_send("AD _D");
                 PCM_send("AL _N");
             }
-            else if(rb_GameSys_EasyMode.Checked == true)
-            {
-
-            }
-            if (rb_GameSys_NightMode.Checked == true)
+            else if (rb_GameSys_NightMode.Checked == true)
             {
                 PCM_send("AG _N");
                 PCM_send("AI _N");
@@ -763,7 +753,7 @@ namespace MainControl_v1._0
                 game_remaing_time = GAMETIME * 60;                              //(변수) 남은시간 초기화
                 lb_GameSys_Clock.Text = "35:00";                                //남은시간 35:00로 출력
                 revive_rnd = rand.Next(0, 9);
-                for(int i = 0; i < 10; i++)
+                for (int i = 0; i < 10; i++)
                 {
                     string lb_name = "lb_revive_";
                     lb_name += i.ToString();
@@ -815,7 +805,7 @@ namespace MainControl_v1._0
         private void btn_GameSys_SelfRevive_Click(object sender, EventArgs e)
         {
             SelfRevive_Timer.Change(0, 1000);                                    //(통신) 부활장치 전체 자가부활 모드
-            PCM_send("VO40");PCM_send("AD _A");
+            PCM_send("VO40"); PCM_send("AD _A");
         }
 
         private void btn_GameSys_5min_add_Click(object sender, EventArgs e)
@@ -843,7 +833,7 @@ namespace MainControl_v1._0
                 PCM_ThreadTimer.Change(0, 1000);                                //timer_GameSys.Enabled = true; //(타이머) 타이머 시작
             else
                 MessageBox.Show((String)"PCM 통신 연결을 먼저 진행해주세요!");
-            
+
 
         }
 
@@ -865,7 +855,7 @@ namespace MainControl_v1._0
                 case 3: return 'C'; //CG
                 case 4: return 'S'; //SG
                 case 5: return 'T'; //TG
-                default:return 'A';
+                default: return 'A';
             }
         }
         private char two_itemforROOM(ComboBox cb_device_room)
@@ -882,8 +872,8 @@ namespace MainControl_v1._0
                 case 7: return 'S'; //SLEEPING
                 case 8: return 'S'; //SLEEPING
                 case 9: return 'T'; //TOILET
-                case 10:return 'T'; //TOILET
-                default:return 'A';
+                case 10: return 'T'; //TOILET
+                default: return 'A';
             }
         }
         private void btn_Generator_send_Click(object sender, EventArgs e)
@@ -893,21 +883,27 @@ namespace MainControl_v1._0
             send_Arduio += "G _";
             switch (cb_Generator_state.SelectedIndex)
             {
-                case 0: send_Arduio += 'A';     break;   //장치 연결
-                case 1: send_Arduio += 'R';     break;   //장치 활성화
-                case 2: send_Arduio += 'S';     break;   //장치 세팅
-                case 3: send_Arduio += 'C';     break;   //장치 연결확인
-                case 4: send_Arduio += "B1";    break;   //봉쇄1단계
-                case 5: send_Arduio += "B2";    break;   //봉쇄2단계
-                case 6: send_Arduio += "B3";    break;   //봉쇄3단계     
-                case 7: send_Arduio += 'O';     break;   //장치 오픈  
-                case 8: send_Arduio += "M1_1";  break;   //뉴비모드
-                case 9: send_Arduio += "M2_60,90,120";    break;   //뉴비모드 
-                case 10: send_Arduio += 'E';    break;   //발전기 배선수리 완료  
-                case 11: send_Arduio += 'F';    break;   //발전기 수리 완료
-                case 12: send_Arduio += 'N';    break;   //발전기 수리 완료
-                case 13: send_Arduio += 'D';    break;   //발전기 수리 완료
-                default: send_Arduio += 'A';    break;
+                case 0: send_Arduio += 'A'; break;   //장치 연결
+                case 1: send_Arduio += 'R'; break;   //장치 활성화
+                case 2: send_Arduio += 'S'; break;   //장치 세팅
+                case 3: send_Arduio += 'C'; break;   //장치 연결확인
+                case 4: send_Arduio += "B1"; break;   //봉쇄1단계
+                case 5: send_Arduio += "B2"; break;   //봉쇄2단계
+                case 6: send_Arduio += "B3"; break;   //봉쇄3단계     
+                case 7: send_Arduio += 'O'; break;   //장치 오픈  
+                case 8:
+                    String easymode = send_Arduio + "M1_" + tb_easy_generator_starter.Text;
+                    PCM_send(easymode); ;
+                    send_Arduio += 'A'; break;    //뉴비모드
+                case 9:
+                    String normalmode = send_Arduio + "M1_" + tb_normal_generator_starter.Text;
+                    PCM_send(normalmode);
+                    send_Arduio += 'A'; break; ;    //뉴비모드 break;   //뉴비모드 
+                case 10: send_Arduio += 'E'; break;   //발전기 배선수리 완료  
+                case 11: send_Arduio += 'F'; break;   //발전기 수리 완료
+                case 12: send_Arduio += 'N'; break;   //발전기 수리 완료
+                case 13: send_Arduio += 'D'; break;   //발전기 수리 완료
+                default: send_Arduio += 'A'; break;
             }
             PCM_send(send_Arduio);
         }
@@ -919,13 +915,13 @@ namespace MainControl_v1._0
             send_Arduio += "E _";
             switch (cb_Escape_state.SelectedIndex)
             {
-                case 0: send_Arduio += 'A';     break;   //장치 연결
-                case 1: send_Arduio += 'R';     break;   //장치 활성화
-                case 2: send_Arduio += 'S';     break;   //장치 세팅
-                case 3: send_Arduio += 'C';     break;   //장치 연결확인
-                case 4: send_Arduio += 'B';     break;   //봉쇄 활성화
-                case 5: send_Arduio += 'E';     break;   //탈출 성공
-                default: send_Arduio += 'A';    break;   //봉쇄 활성화     
+                case 0: send_Arduio += 'A'; break;   //장치 연결
+                case 1: send_Arduio += 'R'; break;   //장치 활성화
+                case 2: send_Arduio += 'S'; break;   //장치 세팅
+                case 3: send_Arduio += 'C'; break;   //장치 연결확인
+                case 4: send_Arduio += 'B'; break;   //봉쇄 활성화
+                case 5: send_Arduio += 'E'; break;   //탈출 성공
+                default: send_Arduio += 'A'; break;   //봉쇄 활성화     
             }
             PCM_send(send_Arduio);
         }
@@ -937,22 +933,22 @@ namespace MainControl_v1._0
             //Console.WriteLine(cb_Revive_name.SelectedIndex);
             if (cb_Revive_name.SelectedIndex == 0)
                 send_Arduio += "R _";
-            else if(cb_Revive_name.SelectedIndex%2 == 1)
+            else if (cb_Revive_name.SelectedIndex % 2 == 1)
                 send_Arduio += "R1_";
             else if (cb_Revive_name.SelectedIndex % 2 == 0)
                 send_Arduio += "R2_";
             switch (cb_Revive_state.SelectedIndex)
             {
-                case 0: send_Arduio += 'A';     break;   //장치 연결
-                case 1: send_Arduio += 'R';     break;   //장치 활성화
-                case 2: send_Arduio += 'S';     break;   //장치 세팅
-                case 3: send_Arduio += 'C';     break;   //장치 연결확인
-                case 4: send_Arduio += 'B';     break;   //봉쇄 활성화
-                case 5: send_Arduio += 'O';     break;   //장치 오픈
-                case 6: send_Arduio += 'E';     break;   //자가부활 모드
-                case 7: send_Arduio += 'N';     break;   //나이트 모드
-                case 8: send_Arduio += 'D';     break;   //데이모드
-                default: send_Arduio += 'A';    break;
+                case 0: send_Arduio += 'A'; break;   //장치 연결
+                case 1: send_Arduio += 'R'; break;   //장치 활성화
+                case 2: send_Arduio += 'S'; break;   //장치 세팅
+                case 3: send_Arduio += 'C'; break;   //장치 연결확인
+                case 4: send_Arduio += 'B'; break;   //봉쇄 활성화
+                case 5: send_Arduio += 'O'; break;   //장치 오픈
+                case 6: send_Arduio += 'E'; break;   //자가부활 모드
+                case 7: send_Arduio += 'N'; break;   //나이트 모드
+                case 8: send_Arduio += 'D'; break;   //데이모드
+                default: send_Arduio += 'A'; break;
             }
             PCM_send(send_Arduio);
         }
@@ -969,18 +965,32 @@ namespace MainControl_v1._0
                 send_Arduio += "I2_";
             switch (cb_Itembox_state.SelectedIndex)
             {
-                case 0: send_Arduio += 'A';     break;   //장치 연결
-                case 1: send_Arduio += 'R';     break;   //장치 활성화
-                case 2: send_Arduio += 'S';     break;   //장치 세팅
-                case 3: send_Arduio += 'C';     break;   //장치 연결확인
-                case 4: send_Arduio += 'B';     break;   //봉쇄 활성화
-                case 5: send_Arduio += 'O';     break;   //장치 연결확인
-                case 6: send_Arduio += "M1_200,0,0,0,0";    break;   //봉쇄 활성화     
-                case 7: send_Arduio += "M2_5,10,15,20,25";    break;   //나이트 모드
-                case 8: send_Arduio += "M3_5,2,30,0,0";    break;   //데이 모드
-                case 9: send_Arduio += 'N';     break;   //나이트 모드
-                case 10: send_Arduio += 'D';    break;   //데이 모드
-                default: send_Arduio += 'A';    break;
+                case 0: send_Arduio += 'A'; break;   //장치 연결
+                case 1: send_Arduio += 'R'; break;   //장치 활성화
+                case 2: send_Arduio += 'S'; break;   //장치 세팅
+                case 3: send_Arduio += 'C'; break;   //장치 연결확인
+                case 4: send_Arduio += 'B'; break;   //봉쇄 활성화
+                case 5: send_Arduio += 'O'; break;   //장치 연결확인
+                case 6:
+                    String easymode = send_Arduio + "M1_" + tb_easy_itembox_vibe1.Text + "," + tb_easy_itembox_vibe2.Text + "," + tb_easy_itembox_vibe3.Text + "," + tb_easy_itembox_vibe4.Text + "," + tb_easy_itembox_vibe5.Text;
+                    PCM_send(easymode);
+                    easymode = send_Arduio + "M2_" + tb_easy_itembox_ans1.Text + "," + tb_easy_itembox_ans2.Text + "," + tb_easy_itembox_ans3.Text + "," + tb_easy_itembox_ans4.Text + "," + tb_easy_itembox_ans5.Text;
+                    PCM_send(easymode);
+                    easymode = send_Arduio + "M3_" + tb_easy_itembox_anscnt.Text + "," + tb_easy_itembox_ansarea.Text + "," + tb_easy_itembox_Btime.Text + "," + tb_easy_itembox_Btime.Text + "," + tb_easy_itembox_Btime.Text;
+                    PCM_send(easymode);
+                    send_Arduio += "A";                  break;   //봉쇄 활성화        
+                case 7:
+                    String normalmode = send_Arduio + "M1_" + tb_normal_itembox_vibe1.Text + "," + tb_normal_itembox_vibe2.Text + "," + tb_normal_itembox_vibe3.Text + "," + tb_normal_itembox_vibe4.Text + "," + tb_normal_itembox_vibe5.Text;
+                    PCM_send(normalmode);
+                    normalmode = send_Arduio + "M2_" + tb_normal_itembox_ans1.Text + "," + tb_normal_itembox_ans2.Text + "," + tb_normal_itembox_ans3.Text + "," + tb_normal_itembox_ans4.Text + "," + tb_normal_itembox_ans5.Text;
+                    PCM_send(normalmode);
+                    normalmode = send_Arduio + "M3_" + tb_normal_itembox_anscnt.Text + "," + tb_normal_itembox_ansarea.Text + "," + tb_normal_itembox_Btime.Text + "," + tb_normal_itembox_Btime.Text + "," + tb_normal_itembox_Btime.Text;
+                    PCM_send(normalmode);
+                    send_Arduio += "A"; break;   //나이트 모드
+                case 8: send_Arduio += "A"; break;   //데이 모드
+                case 9: send_Arduio += 'N'; break;   //나이트 모드
+                case 10: send_Arduio += 'D'; break;   //데이 모드
+                default: send_Arduio += 'A'; break;
             }
             PCM_send(send_Arduio);
         }
@@ -990,26 +1000,26 @@ namespace MainControl_v1._0
             String send_Arduio = "";
             switch (cb_Door_name.SelectedIndex)
             {
-                case 0: send_Arduio += "AD _";  break;  //전체 장치
-                case 1: send_Arduio += "BD _";  break;  //대나무숲 
-                case 2: send_Arduio += "CD _";  break;  //지하실
-                case 3: send_Arduio += "SD _";  break;  //침실
-                case 4: send_Arduio += "TD _";  break;  //화장실
+                case 0: send_Arduio += "AD _"; break;  //전체 장치
+                case 1: send_Arduio += "BD _"; break;  //대나무숲 
+                case 2: send_Arduio += "CD _"; break;  //지하실
+                case 3: send_Arduio += "SD _"; break;  //침실
+                case 4: send_Arduio += "TD _"; break;  //화장실
             }
             switch (cb_Door_state.SelectedIndex)
             {
-                case 0: send_Arduio += 'A';     break;  //장치 연결
-                case 1: send_Arduio += 'R';     break;  //장치 활성화
-                case 2: send_Arduio += 'S';     break;  //장치 세팅
-                case 3: send_Arduio += 'C';     break;  //장치 연결확인
-                case 4: send_Arduio += "B1";    break;  //봉쇄1단계
-                case 5: send_Arduio += "B2";    break;  //봉쇄2단계
-                case 6: send_Arduio += "B3";    break;  //봉쇄3단계     
-                case 7: send_Arduio += 'O';     break;  //장치 오픈 
-                case 8: send_Arduio += 'L';     break;  //도어 잠금
-                case 9: send_Arduio += 'N';     break;  //나이트 모드
-                case 10: send_Arduio += 'D';    break;  //데이 모드
-                default: send_Arduio += 'A';    break;
+                case 0: send_Arduio += 'A'; break;  //장치 연결
+                case 1: send_Arduio += 'R'; break;  //장치 활성화
+                case 2: send_Arduio += 'S'; break;  //장치 세팅
+                case 3: send_Arduio += 'C'; break;  //장치 연결확인
+                case 4: send_Arduio += "B1"; break;  //봉쇄1단계
+                case 5: send_Arduio += "B2"; break;  //봉쇄2단계
+                case 6: send_Arduio += "B3"; break;  //봉쇄3단계     
+                case 7: send_Arduio += 'O'; break;  //장치 오픈 
+                case 8: send_Arduio += 'L'; break;  //도어 잠금
+                case 9: send_Arduio += 'N'; break;  //나이트 모드
+                case 10: send_Arduio += 'D'; break;  //데이 모드
+                default: send_Arduio += 'A'; break;
             }
             PCM_send(send_Arduio);
         }
@@ -1019,28 +1029,30 @@ namespace MainControl_v1._0
             String send_Arduio = "";
             switch (cb_Vent_name.SelectedIndex)
             {
-                case 0: send_Arduio += "AV _";  break;  //전체 장치
-                case 1: send_Arduio += "BV1_";  break;  //대나무 숲 덕트1
-                case 2: send_Arduio += "CV _";  break;  //지하실 덕트
-                case 3: send_Arduio += "TV _";  break;  //화장실 덕트
-                case 4: send_Arduio += "BV2_";  break;  //화장실 덕트
-                case 5: send_Arduio += "LV _";  break;  //화장실 덕트
-                case 6: send_Arduio += "SV _";  break;  //화장실 덕트
+                case 0: send_Arduio += "AV _"; break;  //전체 장치
+                case 1: send_Arduio += "BV1_"; break;  //대나무 숲 덕트1
+                case 2: send_Arduio += "CV _"; break;  //지하실 덕트
+                case 3: send_Arduio += "TV _"; break;  //화장실 덕트
+                case 4: send_Arduio += "BV2_"; break;  //화장실 덕트
+                case 5: send_Arduio += "LV _"; break;  //화장실 덕트
+                case 6: send_Arduio += "SV _"; break;  //화장실 덕트
 
             }
             switch (cb_Vent_state.SelectedIndex)
             {
-                case 0: send_Arduio += 'A';     break;  //장치 연결
-                case 1: send_Arduio += 'R';     break;  //장치 활성화
-                case 2: send_Arduio += 'S';     break;  //장치 세팅
-                case 3: send_Arduio += 'C';     break;  //장치 연결확인
-                case 4: send_Arduio += "B1";    break;  //봉쇄 1단계
-                case 5: send_Arduio += "B2";    break;  //봉쇄 2단계
-                case 6: send_Arduio += "B3";    break;  //봉쇄 3단계
-                case 7: send_Arduio += 'O';     break;  //장치 오픈
+                case 0: send_Arduio += 'A'; break;  //장치 연결
+                case 1: send_Arduio += 'R'; break;  //장치 활성화
+                case 2: send_Arduio += 'S'; break;  //장치 세팅
+                case 3: send_Arduio += 'C'; break;  //장치 연결확인
+                case 4: send_Arduio += "B1"; break;  //봉쇄 1단계
+                case 5: send_Arduio += "B2"; break;  //봉쇄 2단계
+                case 6: send_Arduio += "B3"; break;  //봉쇄 3단계
+                case 7: send_Arduio += 'O'; break;  //장치 오픈
                 case 8: send_Arduio += "M1_10"; break;  //뉴비1 모드
-                case 9: send_Arduio += "M2_0";  break;  //뉴비2 모드
-                default: send_Arduio += 'A';    break;
+                case 9: send_Arduio += "M2_0"; break;  //뉴비2 모드
+                case 10: send_Arduio += "N"; break; // 나이트 모드
+                case 11: send_Arduio += "D"; break; // 데이모드
+                default: send_Arduio += 'A'; break;
             }
             PCM_send(send_Arduio);
         }
@@ -1051,13 +1063,13 @@ namespace MainControl_v1._0
             send_Arduio += "LT _";
             switch (cb_Temple_state.SelectedIndex)
             {
-                case 0: send_Arduio += 'A';     break;   //장치 연결
-                case 1: send_Arduio += 'R';     break;   //장치 활성화
-                case 2: send_Arduio += 'S';     break;   //장치 세팅
-                case 3: send_Arduio += 'C';     break;   //장치 연결확인
-                case 4: send_Arduio += 'N';     break;   //나이트 모드
-                case 5: send_Arduio += 'D';     break;   //데이 모드
-                default: send_Arduio += 'A';    break;    
+                case 0: send_Arduio += 'A'; break;   //장치 연결
+                case 1: send_Arduio += 'R'; break;   //장치 활성화
+                case 2: send_Arduio += 'S'; break;   //장치 세팅
+                case 3: send_Arduio += 'C'; break;   //장치 연결확인
+                case 4: send_Arduio += 'N'; break;   //나이트 모드
+                case 5: send_Arduio += 'D'; break;   //데이 모드
+                default: send_Arduio += 'A'; break;
             }
             PCM_send(send_Arduio);
         }
@@ -1346,7 +1358,7 @@ namespace MainControl_v1._0
         {
             if (serialPort_IOT.IsOpen)
             {
-                IOT_ThreadTimer.Change(0,1000);                                 //timer_IotSys.Enabled = true;//(타이머) iot타이머 시작
+                IOT_ThreadTimer.Change(0, 1000);                                 //timer_IotSys.Enabled = true;//(타이머) iot타이머 시작
                 iot_remaing_time = IOT_TIME * 60;                               //(변수) iot타이머 시간 리셋
             }
             else
@@ -1415,9 +1427,9 @@ namespace MainControl_v1._0
             switch (trm_main_time)
             {
                 //case ((15 * 60) + 00):  TRM_send("VN10"); break;
-                case ((15 * 60) + 00):  TRM_send("VN5"); break;
-                case ((28 * 60) + 00):  TRM_send("VN3"); break;
-                case ((19 * 60) + 00):  TRM_send("VN1"); break;
+                case ((15 * 60) + 00): TRM_send("VN5"); break;
+                case ((28 * 60) + 00): TRM_send("VN3"); break;
+                case ((19 * 60) + 00): TRM_send("VN1"); break;
             }
         }
         void TRM_timerCallBack(Object state)
@@ -1487,12 +1499,12 @@ namespace MainControl_v1._0
                 switch (trm_device_time)
                 {
                     case ((0 * 60) + 1): ExerciseSys_cbScenrio_sel(19); break;
-                    case ((0 * 60) + 10): ExerciseSys_cbScenrio_sel(20); ExerciseSys_cbScenrio_sel(100);    break;
+                    case ((0 * 60) + 10): ExerciseSys_cbScenrio_sel(20); ExerciseSys_cbScenrio_sel(100); break;
                     case ((0 * 60) + 16): ExerciseSys_cbScenrio_sel(21); break;
                     case ((0 * 60) + 26): ExerciseSys_cbScenrio_sel(22); break;
                     case ((3 * 60)): ExerciseSys_cbScenrio_sel(23); break;
                     case ((3 * 60) + 10):
-                        trm_device_time = 0; TRM_send("EI1_O");   TRM_send("EI2_O");
+                        trm_device_time = 0; TRM_send("EI1_O"); TRM_send("EI2_O");
                         using_device = ' ';
                         TRM_ThreadTimer.Change(0, 1000);                                    // timer_ExerciseSys.Enabled = true;//(타이머) TRM타이머 시작
                         TRM_DeviceTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //decivetimer 동작 정지
@@ -1568,7 +1580,7 @@ namespace MainControl_v1._0
                     TRM_DeviceTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //decivetimer 동작 정지
                     trm_device_time = 0;
                 }
-            } 
+            }
         }
         private void timer_ExerciseSys_Tick(object sender, EventArgs e)
         {
@@ -1586,84 +1598,84 @@ namespace MainControl_v1._0
                 //처음 게임시작하고 나레이션if문
                 switch (trm_time)
                 {
-                    case ((0 * 60) + 1):    ExerciseSys_cbScenrio_sel(0);       break;
-                    case ((0 * 60) + 12):   ExerciseSys_cbScenrio_sel(1);       break; 
-                    case ((0 * 60) + 21):   ExerciseSys_cbScenrio_sel(2);       break;
-                    case ((0 * 60) + 27):   ExerciseSys_cbScenrio_sel(100);     break;
-                    case ((0 * 60) + 28):   ExerciseSys_cbScenrio_sel(3);       break;
-                    case ((0 * 60) + 35):   ExerciseSys_cbScenrio_sel(100);     break;
-                    case ((0 * 60) + 36):   ExerciseSys_cbScenrio_sel(4);       break; 
-                    case ((0 * 60) + 45):   ExerciseSys_cbScenrio_sel(5);       break;
-                    case ((0 * 60) + 56):   ExerciseSys_cbScenrio_sel(100);     break;
-                    case ((0 * 60) + 57):   ExerciseSys_cbScenrio_sel(6);       break;
-                    case ((1 * 60) + 4):    ExerciseSys_cbScenrio_sel(7);       break;
-                    case ((1 * 60) + 7):    ExerciseSys_PlayGroup("KILLER_COLOR"); break;
-                    case ((1 * 60) + 11):   ExerciseSys_cbScenrio_sel(100); ExerciseSys_PlayGroup("LR"); break;
-                    case ((1 * 60) + 13):   ExerciseSys_cbScenrio_sel(8);       break;
-                    case ((1 * 60) + 18):   ExerciseSys_cbScenrio_sel(100);     break;
-                    case ((1 * 60) + 19):   ExerciseSys_cbScenrio_sel(9);       break;
-                    case ((1 * 60) + 26):   ExerciseSys_cbScenrio_sel(100);     break;
-                    case ((1 * 60) + 32):   ExerciseSys_cbScenrio_sel(10);      break;
+                    case ((0 * 60) + 1): ExerciseSys_cbScenrio_sel(0); break;
+                    case ((0 * 60) + 12): ExerciseSys_cbScenrio_sel(1); break;
+                    case ((0 * 60) + 21): ExerciseSys_cbScenrio_sel(2); break;
+                    case ((0 * 60) + 27): ExerciseSys_cbScenrio_sel(100); break;
+                    case ((0 * 60) + 28): ExerciseSys_cbScenrio_sel(3); break;
+                    case ((0 * 60) + 35): ExerciseSys_cbScenrio_sel(100); break;
+                    case ((0 * 60) + 36): ExerciseSys_cbScenrio_sel(4); break;
+                    case ((0 * 60) + 45): ExerciseSys_cbScenrio_sel(5); break;
+                    case ((0 * 60) + 56): ExerciseSys_cbScenrio_sel(100); break;
+                    case ((0 * 60) + 57): ExerciseSys_cbScenrio_sel(6); break;
+                    case ((1 * 60) + 4): ExerciseSys_cbScenrio_sel(7); break;
+                    case ((1 * 60) + 7): ExerciseSys_PlayGroup("KILLER_COLOR"); break;
+                    case ((1 * 60) + 11): ExerciseSys_cbScenrio_sel(100); ExerciseSys_PlayGroup("LR"); break;
+                    case ((1 * 60) + 13): ExerciseSys_cbScenrio_sel(8); break;
+                    case ((1 * 60) + 18): ExerciseSys_cbScenrio_sel(100); break;
+                    case ((1 * 60) + 19): ExerciseSys_cbScenrio_sel(9); break;
+                    case ((1 * 60) + 26): ExerciseSys_cbScenrio_sel(100); break;
+                    case ((1 * 60) + 32): ExerciseSys_cbScenrio_sel(10); break;
                     //생명장치 동작
-                    case ((1 * 60) + 52):   ExerciseSys_cbScenrio_sel(11);      break;
-                    case ((2 * 60) + 7):    ExerciseSys_cbScenrio_sel(12);      break;
-                    case ((2 * 60) + 14):   TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false; //(타이머) TRM타이머 정지
-                                            TRM_DeviceTimer.Change(0, 1000); // 다른 타이머 동작 Device_timerWork
-                                                                                break;
+                    case ((1 * 60) + 52): ExerciseSys_cbScenrio_sel(11); break;
+                    case ((2 * 60) + 7): ExerciseSys_cbScenrio_sel(12); break;
+                    case ((2 * 60) + 14): TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false; //(타이머) TRM타이머 정지
+                        TRM_DeviceTimer.Change(0, 1000); // 다른 타이머 동작 Device_timerWork
+                        break;
                     //아이템상자 동작
-                    case ((2 * 60) + 22):   ExerciseSys_cbScenrio_sel(17); TRM_send("ER _A"); break;
-                    case ((2 * 60) + 31):   break;//ExerciseSys_cbScenrio_sel(100);     
-                    case ((2 * 60) + 32):   ExerciseSys_cbScenrio_sel(18);      break;
-                    case ((2 * 60) + 39):   using_device = 'I';  TRM_send("EI1_R"); TRM_send("EI2_R");
-                                            TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false; //(타이머) TRM타이머 정지
-                                            TRM_DeviceTimer.Change(0, 1000); // 다른 타이머 동작 Device_timerWork
-                                                                                break;
+                    case ((2 * 60) + 22): ExerciseSys_cbScenrio_sel(17); TRM_send("ER _A"); break;
+                    case ((2 * 60) + 31): break;//ExerciseSys_cbScenrio_sel(100);     
+                    case ((2 * 60) + 32): ExerciseSys_cbScenrio_sel(18); break;
+                    case ((2 * 60) + 39): using_device = 'I'; TRM_send("EI1_R"); TRM_send("EI2_R");
+                        TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false; //(타이머) TRM타이머 정지
+                        TRM_DeviceTimer.Change(0, 1000); // 다른 타이머 동작 Device_timerWork
+                        break;
                     //발전기
-                    case ((2 * 60) + 55):   ExerciseSys_cbScenrio_sel(25); TRM_send("EI1_O"); TRM_send("EI2_O"); break;
-                    case ((3 * 60) + 5):    ExerciseSys_cbScenrio_sel(26); TRM_send("EI1_A"); TRM_send("EI2_A");
-                                            using_device = 'G'; TRM_send("EG _R");
-                                            TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false; //(타이머) TRM타이머 정지
-                                            TRM_DeviceTimer.Change(0, 1000); // 다른 타이머 동작 Device_timerWork
-                                                                                break;
+                    case ((2 * 60) + 55): ExerciseSys_cbScenrio_sel(25); TRM_send("EI1_O"); TRM_send("EI2_O"); break;
+                    case ((3 * 60) + 5): ExerciseSys_cbScenrio_sel(26); TRM_send("EI1_A"); TRM_send("EI2_A");
+                        using_device = 'G'; TRM_send("EG _R");
+                        TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false; //(타이머) TRM타이머 정지
+                        TRM_DeviceTimer.Change(0, 1000); // 다른 타이머 동작 Device_timerWork
+                        break;
                     //도어
-                    case ((3 * 60) + 13):   ExerciseSys_cbScenrio_sel(32);      break;
-                    case ((3 * 60) + 19):   ExerciseSys_cbScenrio_sel(100);     break;
-                    case ((3 * 60) + 23):   ExerciseSys_cbScenrio_sel(33);      break;
-                    case ((3 * 60) + 29):   ExerciseSys_cbScenrio_sel(100); TRM_send("ED _R"); using_device = 'D';
-                                            TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false; //(타이머) TRM타이머 정지
-                                            TRM_DeviceTimer.Change(0, 1000); // 다른 타이머 동작 Device_timerWork
-                                                                                break;
+                    case ((3 * 60) + 13): ExerciseSys_cbScenrio_sel(32); break;
+                    case ((3 * 60) + 19): ExerciseSys_cbScenrio_sel(100); break;
+                    case ((3 * 60) + 23): ExerciseSys_cbScenrio_sel(33); break;
+                    case ((3 * 60) + 29): ExerciseSys_cbScenrio_sel(100); TRM_send("ED _R"); using_device = 'D';
+                        TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false; //(타이머) TRM타이머 정지
+                        TRM_DeviceTimer.Change(0, 1000); // 다른 타이머 동작 Device_timerWork
+                        break;
 
                     //탈출장치
-                    case ((3 * 60) + 42):   ExerciseSys_cbScenrio_sel(39); TRM_send("EE _R"); break;
-                    case ((3 * 60) + 52):   TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false; //(타이머) TRM타이머 정지
-                                            TRM_DeviceTimer.Change(0, 1000); using_device = 'E'; TRM_send("EE _R"); // 다른 타이머 동작 Device_timerWork
-                                                                                break;
+                    case ((3 * 60) + 42): ExerciseSys_cbScenrio_sel(39); TRM_send("EE _R"); break;
+                    case ((3 * 60) + 52): TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false; //(타이머) TRM타이머 정지
+                        TRM_DeviceTimer.Change(0, 1000); using_device = 'E'; TRM_send("EE _R"); // 다른 타이머 동작 Device_timerWork
+                        break;
 
-                    case ((3 * 60) + 59):   ExerciseSys_cbScenrio_sel(41);      break;
-                    case ((4 * 60) + 1):    TRM_send("ED _K"); TRM_send("EL _EOFF"); break;
-                    case ((4 * 60) + 8):    ExerciseSys_cbScenrio_sel(42);      break;
-                    case ((4 * 60) + 9):    ExerciseSys_cbScenrio_sel(100);     break;
+                    case ((3 * 60) + 59): ExerciseSys_cbScenrio_sel(41); break;
+                    case ((4 * 60) + 1): TRM_send("ED _K"); TRM_send("EL _EOFF"); break;
+                    case ((4 * 60) + 8): ExerciseSys_cbScenrio_sel(42); break;
+                    case ((4 * 60) + 9): ExerciseSys_cbScenrio_sel(100); break;
 
                     //덕트
-                    case ((4 * 60) + 12):   TRM_send("ED _V");                break;
-                    case ((4 * 60) + 14):   ExerciseSys_cbScenrio_sel(43);      break;
+                    case ((4 * 60) + 12): TRM_send("ED _V"); break;
+                    case ((4 * 60) + 14): ExerciseSys_cbScenrio_sel(43); break;
                     case ((4 * 60) + 16):   //ExerciseSys_cbScenrio_sel(100); 
-                                            TRM_send("ED _V"); TRM_send("EM _M12"); break;
-                    case ((4 * 60) + 21):   TRM_send("ED _V");                break;
-                    case ((4 * 60) + 23):   ExerciseSys_cbScenrio_sel(44);      break;
+                        TRM_send("ED _V"); TRM_send("EM _M12"); break;
+                    case ((4 * 60) + 21): TRM_send("ED _V"); break;
+                    case ((4 * 60) + 23): ExerciseSys_cbScenrio_sel(44); break;
                     case ((4 * 60) + 30):   //ExerciseSys_cbScenrio_sel(100); 
                                             //TRM_send("EM _M13\n");
-                                            TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false; //(타이머) TRM타이머 정지
-                                            TRM_DeviceTimer.Change(0, 1000); using_device = 'V'; TRM_send("EV _R"); // 다른 타이머 동작 Device_timerWork
-                                                                                break;
+                        TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false; //(타이머) TRM타이머 정지
+                        TRM_DeviceTimer.Change(0, 1000); using_device = 'V'; TRM_send("EV _R"); // 다른 타이머 동작 Device_timerWork
+                        break;
 
-                    case ((4 * 60) + 38):   ExerciseSys_cbScenrio_sel(46);      break;
-                    case ((4 * 60) + 48):   ExerciseSys_cbScenrio_sel(100);     break;
-                    case ((4 * 60) + 49):   ExerciseSys_cbScenrio_sel(47); TRM_send("EL _EON"); TRM_send("EA _S"); break;
-                    case ((4 * 60) + 56):   TRM_send("EA _R"); TRM_send("EE _A"); TRM_send("ED _S"); TRM_send("ED _R");
+                    case ((4 * 60) + 38): ExerciseSys_cbScenrio_sel(46); break;
+                    case ((4 * 60) + 48): ExerciseSys_cbScenrio_sel(100); break;
+                    case ((4 * 60) + 49): ExerciseSys_cbScenrio_sel(47); TRM_send("EL _EON"); TRM_send("EA _S"); break;
+                    case ((4 * 60) + 56): TRM_send("EA _R"); TRM_send("EE _A"); TRM_send("ED _S"); TRM_send("ED _R");
                         TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false;
-                                                                                break;
+                        break;
                 }
             }
         }
@@ -1688,7 +1700,7 @@ namespace MainControl_v1._0
             if (serialPort_TRM.IsOpen)
             {
                 itembox1 = false;
-                itembox2 = false;                        
+                itembox2 = false;
                 TRM_send("EA _A");
                 TRM_send("EL _EOFF");
                 //TRM_send("EL _WON\n");
@@ -1783,24 +1795,24 @@ namespace MainControl_v1._0
         {
             TRM_send("ELW_WOFF");
         }
-        private String ExerciseSys_cbDevicceName_sel() 
-        { 
-            switch(cb_ExerciseSys_DeviceName.SelectedIndex)
+        private String ExerciseSys_cbDevicceName_sel()
+        {
+            switch (cb_ExerciseSys_DeviceName.SelectedIndex)
             {
-                case 0:     return "A _";//ALL
-                case 1:     return "G _";
-                case 2:     return "E _";
-                case 3:     return "I1_";
-                case 4:     return "I2_";
-                case 5:     return "R _";
-                case 6:     return "D _";
-                case 7:     return "V _";
-                case 8:     return "T _";
-                case 9:     return "M _";
-                case 10:    return "C _";
-                case 11:    return "LE_";
-                case 12:    return "LT_";
-                default:    return "A _";
+                case 0: return "A _";//ALL
+                case 1: return "G _";
+                case 2: return "E _";
+                case 3: return "I1_";
+                case 4: return "I2_";
+                case 5: return "R _";
+                case 6: return "D _";
+                case 7: return "V _";
+                case 8: return "T _";
+                case 9: return "M _";
+                case 10: return "C _";
+                case 11: return "LE_";
+                case 12: return "LT_";
+                default: return "A _";
             }
         }
         private String ExerciseSys_cbDevicceState_sel()
@@ -1826,7 +1838,7 @@ namespace MainControl_v1._0
                     return "A";
                 case 13: return "N";//
                 case 14: return "D";//
-                default:return "A";
+                default: return "A";
             }
         }
 
@@ -1842,56 +1854,56 @@ namespace MainControl_v1._0
         {
             switch (ScenarioIndex)
             {
-                case 0: TRM_send("VE1");      TRM_send("EA _A"); TRM_send("EL _EOFF"); TRM_send("EL _WON"); TRM_send("ED _E");     break;  //#1
-                case 1: TRM_send("VE2");      TRM_send("ED _E");                                                                         break;  //#2
-                case 2: TRM_send("VE3");      TRM_send("EM _M1"); TRM_send("ED _E");                                                   break;  //#3
-                case 3: TRM_send("VE4");      TRM_send("EM _M2");                                                                               break;  //#4
-                case 4: TRM_send("VE5");                                                                                                          break;  //#5
-                case 5: TRM_send("VE6");      TRM_send("EM _M3");                                                                               break;  //#6
-                case 6: TRM_send("VE7_1");                                                                                                        break;  //#7-1
-                case 7: TRM_send("VE7_2");                                                                                                        break;  //#7-2
-                case 8: TRM_send("VE7_3");                                                                                                        break;  //#7-3
-                case 9: TRM_send("VE8");      TRM_send("EM _M4");                                                                               break;  //#8
-                case 10: TRM_send("VE9_1");   TRM_send("EM _M4-2"); TRM_send("EC _ON");                                                       break;  //#9-1
-                case 11: TRM_send("VE9_2");   TRM_send("EM _M4-3"); TRM_send("EL _EON");                                                      break;  //#9-2
-                case 12: TRM_send("VE9_3");   TRM_send("EL _EOFF"); TRM_send("EM _M4-4"); using_device = 'R';                                 break;  //#9-3
-                case 13: TRM_send("VE9_4");   TRM_send("EM _M4-5"); TRM_send("EL _EON");                                                      break;  //#9-4
-                case 14: TRM_send("VE9_5");                                                                                                       break;  //#9-5
-                case 15: TRM_send("VE9_6");                                                                                                       break;  //#9-6
-                case 16: TRM_send("VE9_7");                                                                                                       break;  //#9-7
-                case 17: TRM_send("VE10");    TRM_send("EL _EOFF"); TRM_send("EM _M5");                                                       break;  //#10
-                case 18: TRM_send("VE11");                                                                                                        break;  //#11
-                case 19: TRM_send("VE12");                                                                                                        break;  //#12
-                case 20: TRM_send("VE13");    TRM_send("EL _EON");                                                                              break;  //#13
-                case 21: TRM_send("VE14");                                                                                                        break;  //#14
-                case 22: TRM_send("VE15");                                                                                                        break;  //#15
-                case 23: TRM_send("VE16_1");  TRM_send("EM _M6");                                                                               break;  //#16-1
-                case 24: TRM_send("VE16_2");  TRM_send("EM _M6");                                                                               break;  //#16-2
-                case 25: TRM_send("VE17");                                                                                                        break;  //#17
-                case 26: TRM_send("VE18");    TRM_send("EL _EOFF"); TRM_send("EM _M7");                                                       break;  //#18
-                case 27: TRM_send("VE19");                                                                                                        break;  //#19
-                case 28: TRM_send("VE20");    TRM_send("EL _EON");                                                                              break;  //#20
-                case 29: TRM_send("VE21");                                                                                                        break;  //#21
-                case 30: TRM_send("VE22_1");                                                                                                      break;  //#22-1
-                case 31: TRM_send("VE22_2");  TRM_send("EL _EOFF"); TRM_send("EM _M8");                                                       break;  //#22-2
-                case 32: TRM_send("VE23");    TRM_send("EM _M9");                                                                               break;  //#23
-                case 33: TRM_send("VE24");    TRM_send("EM _M9-2");                                                                             break;  //#24
-                case 34: TRM_send("VE25_1");  TRM_send("EL _EON"); TRM_send("EM _M9-3");                                                      break;  //#25-1
-                case 35: TRM_send("VE25_2");  TRM_send("EM _M9-3");                                                                             break;  //#25-2
-                case 36: TRM_send("VE25_3");  TRM_send("EM _M9-3");                                                                             break;  //#25-3
-                case 37: TRM_send("VE26_1");  TRM_send("EL _EON");                                                                              break;  //#26-1
-                case 38: TRM_send("VE26_2");  TRM_send("EM _M9-4");                                                                             break;  //#26-2
-                case 39: TRM_send("VE27");    TRM_send("EM _M10");                                                                              break;  //#27
-                case 40: TRM_send("VE28");                                                                                                        break;  //#28
-                case 41: TRM_send("VE29");                                                                                                        break;  //#29
-                case 42: TRM_send("VE30");    TRM_send("EM _M11");                                                                              break;  //#30
-                case 43: TRM_send("VE31");                                                                                                        break;  //#31
-                case 44: TRM_send("VE32");                                                                                                        break;  //#32
-                case 45: TRM_send("VE33");    TRM_send("EM _M12-2");                                                                            break;  //#33
-                case 46: TRM_send("VE34");    TRM_send("EM _M13");                                                                              break;  //#34
-                case 47: TRM_send("VE35");                                                                                                        break;  //#35
-                case 48: TRM_send("VE36");                                                                                                        break;  //#36
-                case 100: TRM_send("EM _OFF");                                                                                                    break; //#1000
+                case 0: TRM_send("VE1"); TRM_send("EA _A"); TRM_send("EL _EOFF"); TRM_send("EL _WON"); TRM_send("ED _E"); break;  //#1
+                case 1: TRM_send("VE2"); TRM_send("ED _E"); break;  //#2
+                case 2: TRM_send("VE3"); TRM_send("EM _M1"); TRM_send("ED _E"); break;  //#3
+                case 3: TRM_send("VE4"); TRM_send("EM _M2"); break;  //#4
+                case 4: TRM_send("VE5"); break;  //#5
+                case 5: TRM_send("VE6"); TRM_send("EM _M3"); break;  //#6
+                case 6: TRM_send("VE7_1"); break;  //#7-1
+                case 7: TRM_send("VE7_2"); break;  //#7-2
+                case 8: TRM_send("VE7_3"); break;  //#7-3
+                case 9: TRM_send("VE8"); TRM_send("EM _M4"); break;  //#8
+                case 10: TRM_send("VE9_1"); TRM_send("EM _M4-2"); TRM_send("EC _ON"); break;  //#9-1
+                case 11: TRM_send("VE9_2"); TRM_send("EM _M4-3"); TRM_send("EL _EON"); break;  //#9-2
+                case 12: TRM_send("VE9_3"); TRM_send("EL _EOFF"); TRM_send("EM _M4-4"); using_device = 'R'; break;  //#9-3
+                case 13: TRM_send("VE9_4"); TRM_send("EM _M4-5"); TRM_send("EL _EON"); break;  //#9-4
+                case 14: TRM_send("VE9_5"); break;  //#9-5
+                case 15: TRM_send("VE9_6"); break;  //#9-6
+                case 16: TRM_send("VE9_7"); break;  //#9-7
+                case 17: TRM_send("VE10"); TRM_send("EL _EOFF"); TRM_send("EM _M5"); break;  //#10
+                case 18: TRM_send("VE11"); break;  //#11
+                case 19: TRM_send("VE12"); break;  //#12
+                case 20: TRM_send("VE13"); TRM_send("EL _EON"); break;  //#13
+                case 21: TRM_send("VE14"); break;  //#14
+                case 22: TRM_send("VE15"); break;  //#15
+                case 23: TRM_send("VE16_1"); TRM_send("EM _M6"); break;  //#16-1
+                case 24: TRM_send("VE16_2"); TRM_send("EM _M6"); break;  //#16-2
+                case 25: TRM_send("VE17"); break;  //#17
+                case 26: TRM_send("VE18"); TRM_send("EL _EOFF"); TRM_send("EM _M7"); break;  //#18
+                case 27: TRM_send("VE19"); break;  //#19
+                case 28: TRM_send("VE20"); TRM_send("EL _EON"); break;  //#20
+                case 29: TRM_send("VE21"); break;  //#21
+                case 30: TRM_send("VE22_1"); break;  //#22-1
+                case 31: TRM_send("VE22_2"); TRM_send("EL _EOFF"); TRM_send("EM _M8"); break;  //#22-2
+                case 32: TRM_send("VE23"); TRM_send("EM _M9"); break;  //#23
+                case 33: TRM_send("VE24"); TRM_send("EM _M9-2"); break;  //#24
+                case 34: TRM_send("VE25_1"); TRM_send("EL _EON"); TRM_send("EM _M9-3"); break;  //#25-1
+                case 35: TRM_send("VE25_2"); TRM_send("EM _M9-3"); break;  //#25-2
+                case 36: TRM_send("VE25_3"); TRM_send("EM _M9-3"); break;  //#25-3
+                case 37: TRM_send("VE26_1"); TRM_send("EL _EON"); break;  //#26-1
+                case 38: TRM_send("VE26_2"); TRM_send("EM _M9-4"); break;  //#26-2
+                case 39: TRM_send("VE27"); TRM_send("EM _M10"); break;  //#27
+                case 40: TRM_send("VE28"); break;  //#28
+                case 41: TRM_send("VE29"); break;  //#29
+                case 42: TRM_send("VE30"); TRM_send("EM _M11"); break;  //#30
+                case 43: TRM_send("VE31"); break;  //#31
+                case 44: TRM_send("VE32"); break;  //#32
+                case 45: TRM_send("VE33"); TRM_send("EM _M12-2"); break;  //#33
+                case 46: TRM_send("VE34"); TRM_send("EM _M13"); break;  //#34
+                case 47: TRM_send("VE35"); break;  //#35
+                case 48: TRM_send("VE36"); break;  //#36
+                case 100: TRM_send("EM _OFF"); break; //#1000
             }
         }
         private void btn_ExerciseSys_ScenarioSend_Click(object sender, EventArgs e)
@@ -1954,5 +1966,61 @@ namespace MainControl_v1._0
         {
             PCM_send("AL _F");
         }
+        private void modeChange()
+        {
+            String gamemode = "";
+            if (rb_GameSys_EasyMode.Checked == true)
+            {
+                gamemode = "PM_" + tb_easy_generator_starter.Text + "," + tb_easy_generator_B1.Text + "," + tb_easy_generator_B2.Text + "," + tb_easy_generator_B3.Text + ","
+                                 + tb_easy_escape_Btime.Text + ","
+                                 + tb_easy_itembox_vibe1.Text + "," + tb_easy_itembox_vibe2.Text + "," + tb_easy_itembox_vibe3.Text + "," + tb_easy_itembox_vibe4.Text + "," + tb_easy_itembox_vibe5.Text + ","
+                                 + tb_easy_itembox_ans1.Text + "," + tb_easy_itembox_ans2.Text + "," + tb_easy_itembox_ans3.Text + "," + tb_easy_itembox_ans4.Text + "," + tb_easy_itembox_ans5.Text + ","
+                                 + tb_easy_itembox_anscnt.Text + "," + tb_easy_itembox_ansarea.Text + "," + tb_easy_itembox_Btime.Text + "," + tb_easy_itembox_Btime.Text + "," + tb_easy_itembox_Btime.Text + ","
+                                 + tb_easy_vent_cooltime.Text + ","
+                                 + tb_easy_vent_cooltime_addup.Text + ",";
+            }
+            PCM_send(gamemode);
+        }
+        private void modeChange1()
+        { 
+            if (rb_GameSys_NormalMode.Checked == true)
+            {
+                String gamemode = "";
+                gamemode = "AG _M1_" + tb_normal_generator_starter.Text;
+                PCM_send(gamemode);
+                modeSetting = true;
+            }
+            else if (rb_GameSys_EasyMode.Checked == true)
+            {
+                String gamemode = "";
+                gamemode = "AG _M1_" + tb_easy_generator_starter.Text;
+                PCM_send(gamemode);
+                gamemode = "AG _M2_" + tb_easy_generator_B1.Text + "," + tb_easy_generator_B2.Text + "," + tb_easy_generator_B3.Text;
+                PCM_send(gamemode);
+
+                gamemode = "AI _M1_" + tb_easy_itembox_vibe1.Text + "," + tb_easy_itembox_vibe2.Text + "," + tb_easy_itembox_vibe3.Text + "," + tb_easy_itembox_vibe4.Text + "," + tb_easy_itembox_vibe5.Text;
+                PCM_send(gamemode);
+                gamemode = "AI _M2_" + tb_easy_itembox_ans1.Text + "," + tb_easy_itembox_ans2.Text + "," + tb_easy_itembox_ans3.Text + "," + tb_easy_itembox_ans4.Text + "," + tb_easy_itembox_ans5.Text;
+                PCM_send(gamemode);
+                gamemode = "AI _M3_" + tb_easy_itembox_anscnt.Text + "," + tb_easy_itembox_ansarea.Text + "," + tb_easy_itembox_Btime.Text + "," + tb_easy_itembox_Btime.Text + "," + tb_easy_itembox_Btime.Text;
+                PCM_send(gamemode);
+
+                gamemode = "AE _M1_" + tb_easy_escape_Btime;
+                PCM_send(gamemode);
+
+                gamemode = "AV _M1_" + tb_easy_vent_cooltime;
+                PCM_send(gamemode);
+                gamemode = "AV _M1_" + tb_easy_vent_cooltime_addup;
+                PCM_send(gamemode);
+            }
+
+
+        }
+
+        private void gp_Door_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
+    
 }

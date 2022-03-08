@@ -132,7 +132,7 @@
             this.tb_normal_vent_cooltime_addup = new System.Windows.Forms.TextBox();
             this.lb_normal_vent_cooltime_addup = new System.Windows.Forms.Label();
             this.lb_noraml_duct_cooltime = new System.Windows.Forms.Label();
-            this.tb_noraml_duct_cooltime = new System.Windows.Forms.TextBox();
+            this.tb_normal_vent_cooltime = new System.Windows.Forms.TextBox();
             this.tp_nightmode = new System.Windows.Forms.TabPage();
             this.cb_videoAfter_autoStart = new System.Windows.Forms.CheckBox();
             this.cb_selfRevive_auto = new System.Windows.Forms.CheckBox();
@@ -1536,7 +1536,7 @@
             this.tp_normal_duct.Controls.Add(this.tb_normal_vent_cooltime_addup);
             this.tp_normal_duct.Controls.Add(this.lb_normal_vent_cooltime_addup);
             this.tp_normal_duct.Controls.Add(this.lb_noraml_duct_cooltime);
-            this.tp_normal_duct.Controls.Add(this.tb_noraml_duct_cooltime);
+            this.tp_normal_duct.Controls.Add(this.tb_normal_vent_cooltime);
             this.tp_normal_duct.Location = new System.Drawing.Point(4, 22);
             this.tp_normal_duct.Name = "tp_normal_duct";
             this.tp_normal_duct.Size = new System.Drawing.Size(349, 134);
@@ -1570,13 +1570,13 @@
             this.lb_noraml_duct_cooltime.TabIndex = 18;
             this.lb_noraml_duct_cooltime.Text = "쿨타임(초):";
             // 
-            // tb_noraml_duct_cooltime
+            // tb_normal_vent_cooltime
             // 
-            this.tb_noraml_duct_cooltime.Location = new System.Drawing.Point(110, 6);
-            this.tb_noraml_duct_cooltime.Name = "tb_noraml_duct_cooltime";
-            this.tb_noraml_duct_cooltime.Size = new System.Drawing.Size(35, 21);
-            this.tb_noraml_duct_cooltime.TabIndex = 17;
-            this.tb_noraml_duct_cooltime.Text = "200";
+            this.tb_normal_vent_cooltime.Location = new System.Drawing.Point(110, 6);
+            this.tb_normal_vent_cooltime.Name = "tb_normal_vent_cooltime";
+            this.tb_normal_vent_cooltime.Size = new System.Drawing.Size(35, 21);
+            this.tb_normal_vent_cooltime.TabIndex = 17;
+            this.tb_normal_vent_cooltime.Text = "200";
             // 
             // tp_nightmode
             // 
@@ -2729,13 +2729,11 @@
             // rb_GameSys_HardMode
             // 
             this.rb_GameSys_HardMode.AutoSize = true;
-            this.rb_GameSys_HardMode.Checked = true;
             this.rb_GameSys_HardMode.Font = new System.Drawing.Font("타이포_쌍문동 B", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.rb_GameSys_HardMode.Location = new System.Drawing.Point(11, 75);
             this.rb_GameSys_HardMode.Name = "rb_GameSys_HardMode";
             this.rb_GameSys_HardMode.Size = new System.Drawing.Size(83, 17);
             this.rb_GameSys_HardMode.TabIndex = 2;
-            this.rb_GameSys_HardMode.TabStop = true;
             this.rb_GameSys_HardMode.Text = "찌발 MODE";
             this.rb_GameSys_HardMode.UseVisualStyleBackColor = true;
             // 
@@ -3421,9 +3419,9 @@
             "(C)장치 연결상태확인",
             "(B)봉쇄 활성화",
             "(O)장치오픈",
-            "(M1)",
-            "(M2)",
-            "(M3)",
+            "(M) 뉴비모드",
+            "(M) 일반 모드",
+            "(M) 찌발 모드",
             "(N)나이트 모드",
             "(D)데이모드"});
             this.cb_Itembox_state.Location = new System.Drawing.Point(6, 51);
@@ -3722,8 +3720,8 @@
             "(B2)봉쇄 2단계",
             "(B3)봉쇄 3단계",
             "(O)장치오픈",
-            "(M1) M1_1뉴비스타터",
-            "(M2) M2_60,90,120",
+            "(M) 뉴비 모드",
+            "(M) 일반 모드",
             "(E)배선수리 완료",
             "(F)발전기수리 완료",
             "(N)나이트 모드",
@@ -4042,7 +4040,9 @@
             "(B3)봉쇄 3단계",
             "(O)장치오픈",
             "(M1)첫: 10초",
-            "(M2)증가량: 0"});
+            "(M2)증가량: 0",
+            "(N)나이트 모드",
+            "(D)데이모드"});
             this.cb_Vent_state.Location = new System.Drawing.Point(6, 51);
             this.cb_Vent_state.Name = "cb_Vent_state";
             this.cb_Vent_state.Size = new System.Drawing.Size(117, 23);
@@ -4100,6 +4100,7 @@
             this.gp_Door.TabIndex = 42;
             this.gp_Door.TabStop = false;
             this.gp_Door.Text = "게임도어 (D)";
+            this.gp_Door.Enter += new System.EventHandler(this.gp_Door_Enter);
             // 
             // lb_TD_name
             // 
@@ -4252,7 +4253,7 @@
             this.gp_Temple.Size = new System.Drawing.Size(866, 80);
             this.gp_Temple.TabIndex = 12;
             this.gp_Temple.TabStop = false;
-            this.gp_Temple.Text = "ㄴ";
+            this.gp_Temple.Text = "제단 (T)";
             // 
             // btn_Temple_send
             // 
@@ -5895,6 +5896,10 @@
             this.timer_ExerciseSys.Interval = 1000;
             this.timer_ExerciseSys.Tick += new System.EventHandler(this.timer_ExerciseSys_Tick);
             // 
+            // serialPort_PCM
+            // 
+            this.serialPort_PCM.DtrEnable = true;
+            // 
             // MainControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -6457,7 +6462,7 @@
         private System.Windows.Forms.TextBox tb_normal_vent_cooltime_addup;
         private System.Windows.Forms.Label lb_normal_vent_cooltime_addup;
         private System.Windows.Forms.Label lb_noraml_duct_cooltime;
-        private System.Windows.Forms.TextBox tb_noraml_duct_cooltime;
+        private System.Windows.Forms.TextBox tb_normal_vent_cooltime;
         private System.Windows.Forms.RadioButton rb_GameSys_NightMode;
         private System.Windows.Forms.RadioButton rb_GameSys_DayMode;
         private System.Windows.Forms.RadioButton rb_GameSys_HardMode;

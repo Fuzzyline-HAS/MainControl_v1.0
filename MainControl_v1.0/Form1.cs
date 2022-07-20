@@ -182,22 +182,106 @@ namespace MainControl_v1._0
                         lb_color_change("lb_SL_state", "DAY 모드", Color.Yellow, Color.Black);
                         lb_color_change("lb_TL_state", "DAY 모드", Color.Yellow, Color.Black);
                     }
+                    else if (pcm_str[1].Contains('T'))
+                    {
+                        lb_LT_destroy.Visible = true;
+                        PCM_send("AD_TL_10");
+                    }
                     else
                         lb_color_change(lb_name, "데이모트", Color.Yellow, Color.White);
                                                                                             break;
+                case 'H':
+                    if (pcm_str[1].Contains('T'))
+                    {
+                        lb_LT_mode.Text = "하드";
+                    }
+                    if (pcm_str[1].Contains("AD"))
+                    {
+                        lb_BD_mode.Text = "하드";
+                        lb_CD_mode.Text = "하드";
+                        lb_SD_mode.Text = "하드";
+                        lb_TD_mode.Text = "하드";
+                    }
+                    else if (pcm_str[1].Contains("BD"))
+                    {
+                        lb_BD_mode.Text = "하드";
+                    }
+                    else if (pcm_str[1].Contains("CD"))
+                    {
+                        lb_BD_mode.Text = "하드";
+                    }
+                    else if (pcm_str[1].Contains("SD"))
+                    {
+                        lb_BD_mode.Text = "하드";
+                    }
+                    else if (pcm_str[1].Contains("TD"))
+                    {
+                        lb_BD_mode.Text = "하드";
+                    }
+                    break;
+                case 'K':
+                    if (pcm_str[1].Contains("I"))
+                    {
+                        lb_color_change(lb_name, "모이즈스킬", Color.Blue, Color.Black);
+                    }break;
                 case 'R':
-                    if (pcm_str[1].Contains('R'))           revivalOpenShow(pcm_str[1], lb_name);
-                    else if (pcm_str[1].Contains("BV1"))    BV1_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
-                    else if (pcm_str[1].Contains("BV2"))    BV2_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
-                    else if (pcm_str[1].Contains("LV"))     LV_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
-                    else if (pcm_str[1].Contains("CV"))     CV_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
-                    else if (pcm_str[1].Contains("SV"))     SV_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
-                    else if (pcm_str[1].Contains("TV"))     TV_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
-
-                    lb_color_change(lb_name, "장치 활성", Color.Yellow, Color.Black);
+                    if (pcm_str[1].Contains('R'))
+                    {
+                        lb_color_change(lb_name, "장치 활성", Color.Yellow, Color.Black);
+                        revivalOpenShow(pcm_str[1], lb_name);
+                    }
+                    else if (pcm_str[1].Contains('V'))
+                    {
+                        lb_color_change(lb_name, "장치 활성", Color.Yellow, Color.Black);
+                        if (pcm_str[1].Contains("BV1")) BV1_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+                        else if (pcm_str[1].Contains("BV2")) BV2_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+                        else if (pcm_str[1].Contains("LV")) LV_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+                        else if (pcm_str[1].Contains("CV")) CV_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+                        else if (pcm_str[1].Contains("SV")) SV_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+                        else if (pcm_str[1].Contains("TV")) TV_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+                    }
+                    else lb_color_change(lb_name, "장치 활성", Color.Yellow, Color.Black);
                                                                                             break;
-                case 'S': lb_color_change(lb_name, "장치 세팅", Color.White, Color.Black);
-                            lb_name_color_change(block_name, Color.LightGray, Color.Black); break;
+                case 'S':   
+                    lb_color_change(lb_name, "장치 세팅", Color.White, Color.Black);
+                    lb_name_color_change(block_name, Color.LightGray, Color.Black);
+                    if (pcm_str[1].Contains('T'))
+                    {
+                        lb_LT_mode.Text = "일반";
+                        lb_LT_destroy.Visible = false;
+                    }
+                    else if (pcm_str[1].Contains("AD"))
+                    {
+                        lb_BD_mode.Text = "일반";
+                        lb_CD_mode.Text = "일반";
+                        lb_SD_mode.Text = "일반";
+                        lb_TD_mode.Text = "일반";
+                    }
+                    else if (pcm_str[1].Contains("BD"))
+                    {
+                        lb_BD_mode.Text = "일반";
+                        lb_BD_taggertime.Text = "7초";
+                        lb_BD_showtime.Visible = false;
+                    }
+                    else if (pcm_str[1].Contains("CD"))
+                    {
+                        lb_CD_mode.Text = "일반";
+                        lb_CD_taggertime.Text = "7초";
+                        lb_CD_showtime.Visible = false;
+                    }
+                    else if (pcm_str[1].Contains("SD"))
+                    {
+                        lb_SD_mode.Text = "일반";
+                        lb_SD_taggertime.Text = "7초";
+                        lb_SD_showtime.Visible = false;
+                    }
+                    else if (pcm_str[1].Contains("TD"))
+                    {
+                        lb_TD_mode.Text = "일반";
+                        lb_TD_taggertime.Text = "7초";
+                        lb_TD_showtime.Visible = false;
+                    }
+                    break;
                 case 'B': lb_name_color_change(block_name, Color.Purple, Color.WhiteSmoke); break;
                 case 'F':
                     if (pcm_str[1].Contains('G'))
@@ -219,26 +303,10 @@ namespace MainControl_v1._0
                         else
                             lb_color_change(lb_name, "조명OFF", Color.Gray, Color.White);
                     }
-                    else if (pcm_str[1][1] == 'T')                                                                      //제단활성화 일때
+                    else if (pcm_str[1].Contains('T'))
                     {
-                        OS_start = false; //게임종료
-                        btn_GameSys_GameStart.Text = "GAME\nSTART";
-                        btn_GameSys_GameStart.BackColor = Color.Green; btn_GameSys_GameStart.ForeColor = Color.WhiteSmoke;
-                        PCM_send("VO13"); PCM_send("AD _S");
-                        lb_color_change(lb_name, "제단 활성", Color.Purple, Color.White);
-                        Radiobutton_PlayGroup("VIBE_OFF");
-                        PCM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
-                        TaggerSkill_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //술래스킬 타이머 정지
-                        taggerskill_remaing_time = TAGGERSKILL_TIME * 60;                                               //술래스킬 타이머 리셋
-                        lb_TaggerSkill_timer.Text = lb_TaggerSkill_timer.Text = (taggerskill_remaing_time / 60).ToString("00") + ":" + (taggerskill_remaing_time % 60).ToString("00");   //술래스킬 타이머 리셋
-                        if (cb_iotAUTO.Checked == true)
-                            Radiobutton_PlayGroup("LR");                                             //(함수) iot그룹에서 술래 정해진것 통신 보는 함수
-                        BV1_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
-                        BV2_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
-                        LV_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
-                        CV_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
-                        SV_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
-                        TV_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+                        lb_LT_destroy.Visible = false;
+                        PCM_send("AD_TL_5");
                     }
                     else if (pcm_str[1][1] == 'I')
                     {
@@ -288,7 +356,83 @@ namespace MainControl_v1._0
                     }
                     break;
                 case 'T':
-                    if (cb_Temple_autokiller.Checked)                                                                   //제단 술래결정일때
+                    if (pcm_str[1].Contains("TL"))
+                    {
+                        if (pcm_str[1].Contains("AD")){
+                            lb_BD_taggertime.Text = pcm_str[2] + "초";
+                            lb_CD_taggertime.Text = pcm_str[2] + "초";
+                            lb_SD_taggertime.Text = pcm_str[2] + "초";
+                            lb_TD_taggertime.Text = pcm_str[2] + "초";
+                        }
+                        else if (pcm_str[1].Contains("BD"))
+                        {
+                            lb_BD_taggertime.Text = pcm_str[2] + "초";
+                        }
+                        else if (pcm_str[1].Contains("CD"))
+                        {
+                            lb_CD_taggertime.Text = pcm_str[2] + "초";
+                        }
+                        else if (pcm_str[1].Contains("SD"))
+                        {
+                            lb_SD_taggertime.Text = pcm_str[2] + "초";
+                        }
+                        else if (pcm_str[1].Contains("TD"))
+                        {
+                            lb_TD_taggertime.Text = pcm_str[2] + "초";
+                        }                       
+                    }
+                    else if (pcm_str[1].Contains("TON"))
+                    {
+                        if (pcm_str[1].Contains("AD"))
+                        {
+                            lb_BD_showtime.Visible = true;
+                            lb_CD_showtime.Visible = true;
+                            lb_SD_showtime.Visible = true;
+                            lb_TD_showtime.Visible = true;
+                        }
+                        else if (pcm_str[1].Contains("BD"))
+                        {
+                            lb_BD_showtime.Visible = true;
+                        }
+                        else if (pcm_str[1].Contains("CD"))
+                        {
+                            lb_CD_showtime.Visible = true;
+                        }
+                        else if (pcm_str[1].Contains("SD"))
+                        {
+                            lb_SD_showtime.Visible = true;
+                        }
+                        else if (pcm_str[1].Contains("TD"))
+                        {
+                            lb_TD_showtime.Visible = true;
+                        }
+                    }
+                    else if (pcm_str[1].Contains("TOF")){
+                        if (pcm_str[1].Contains("AD"))
+                        {
+                            lb_BD_showtime.Visible = false;
+                            lb_CD_showtime.Visible = false;
+                            lb_SD_showtime.Visible = false;
+                            lb_TD_showtime.Visible = false;
+                        }
+                        else if (pcm_str[1].Contains("BD"))
+                        {
+                            lb_BD_showtime.Visible = false;
+                        }
+                        else if (pcm_str[1].Contains("CD"))
+                        {
+                            lb_CD_showtime.Visible = false;
+                        }
+                        else if (pcm_str[1].Contains("SD"))
+                        {
+                            lb_SD_showtime.Visible = false;
+                        }
+                        else if (pcm_str[1].Contains("TD"))
+                        {
+                            lb_TD_showtime.Visible = false;
+                        }
+                    }
+                    else if (cb_Temple_autokiller.Checked)                                                                   //제단 술래결정일때
                     {
                         if (pcm_str[1][1] == 'T')                                                                      //제단 일때
                         {
@@ -338,7 +482,29 @@ namespace MainControl_v1._0
                     break;
                 case 'O': lb_color_change(lb_name, "장치 열림", Color.Blue, Color.White);
                     revivalOpenChk(pcm_str[1]); break;
-                case 'I': temple_collected_chip = Convert.ToInt32(pcm_str[2][1] - 48); lb_GameSys_CollectedTemple_cnt.Text = temple_collected_chip.ToString();
+                case 'Q':
+                    if (pcm_str[1][1] == 'T')                                                                      //제단활성화 일때
+                    {
+                        OS_start = false; //게임종료
+                        btn_GameSys_GameStart.Text = "GAME\nSTART";
+                        btn_GameSys_GameStart.BackColor = Color.Green; btn_GameSys_GameStart.ForeColor = Color.WhiteSmoke;
+                        PCM_send("VO13"); PCM_send("AD _S");
+                        lb_color_change(lb_name, "제단 활성", Color.Purple, Color.White);
+                        Radiobutton_PlayGroup("VIBE_OFF");
+                        PCM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+                        TaggerSkill_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //술래스킬 타이머 정지
+                        taggerskill_remaing_time = TAGGERSKILL_TIME * 60;                                               //술래스킬 타이머 리셋
+                        lb_TaggerSkill_timer.Text = lb_TaggerSkill_timer.Text = (taggerskill_remaing_time / 60).ToString("00") + ":" + (taggerskill_remaing_time % 60).ToString("00");   //술래스킬 타이머 리셋
+                        if (cb_iotAUTO.Checked == true)
+                            Radiobutton_PlayGroup("LR");                                             //(함수) iot그룹에서 술래 정해진것 통신 보는 함수
+                        BV1_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+                        BV2_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+                        LV_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+                        CV_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+                        SV_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+                        TV_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+                        }break;
+                    case 'I': temple_collected_chip = Convert.ToInt32(pcm_str[2][1] - 48); lb_GameSys_CollectedTemple_cnt.Text = temple_collected_chip.ToString();
                     if (rb_GameSys_NightMode.Checked == true)
                         PCM_send("LL _Z");
                     if (selfrevive_cnt == temple_collected_chip)
@@ -358,7 +524,7 @@ namespace MainControl_v1._0
                         lb_color_change("lb_SL_state", "조명ON", Color.Yellow, Color.Black);
                         lb_color_change("lb_TL_state", "조명ON", Color.Yellow, Color.Black);
                     }
-                    else if(pcm_str[2] == "NFC_X")
+                    else if(pcm_str[2].Contains("NFC"))
                     {
                         tb_serialPort_PCM_err.AppendText(DateTime.Now.ToString("yy.MM.dd hh:mm:ss -> "));
                         tb_serialPort_PCM_err.AppendText(pcm_str[1] + "_RFID 오류\r\n");
@@ -367,13 +533,17 @@ namespace MainControl_v1._0
                         lb_color_change(lb_name, "나이트모트", Color.Gray, Color.Black);
                     break;
                 case 'M':
-                    if(pcm_str[2] == "MP3_X")
+                    if(pcm_str[2].Contains("MP3"))
                     {
                         tb_serialPort_PCM_err.AppendText(DateTime.Now.ToString("yy.MM.dd hh:mm:ss -> "));
                         tb_serialPort_PCM_err.AppendText(pcm_str[1] + "_MP3 오류\r\n");
                     }
                     break;
-                //case 'Z': lb_color_change(lb_name, "BLINK", Color.Purple, Color.White);                                                         break;
+                    //case 'Z': lb_color_change(lb_name, "BLINK", Color.Purple, Color.White);                                                         break;
+                case 'W':
+                    tb_serialPort_PCM_err.AppendText(DateTime.Now.ToString("yy.MM.dd hh:mm:ss -> "));
+                    tb_serialPort_PCM_err.AppendText(pcm_str[1] + "_리셋됨\r\n");
+                    lb_color_change(lb_name, "리셋됨", Color.Black, Color.White); break;
                 case 'X':
                     tb_serialPort_PCM_err.AppendText(DateTime.Now.ToString("yy.MM.dd hh:mm:ss -> "));
                     tb_serialPort_PCM_err.AppendText(pcm_str[1] + "_지그비 오류\r\n");
@@ -427,8 +597,8 @@ namespace MainControl_v1._0
                             case 2: PCM_send("VO37"); break;
                             case 3: PCM_send("VO22"); PCM_send("VO23");
                                 PCM_send("TE _R");
-                                //PCM_send("TE _R"); PCM_send("SE _R");   break; //지하실 탈출장치 안되서 화장실 침실 탈출장치 강제 오픈*/
-                                PCM_send(escapeMachine[rand.Next(0, 2)].deviceName + " _R"); break;
+                                PCM_send("TE _R"); PCM_send("SE _R");   break; //지하실 탈출장치 안되서 화장실 침실 탈출장치 강제 오픈*/
+                                //PCM_send(escapeMachine[rand.Next(0, 2)].deviceName + " _R"); break;
                         }
                     }
                 }
@@ -803,8 +973,7 @@ namespace MainControl_v1._0
                         MessageBox.Show((String)"영상 파일을 새로 시작해 주세요!");
                     }
                     else lb_color_change("lb_ExerciseSys_ELE_State", "E조명OFF", Color.Gray, Color.Black); break;
-                case 'W': if (pcm_str[2].Contains("WON")) lb_color_change("lb_ExerciseSys_ELW_State", "W조명ON", Color.Yellow, Color.Black);
-                    else lb_color_change("lb_ExerciseSys_ELW_State", "W조명OFF", Color.Gray, Color.Black); break;
+                
                 case 'O':
                     if (pcm_str[1].Contains("ES"))
                     {
@@ -827,14 +996,14 @@ namespace MainControl_v1._0
                         btn_setting_light.BackColor = Color.Red;
                         btn_setting_light.Text = "청소등 OFF";
                     }
-                    else if (pcm_str[2] == "NFC_X")
+                    else if (pcm_str[2].Contains("NFC"))
                     {
                         tb_serialPort_PCM_err.AppendText(DateTime.Now.ToString("yy.MM.dd hh:mm:ss -> "));
                         tb_serialPort_PCM_err.AppendText(pcm_str[1] + "_RFID 오류\r\n");
                     }
                     break;
                 case 'M':
-                    if (pcm_str[2] == "MP3_X")
+                    if (pcm_str[2].Contains("MP3"))
                     {
                         tb_serialPort_PCM_err.AppendText(DateTime.Now.ToString("yy.MM.dd hh:mm:ss -> "));
                         tb_serialPort_PCM_err.AppendText(pcm_str[1] + "_MP3 오류\r\n");
@@ -852,6 +1021,17 @@ namespace MainControl_v1._0
                     {
                         lb_color_change(lb_name, "스크린UP", Color.Blue, Color.White);
                     }                                                                               break;
+
+                case 'W':
+                    if (pcm_str[2].Contains("WON")) lb_color_change("lb_ExerciseSys_ELW_State", "W조명ON", Color.Yellow, Color.Black);
+                    else if (pcm_str[2].Contains("WOFF")) lb_color_change("lb_ExerciseSys_ELW_State", "W조명OFF", Color.Gray, Color.Black);
+                    else
+                    {
+                        tb_serialPort_PCM_err.AppendText(DateTime.Now.ToString("yy.MM.dd hh:mm:ss -> "));
+                        tb_serialPort_PCM_err.AppendText(pcm_str[1] + "_리셋됨\r\n");
+                        lb_color_change(lb_name, "리셋됨", Color.Black, Color.White);
+                    }
+                        break;
                 case 'X':
                     if (pcm_str[1].Contains("EB"))
                     {
@@ -1544,7 +1724,7 @@ namespace MainControl_v1._0
                     PCM_send(easymode);
                     easymode = send_Arduio + "M3_" + tb_easy_itembox_anscnt.Text + "," + tb_easy_itembox_ansarea.Text + "," + tb_easy_itembox_Btime.Text + "," + tb_easy_itembox_Btime.Text + "," + tb_easy_itembox_Btime.Text;
                     PCM_send(easymode);
-                    send_Arduio += "A";                  break;   //봉쇄 활성화        
+                    send_Arduio += "A";                  break;   //뉴비모드
                 case 7:
                     String normalmode = send_Arduio + "M1_" + tb_normal_itembox_vibe1.Text + "," + tb_normal_itembox_vibe2.Text + "," + tb_normal_itembox_vibe3.Text + "," + tb_normal_itembox_vibe4.Text + "," + tb_normal_itembox_vibe5.Text;
                     PCM_send(normalmode);
@@ -1552,11 +1732,19 @@ namespace MainControl_v1._0
                     PCM_send(normalmode);
                     normalmode = send_Arduio + "M3_" + tb_normal_itembox_anscnt.Text + "," + tb_normal_itembox_ansarea.Text + "," + tb_normal_itembox_Btime.Text + "," + tb_normal_itembox_Btime.Text + "," + tb_normal_itembox_Btime.Text;
                     PCM_send(normalmode);
-                    send_Arduio += "A"; break;   //나이트 모드
-                case 8: send_Arduio += "A"; break;   //데이 모드
-                case 9: send_Arduio += 'N'; break;   //나이트 모드
-                case 10: send_Arduio += 'D'; break;   //데이 모드
-                case 11: send_Arduio += 'W'; break;
+                    send_Arduio += "A"; break;          //일반 모드
+                case 8:
+                    String hardnode = send_Arduio + "M1_" + tb_hard_itembox_vibe1.Text + "," + tb_hard_itembox_vibe2.Text + "," + tb_hard_itembox_vibe3.Text + "," + tb_hard_itembox_vibe4.Text + "," + tb_hard_itembox_vibe5.Text;
+                    PCM_send(hardnode);
+                    hardnode = send_Arduio + "M2_" + tb_hard_itembox_ans1.Text + "," + tb_hard_itembox_ans2.Text + "," + tb_hard_itembox_ans3.Text + "," + tb_hard_itembox_ans4.Text + "," + tb_hard_itembox_ans5.Text;
+                    PCM_send(hardnode);
+                    hardnode = send_Arduio + "M3_" + tb_hard_itembox_anscnt.Text + "," + tb_hard_itembox_ansarea.Text + "," + tb_hard_itembox_Btime.Text + "," + tb_hard_itembox_Btime.Text + "," + tb_hard_itembox_Btime.Text;
+                    PCM_send(hardnode);
+                    send_Arduio += "A"; break;          //찌발 모드
+                case 9: send_Arduio += 'N'; break;      //나이트 모드
+                case 10: send_Arduio += 'D'; break;     //데이 모드
+                case 11: send_Arduio += 'W'; break;     //와치독 리셋
+                case 12: send_Arduio += 'Q'; break;     //아이템박스 빠른리셋
                 default: send_Arduio += 'A'; break;
             }
             PCM_send(send_Arduio);
@@ -1576,7 +1764,7 @@ namespace MainControl_v1._0
             switch (cb_Door_state.SelectedIndex)
             {
                 case 0: send_Arduio += 'A'; break;  //장치 연결
-                case 1: send_Arduio += 'R'; break;  //장치 활성화
+                case 1: String str_temp = send_Arduio + 'A'; PCM_send(str_temp); send_Arduio += 'R'; break;  //장치 활성화
                 case 2: send_Arduio += 'S'; break;  //장치 세팅
                 case 3: send_Arduio += 'C'; break;  //장치 연결확인
                 case 4: send_Arduio += "B1"; break;  //봉쇄1단계
@@ -1587,6 +1775,13 @@ namespace MainControl_v1._0
                 case 9: send_Arduio += 'N'; break;  //나이트 모드
                 case 10: send_Arduio += 'D'; break;  //데이 모드
                 case 11: send_Arduio += 'W'; break;
+                case 12: send_Arduio += 'H'; break;     //하드모드
+                case 13: send_Arduio += "TON"; break;   //쇼타임 시작
+                case 14: send_Arduio += "TOF"; break;   //쇼타임 종료
+                case 15: send_Arduio += "TL_5"; break;  //술래잠금해제시간5초
+                case 16: send_Arduio += "TL_10"; break; //술래잠금해제시간10초
+
+
                 default: send_Arduio += 'A'; break;
             }
             PCM_send(send_Arduio);
@@ -1650,6 +1845,10 @@ namespace MainControl_v1._0
                 case 5: send_Arduio += 'D'; break;   //데이 모드
                 case 6: send_Arduio += 'B'; break;   //데이 모드
                 case 7: send_Arduio += 'W'; break;   //데이 모드
+                case 8: send_Arduio += 'H'; break;   //하드 모드
+                case 9: send_Arduio += 'D'; break;   //제단 파괴
+                case 10: send_Arduio += 'F'; break;   //제단 수리
+
                 default: send_Arduio += 'A'; break;
             }
             PCM_send(send_Arduio);
@@ -2258,6 +2457,7 @@ namespace MainControl_v1._0
             {
                 if (ExerciseRm_status.Contains("Duct Open"))
                 {
+                    //TRM_send("ED _I");
                     ExerciseSys_cbScenrio_sel(45);
                     TRM_ThreadTimer.Change(0, 1000);                                    // timer_ExerciseSys.Enabled = true;//(타이머) TRM타이머 시작
                     TRM_DeviceTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //decivetimer 동작 정지
@@ -2281,7 +2481,7 @@ namespace MainControl_v1._0
                 //처음 게임시작하고 나레이션if문
                 switch (trm_time)
                 {
-                    case ((0 * 60) + 1): ExerciseSys_cbScenrio_sel(0); break;
+                    case ((0 * 60) + 1): ExerciseSys_cbScenrio_sel(0); TRM_send("ED _E");break;
                     case ((0 * 60) + 12): ExerciseSys_cbScenrio_sel(1); break;
                     case ((0 * 60) + 21): ExerciseSys_cbScenrio_sel(2); break;
                     case ((0 * 60) + 27): ExerciseSys_cbScenrio_sel(100); break;
@@ -2343,8 +2543,8 @@ namespace MainControl_v1._0
                     //덕트
                     case ((4 * 60) + 12): TRM_send("ED _V"); break;
                     case ((4 * 60) + 14): ExerciseSys_cbScenrio_sel(43); break;
-                    case ((4 * 60) + 16):   //ExerciseSys_cbScenrio_sel(100); 
-                        TRM_send("ED _V"); TRM_send("EM _M12"); break;
+                    case ((4 * 60) + 16):   //ExerciseSys_cbScenrio_sel(100); TRM_send("ED _V"); 
+                        TRM_send("EM _M12"); break;
                     case ((4 * 60) + 21): TRM_send("ED _V"); break;
                     case ((4 * 60) + 23): ExerciseSys_cbScenrio_sel(44); break;
                     case ((4 * 60) + 30):   //ExerciseSys_cbScenrio_sel(100); 
@@ -2355,7 +2555,7 @@ namespace MainControl_v1._0
 
                     case ((4 * 60) + 38): ExerciseSys_cbScenrio_sel(46); break;
                     case ((4 * 60) + 48): ExerciseSys_cbScenrio_sel(100); break;
-                    case ((4 * 60) + 49): ExerciseSys_cbScenrio_sel(47); TRM_send("EL _EON"); TRM_send("EA _S"); break;
+                    case ((4 * 60) + 49): ExerciseSys_cbScenrio_sel(47); TRM_send("EL _EON"); TRM_send("EA _S"); break; //TRM_send("ED _!");
                     case ((4 * 60) + 56): TRM_send("EA _R"); TRM_send("EE _A"); TRM_send("ED _S"); TRM_send("ED _R"); TRM_send("ET _B"); lb_Exercise_progress.Text = "종료";
                         TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false;
                         break;
@@ -2615,6 +2815,10 @@ namespace MainControl_v1._0
                 case 14: return "ON";
                 case 15: return "OFF";
                 case 16: return "W";    //워치독 리셋
+                case 17: return "Q";    //아이템박스 빠른 리셋
+                case 18: return "I"; // 도어 침입시도 멈추기
+                case 19: PCM_send("ED _!"); return "S"; //훈련소 도어 일반모드로 리셋
+
                 default: return "A";
             }
         }
@@ -2624,6 +2828,8 @@ namespace MainControl_v1._0
             String send_Arduio = "E";
             send_Arduio += ExerciseSys_cbDevicceName_sel();
             send_Arduio += ExerciseSys_cbDevicceState_sel();
+            if(send_Arduio.Equals("ED _R"))
+                TRM_send("ED _A");
             TRM_send(send_Arduio);
             Console.WriteLine(send_Arduio);
         }
@@ -2633,7 +2839,7 @@ namespace MainControl_v1._0
             {
                 case 0: TRM_send("VE1"); TRM_send("EA _A"); TRM_send("EL _EOFF"); TRM_send("EL _WON"); TRM_send("ED _E"); break;  //#1
                 case 1: TRM_send("VE2"); TRM_send("ED _E"); break;  //#2
-                case 2: TRM_send("VE3"); TRM_send("EM _M1"); TRM_send("ED _E"); break;  //#3
+                case 2: TRM_send("VE3"); TRM_send("EM _M1");break;  //#3
                 case 3: TRM_send("VE4"); TRM_send("EM _M2"); break;  //#4
                 case 4: TRM_send("VE5"); break;  //#5
                 case 5: TRM_send("VE6"); TRM_send("EM _M3"); break;  //#6
@@ -2836,21 +3042,24 @@ namespace MainControl_v1._0
                 gamemode = "AV _M2_" + tb_hard_vent_cooltime_addup.Text;
                 PCM_send(gamemode);
             }
-            if (rb_GameSys_DayMode.Checked == true)
+            if (cb_GameSys_deviceLight_auto.Checked)
             {
-                PCM_send("AG _D");
-                PCM_send("AI _D");
-                PCM_send("AR _D");
-                PCM_send("AD _D");
-                PCM_send("AL _N");
-            }
-            else if (rb_GameSys_NightMode.Checked == true)
-            {
-                PCM_send("AG _N");
-                PCM_send("AI _N");
-                PCM_send("AR _N");
-                PCM_send("AD _N");
-                PCM_send("AL _F");
+                if (rb_GameSys_DayMode.Checked == true)
+                {
+                    PCM_send("AG _D");
+                    PCM_send("AI _D");
+                    PCM_send("AR _D");
+                    PCM_send("AD _D");
+                    PCM_send("AL _N");
+                }
+                else if (rb_GameSys_NightMode.Checked == true)
+                {
+                    PCM_send("AG _N");
+                    PCM_send("AI _N");
+                    PCM_send("AR _N");
+                    PCM_send("AD _N");
+                    PCM_send("AL _F");
+                }
             }
         }
 
@@ -2932,6 +3141,99 @@ namespace MainControl_v1._0
                 TRM_send("EB _N");
                 btn_setting_light.BackColor = Color.Black;
                 btn_setting_light.Text = "청소등 리셋";
+            }
+        }
+
+        private void btn_ExerciseSys_SkipMode_Click(object sender, EventArgs e)
+        {
+            TRM_send("EA _R");
+            TRM_send("ET _B");
+            TRM_send("ELE_EON");
+            TRM_send("ELW_WON");
+            TRM_MainTimer.Change(0, 1000);
+        }
+
+        private void btn_ExerciseSys_trainroomMode_Click(object sender, EventArgs e)
+        {
+            if (serialPort_TRM.IsOpen)
+            {
+                if (rb_ExercisSys_normalMode.Checked)
+                {
+                    String gamemode = "";
+                    gamemode = "EG _M1_" + tb_normal_generator_starter.Text;
+                    TRM_send(gamemode);
+
+                    gamemode = "EI1_M1_" + tb_normal_itembox_vibe1.Text + "," + tb_normal_itembox_vibe2.Text + "," + tb_normal_itembox_vibe3.Text + "," + tb_normal_itembox_vibe4.Text + "," + tb_normal_itembox_vibe5.Text;
+                    TRM_send(gamemode);
+                    gamemode = "EI1_M2_" + tb_normal_itembox_ans1.Text + "," + tb_normal_itembox_ans2.Text + "," + tb_normal_itembox_ans3.Text + "," + tb_normal_itembox_ans4.Text + "," + tb_normal_itembox_ans5.Text;
+                    TRM_send(gamemode);
+                    gamemode = "EI1_M3_" + tb_normal_itembox_anscnt.Text + "," + tb_normal_itembox_ansarea.Text + "," + tb_normal_itembox_Btime.Text + "," + tb_normal_itembox_Btime.Text + "," + tb_normal_itembox_Btime.Text;
+                    TRM_send(gamemode);
+
+                    gamemode = "EI2_M1_" + tb_normal_itembox_vibe1.Text + "," + tb_normal_itembox_vibe2.Text + "," + tb_normal_itembox_vibe3.Text + "," + tb_normal_itembox_vibe4.Text + "," + tb_normal_itembox_vibe5.Text;
+                    TRM_send(gamemode);
+                    gamemode = "EI2_M2_" + tb_normal_itembox_ans1.Text + "," + tb_normal_itembox_ans2.Text + "," + tb_normal_itembox_ans3.Text + "," + tb_normal_itembox_ans4.Text + "," + tb_normal_itembox_ans5.Text;
+                    TRM_send(gamemode);
+                    gamemode = "EI2_M3_" + tb_normal_itembox_anscnt.Text + "," + tb_normal_itembox_ansarea.Text + "," + tb_normal_itembox_Btime.Text + "," + tb_normal_itembox_Btime.Text + "," + tb_normal_itembox_Btime.Text;
+                    TRM_send(gamemode);
+
+                    gamemode = "EV _M1_" + tb_normal_vent_cooltime.Text;
+                    TRM_send(gamemode);
+                    gamemode = "EV _M2_" + tb_normal_vent_cooltime_addup.Text;
+                    TRM_send(gamemode);
+                }
+                else if (rb_ExercisSys_easyMode.Checked)
+                {
+                    String gamemode = "";
+                    gamemode = "EG _M1_" + tb_easy_generator_starter.Text;
+                    TRM_send(gamemode);
+
+                    gamemode = "EI1_M1_" + tb_easy_itembox_vibe1.Text + "," + tb_easy_itembox_vibe2.Text + "," + tb_easy_itembox_vibe3.Text + "," + tb_easy_itembox_vibe4.Text + "," + tb_easy_itembox_vibe5.Text;
+                    TRM_send(gamemode);
+                    gamemode = "EI1_M2_" + tb_easy_itembox_ans1.Text + "," + tb_easy_itembox_ans2.Text + "," + tb_easy_itembox_ans3.Text + "," + tb_easy_itembox_ans4.Text + "," + tb_easy_itembox_ans5.Text;
+                    TRM_send(gamemode);
+                    gamemode = "EI1_M3_" + tb_easy_itembox_anscnt.Text + "," + tb_easy_itembox_ansarea.Text + "," + tb_easy_itembox_Btime.Text + "," + tb_easy_itembox_Btime.Text + "," + tb_easy_itembox_Btime.Text;
+                    TRM_send(gamemode);
+
+                    gamemode = "EI2_M1_" + tb_easy_itembox_vibe1.Text + "," + tb_easy_itembox_vibe2.Text + "," + tb_easy_itembox_vibe3.Text + "," + tb_easy_itembox_vibe4.Text + "," + tb_easy_itembox_vibe5.Text;
+                    TRM_send(gamemode);
+                    gamemode = "EI2_M2_" + tb_easy_itembox_ans1.Text + "," + tb_easy_itembox_ans2.Text + "," + tb_easy_itembox_ans3.Text + "," + tb_easy_itembox_ans4.Text + "," + tb_easy_itembox_ans5.Text;
+                    TRM_send(gamemode);
+                    gamemode = "EI2_M3_" + tb_easy_itembox_anscnt.Text + "," + tb_easy_itembox_ansarea.Text + "," + tb_easy_itembox_Btime.Text + "," + tb_easy_itembox_Btime.Text + "," + tb_easy_itembox_Btime.Text;
+                    TRM_send(gamemode);
+
+                    gamemode = "EV _M1_" + tb_easy_vent_cooltime.Text;
+                    TRM_send(gamemode);
+                    gamemode = "EV _M2_" + tb_easy_vent_cooltime_addup.Text;
+                    TRM_send(gamemode);
+
+                }
+                else if (rb_ExercisSys_hardMode.Checked)
+                {
+                    String gamemode = "";
+                    gamemode = "EG _M1_" + tb_hard_generator_starter.Text;
+                    TRM_send(gamemode);
+
+                    gamemode = "EI1_M1_" + tb_hard_itembox_vibe1.Text + "," + tb_hard_itembox_vibe2.Text + "," + tb_hard_itembox_vibe3.Text + "," + tb_hard_itembox_vibe4.Text + "," + tb_hard_itembox_vibe5.Text;
+                    TRM_send(gamemode);
+                    gamemode = "EI1_M2_" + tb_hard_itembox_ans1.Text + "," + tb_hard_itembox_ans2.Text + "," + tb_hard_itembox_ans3.Text + "," + tb_hard_itembox_ans4.Text + "," + tb_hard_itembox_ans5.Text;
+                    TRM_send(gamemode);
+                    gamemode = "EI1_M3_" + tb_hard_itembox_anscnt.Text + "," + tb_hard_itembox_ansarea.Text + "," + tb_hard_itembox_Btime.Text + "," + tb_hard_itembox_Btime.Text + "," + tb_hard_itembox_Btime.Text;
+                    TRM_send(gamemode);
+
+                    gamemode = "EI2_M1_" + tb_hard_itembox_vibe1.Text + "," + tb_hard_itembox_vibe2.Text + "," + tb_hard_itembox_vibe3.Text + "," + tb_hard_itembox_vibe4.Text + "," + tb_hard_itembox_vibe5.Text;
+                    TRM_send(gamemode);
+                    gamemode = "EI2_M2_" + tb_hard_itembox_ans1.Text + "," + tb_hard_itembox_ans2.Text + "," + tb_hard_itembox_ans3.Text + "," + tb_hard_itembox_ans4.Text + "," + tb_hard_itembox_ans5.Text;
+                    TRM_send(gamemode);
+                    gamemode = "EI2_M3_" + tb_hard_itembox_anscnt.Text + "," + tb_hard_itembox_ansarea.Text + "," + tb_hard_itembox_Btime.Text + "," + tb_hard_itembox_Btime.Text + "," + tb_hard_itembox_Btime.Text;
+                    TRM_send(gamemode);
+
+                    gamemode = "EV _M1_" + tb_hard_vent_cooltime.Text;
+                    TRM_send(gamemode);
+                    gamemode = "EV _M2_" + tb_hard_vent_cooltime_addup.Text;
+                    TRM_send(gamemode);
+
+                }
             }
         }
     }

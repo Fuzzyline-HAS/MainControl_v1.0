@@ -213,6 +213,7 @@
             this.btn_ExerciseSys_DoorClose = new System.Windows.Forms.Button();
             this.lb_ExerciseSys_ES_State = new System.Windows.Forms.Label();
             this.gp_light_setup = new System.Windows.Forms.GroupBox();
+            this.cb_GameSys_deviceLight_auto = new System.Windows.Forms.CheckBox();
             this.rb_GameSys_DayMode = new System.Windows.Forms.RadioButton();
             this.rb_GameSys_NightMode = new System.Windows.Forms.RadioButton();
             this.btn_GameSys_AL_Off = new System.Windows.Forms.Button();
@@ -428,6 +429,8 @@
             this.cb_Temple_name = new System.Windows.Forms.ComboBox();
             this.lb_LT_state = new System.Windows.Forms.Label();
             this.gp_ExerciseSys = new System.Windows.Forms.GroupBox();
+            this.btn_ExerciseSys_trainroomMode = new System.Windows.Forms.Button();
+            this.btn_ExerciseSys_SkipMode = new System.Windows.Forms.Button();
             this.cb_TRM_Temple_autokiller = new System.Windows.Forms.CheckBox();
             this.gb_ExercisSys_iotMode = new System.Windows.Forms.GroupBox();
             this.rb_ExercisSys_hardMode = new System.Windows.Forms.RadioButton();
@@ -437,8 +440,6 @@
             this.rb_ExerciseSys_iotG1 = new System.Windows.Forms.RadioButton();
             this.rb_ExerciseSys_iotG3 = new System.Windows.Forms.RadioButton();
             this.rb_ExerciseSys_iotG2 = new System.Windows.Forms.RadioButton();
-            this.btn_ExerciseSys_timerStop = new System.Windows.Forms.Button();
-            this.btn_ExerciseSys_timerStart = new System.Windows.Forms.Button();
             this.label66 = new System.Windows.Forms.Label();
             this.label64 = new System.Windows.Forms.Label();
             this.lb_logo = new System.Windows.Forms.Label();
@@ -487,7 +488,9 @@
             this.lb_Exercise_progress = new System.Windows.Forms.Label();
             this.lb_Exercise_progress_name = new System.Windows.Forms.Label();
             this.lb_Exercise_device_time = new System.Windows.Forms.Label();
+            this.btn_ExerciseSys_timerStop = new System.Windows.Forms.Button();
             this.lb_Exercise_trm_time = new System.Windows.Forms.Label();
+            this.btn_ExerciseSys_timerStart = new System.Windows.Forms.Button();
             this.lb_ExerciseSys_subtime = new System.Windows.Forms.Label();
             this.lb_ExerciseSys_maintime = new System.Windows.Forms.Label();
             this.lb_ExerciseSys_Clock = new System.Windows.Forms.Label();
@@ -573,6 +576,20 @@
             this.serialPort_PCM = new System.IO.Ports.SerialPort(this.components);
             this.serialPort_IOT = new System.IO.Ports.SerialPort(this.components);
             this.serialPort_TRM = new System.IO.Ports.SerialPort(this.components);
+            this.lb_BD_mode = new System.Windows.Forms.Label();
+            this.lb_CD_mode = new System.Windows.Forms.Label();
+            this.lb_SD_mode = new System.Windows.Forms.Label();
+            this.lb_TD_mode = new System.Windows.Forms.Label();
+            this.lb_BD_showtime = new System.Windows.Forms.Label();
+            this.lb_CD_showtime = new System.Windows.Forms.Label();
+            this.lb_SD_showtime = new System.Windows.Forms.Label();
+            this.lb_TD_showtime = new System.Windows.Forms.Label();
+            this.lb_BD_taggertime = new System.Windows.Forms.Label();
+            this.lb_CD_taggertime = new System.Windows.Forms.Label();
+            this.lb_SD_taggertime = new System.Windows.Forms.Label();
+            this.lb_TD_taggertime = new System.Windows.Forms.Label();
+            this.lb_LT_destroy = new System.Windows.Forms.Label();
+            this.lb_LT_mode = new System.Windows.Forms.Label();
             this.gp_GameSys.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.gp_IotSys_Animation.SuspendLayout();
@@ -2517,6 +2534,7 @@
             // 
             // gp_light_setup
             // 
+            this.gp_light_setup.Controls.Add(this.cb_GameSys_deviceLight_auto);
             this.gp_light_setup.Controls.Add(this.rb_GameSys_DayMode);
             this.gp_light_setup.Controls.Add(this.rb_GameSys_NightMode);
             this.gp_light_setup.Controls.Add(this.btn_GameSys_AL_Off);
@@ -2534,10 +2552,22 @@
             this.gp_light_setup.Font = new System.Drawing.Font("타이포_쌍문동 B", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.gp_light_setup.Location = new System.Drawing.Point(642, 658);
             this.gp_light_setup.Name = "gp_light_setup";
-            this.gp_light_setup.Size = new System.Drawing.Size(133, 202);
+            this.gp_light_setup.Size = new System.Drawing.Size(133, 231);
             this.gp_light_setup.TabIndex = 73;
             this.gp_light_setup.TabStop = false;
             this.gp_light_setup.Text = "조명관리";
+            // 
+            // cb_GameSys_deviceLight_auto
+            // 
+            this.cb_GameSys_deviceLight_auto.AutoSize = true;
+            this.cb_GameSys_deviceLight_auto.Font = new System.Drawing.Font("타이포_쌍문동 B", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.cb_GameSys_deviceLight_auto.Location = new System.Drawing.Point(14, 204);
+            this.cb_GameSys_deviceLight_auto.Name = "cb_GameSys_deviceLight_auto";
+            this.cb_GameSys_deviceLight_auto.Size = new System.Drawing.Size(106, 17);
+            this.cb_GameSys_deviceLight_auto.TabIndex = 97;
+            this.cb_GameSys_deviceLight_auto.Text = "장치밝기 자동화";
+            this.cb_GameSys_deviceLight_auto.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.cb_GameSys_deviceLight_auto.UseVisualStyleBackColor = true;
             // 
             // rb_GameSys_DayMode
             // 
@@ -4247,11 +4277,12 @@
             "(B)봉쇄 활성화",
             "(O)장치오픈",
             "(M) 뉴비모드",
-            "(M) 일반 모드",
-            "(M) 찌발 모드",
+            "(M) 일반모드",
+            "(M) 찌발모드",
             "(N)나이트 모드",
             "(D)데이모드",
-            "(W)리셋(와치독)"});
+            "(W)리셋(와치독)",
+            "(Q)아이템박스 빠른리셋"});
             this.cb_Itembox_state.Location = new System.Drawing.Point(6, 51);
             this.cb_Itembox_state.Name = "cb_Itembox_state";
             this.cb_Itembox_state.Size = new System.Drawing.Size(116, 23);
@@ -4912,6 +4943,18 @@
             // gp_Door
             // 
             this.gp_Door.BackColor = System.Drawing.Color.LightGray;
+            this.gp_Door.Controls.Add(this.lb_TD_taggertime);
+            this.gp_Door.Controls.Add(this.lb_SD_taggertime);
+            this.gp_Door.Controls.Add(this.lb_CD_taggertime);
+            this.gp_Door.Controls.Add(this.lb_BD_taggertime);
+            this.gp_Door.Controls.Add(this.lb_TD_showtime);
+            this.gp_Door.Controls.Add(this.lb_SD_showtime);
+            this.gp_Door.Controls.Add(this.lb_CD_showtime);
+            this.gp_Door.Controls.Add(this.lb_BD_showtime);
+            this.gp_Door.Controls.Add(this.lb_TD_mode);
+            this.gp_Door.Controls.Add(this.lb_SD_mode);
+            this.gp_Door.Controls.Add(this.lb_CD_mode);
+            this.gp_Door.Controls.Add(this.lb_BD_mode);
             this.gp_Door.Controls.Add(this.lb_TD_name);
             this.gp_Door.Controls.Add(this.lb_TD_state);
             this.gp_Door.Controls.Add(this.lb_SD_name);
@@ -4935,7 +4978,7 @@
             // 
             this.lb_TD_name.AutoSize = true;
             this.lb_TD_name.Font = new System.Drawing.Font("HelveticaInserat", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_TD_name.Location = new System.Drawing.Point(733, 23);
+            this.lb_TD_name.Location = new System.Drawing.Point(733, 29);
             this.lb_TD_name.Name = "lb_TD_name";
             this.lb_TD_name.Size = new System.Drawing.Size(122, 19);
             this.lb_TD_name.TabIndex = 39;
@@ -4947,7 +4990,7 @@
             this.lb_TD_state.BackColor = System.Drawing.Color.Black;
             this.lb_TD_state.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lb_TD_state.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.lb_TD_state.Location = new System.Drawing.Point(764, 43);
+            this.lb_TD_state.Location = new System.Drawing.Point(764, 49);
             this.lb_TD_state.Name = "lb_TD_state";
             this.lb_TD_state.Size = new System.Drawing.Size(64, 16);
             this.lb_TD_state.TabIndex = 40;
@@ -4957,7 +5000,7 @@
             // 
             this.lb_SD_name.AutoSize = true;
             this.lb_SD_name.Font = new System.Drawing.Font("HelveticaInserat", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_SD_name.Location = new System.Drawing.Point(584, 22);
+            this.lb_SD_name.Location = new System.Drawing.Point(584, 28);
             this.lb_SD_name.Name = "lb_SD_name";
             this.lb_SD_name.Size = new System.Drawing.Size(123, 19);
             this.lb_SD_name.TabIndex = 39;
@@ -4969,7 +5012,7 @@
             this.lb_SD_state.BackColor = System.Drawing.Color.Black;
             this.lb_SD_state.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lb_SD_state.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.lb_SD_state.Location = new System.Drawing.Point(614, 42);
+            this.lb_SD_state.Location = new System.Drawing.Point(614, 48);
             this.lb_SD_state.Name = "lb_SD_state";
             this.lb_SD_state.Size = new System.Drawing.Size(64, 16);
             this.lb_SD_state.TabIndex = 40;
@@ -4979,7 +5022,7 @@
             // 
             this.lb_BD_name.AutoSize = true;
             this.lb_BD_name.Font = new System.Drawing.Font("HelveticaInserat", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_BD_name.Location = new System.Drawing.Point(142, 22);
+            this.lb_BD_name.Location = new System.Drawing.Point(142, 28);
             this.lb_BD_name.Name = "lb_BD_name";
             this.lb_BD_name.Size = new System.Drawing.Size(123, 19);
             this.lb_BD_name.TabIndex = 39;
@@ -4987,6 +5030,7 @@
             // 
             // btn_Door_send
             // 
+            this.btn_Door_send.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btn_Door_send.Font = new System.Drawing.Font("Helvetica75", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_Door_send.Location = new System.Drawing.Point(67, 22);
             this.btn_Door_send.Name = "btn_Door_send";
@@ -5002,7 +5046,7 @@
             this.lb_BD_state.BackColor = System.Drawing.Color.Black;
             this.lb_BD_state.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lb_BD_state.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.lb_BD_state.Location = new System.Drawing.Point(172, 42);
+            this.lb_BD_state.Location = new System.Drawing.Point(172, 48);
             this.lb_BD_state.Name = "lb_BD_state";
             this.lb_BD_state.Size = new System.Drawing.Size(64, 16);
             this.lb_BD_state.TabIndex = 40;
@@ -5012,7 +5056,7 @@
             // 
             this.lb_CD_name.AutoSize = true;
             this.lb_CD_name.Font = new System.Drawing.Font("HelveticaInserat", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_CD_name.Location = new System.Drawing.Point(434, 22);
+            this.lb_CD_name.Location = new System.Drawing.Point(434, 28);
             this.lb_CD_name.Name = "lb_CD_name";
             this.lb_CD_name.Size = new System.Drawing.Size(130, 19);
             this.lb_CD_name.TabIndex = 1;
@@ -5034,7 +5078,12 @@
             "(L)도어잠금",
             "(N)나이트 모드",
             "(D)데이 모드",
-            "(W)리셋(와치독)"});
+            "(W)리셋(와치독)",
+            "(H)하드모드",
+            "(TON)쇼타임 시작",
+            "(TOF)쇼타임 끝",
+            "(TL_5)술래잠금해제5초",
+            "(TL_10)술래잠금해제10초"});
             this.cb_Door_state.Location = new System.Drawing.Point(6, 51);
             this.cb_Door_state.Name = "cb_Door_state";
             this.cb_Door_state.Size = new System.Drawing.Size(117, 23);
@@ -5063,7 +5112,7 @@
             this.lb_CD_state.BackColor = System.Drawing.Color.Black;
             this.lb_CD_state.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lb_CD_state.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.lb_CD_state.Location = new System.Drawing.Point(470, 42);
+            this.lb_CD_state.Location = new System.Drawing.Point(470, 48);
             this.lb_CD_state.Name = "lb_CD_state";
             this.lb_CD_state.Size = new System.Drawing.Size(64, 16);
             this.lb_CD_state.TabIndex = 6;
@@ -5072,6 +5121,8 @@
             // gp_Temple
             // 
             this.gp_Temple.BackColor = System.Drawing.Color.LightGray;
+            this.gp_Temple.Controls.Add(this.lb_LT_mode);
+            this.gp_Temple.Controls.Add(this.lb_LT_destroy);
             this.gp_Temple.Controls.Add(this.btn_Temple_send);
             this.gp_Temple.Controls.Add(this.lb_LT_name);
             this.gp_Temple.Controls.Add(this.cb_Temple_state);
@@ -5118,7 +5169,10 @@
             "(N)나이트 모드",
             "(D)데이 모드",
             "(B)술래자동결정 대기",
-            "(W)리셋(와치독)"});
+            "(W)리셋(와치독)",
+            "(H)하드모드",
+            "(D)제단파괴",
+            "(F)제단수리"});
             this.cb_Temple_state.Location = new System.Drawing.Point(6, 51);
             this.cb_Temple_state.Name = "cb_Temple_state";
             this.cb_Temple_state.Size = new System.Drawing.Size(117, 23);
@@ -5151,11 +5205,11 @@
             // 
             // gp_ExerciseSys
             // 
+            this.gp_ExerciseSys.Controls.Add(this.btn_ExerciseSys_trainroomMode);
+            this.gp_ExerciseSys.Controls.Add(this.btn_ExerciseSys_SkipMode);
             this.gp_ExerciseSys.Controls.Add(this.cb_TRM_Temple_autokiller);
             this.gp_ExerciseSys.Controls.Add(this.gb_ExercisSys_iotMode);
             this.gp_ExerciseSys.Controls.Add(this.gp_ExercisSys_iotGroup);
-            this.gp_ExerciseSys.Controls.Add(this.btn_ExerciseSys_timerStop);
-            this.gp_ExerciseSys.Controls.Add(this.btn_ExerciseSys_timerStart);
             this.gp_ExerciseSys.Controls.Add(this.label66);
             this.gp_ExerciseSys.Controls.Add(this.label64);
             this.gp_ExerciseSys.Controls.Add(this.lb_logo);
@@ -5177,6 +5231,32 @@
             this.gp_ExerciseSys.TabIndex = 8;
             this.gp_ExerciseSys.TabStop = false;
             this.gp_ExerciseSys.Text = "EXERCISE ROOM SYSTEM";
+            // 
+            // btn_ExerciseSys_trainroomMode
+            // 
+            this.btn_ExerciseSys_trainroomMode.BackColor = System.Drawing.Color.Gray;
+            this.btn_ExerciseSys_trainroomMode.Font = new System.Drawing.Font("타이포_쌍문동 B", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btn_ExerciseSys_trainroomMode.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.btn_ExerciseSys_trainroomMode.Location = new System.Drawing.Point(642, 495);
+            this.btn_ExerciseSys_trainroomMode.Name = "btn_ExerciseSys_trainroomMode";
+            this.btn_ExerciseSys_trainroomMode.Size = new System.Drawing.Size(87, 59);
+            this.btn_ExerciseSys_trainroomMode.TabIndex = 97;
+            this.btn_ExerciseSys_trainroomMode.Text = "훈련소\r\n모드 설정";
+            this.btn_ExerciseSys_trainroomMode.UseVisualStyleBackColor = false;
+            this.btn_ExerciseSys_trainroomMode.Click += new System.EventHandler(this.btn_ExerciseSys_trainroomMode_Click);
+            // 
+            // btn_ExerciseSys_SkipMode
+            // 
+            this.btn_ExerciseSys_SkipMode.BackColor = System.Drawing.Color.Gold;
+            this.btn_ExerciseSys_SkipMode.Font = new System.Drawing.Font("타이포_쌍문동 B", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btn_ExerciseSys_SkipMode.ForeColor = System.Drawing.Color.Black;
+            this.btn_ExerciseSys_SkipMode.Location = new System.Drawing.Point(541, 24);
+            this.btn_ExerciseSys_SkipMode.Name = "btn_ExerciseSys_SkipMode";
+            this.btn_ExerciseSys_SkipMode.Size = new System.Drawing.Size(188, 31);
+            this.btn_ExerciseSys_SkipMode.TabIndex = 93;
+            this.btn_ExerciseSys_SkipMode.Text = "훈련소 스킵 모드";
+            this.btn_ExerciseSys_SkipMode.UseVisualStyleBackColor = false;
+            this.btn_ExerciseSys_SkipMode.Click += new System.EventHandler(this.btn_ExerciseSys_SkipMode_Click);
             // 
             // cb_TRM_Temple_autokiller
             // 
@@ -5287,28 +5367,6 @@
             this.rb_ExerciseSys_iotG2.TabIndex = 73;
             this.rb_ExerciseSys_iotG2.Text = "G2";
             this.rb_ExerciseSys_iotG2.UseVisualStyleBackColor = true;
-            // 
-            // btn_ExerciseSys_timerStop
-            // 
-            this.btn_ExerciseSys_timerStop.Font = new System.Drawing.Font("타이포_쌍문동 B", 8.999999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_ExerciseSys_timerStop.Location = new System.Drawing.Point(639, 30);
-            this.btn_ExerciseSys_timerStop.Name = "btn_ExerciseSys_timerStop";
-            this.btn_ExerciseSys_timerStop.Size = new System.Drawing.Size(90, 25);
-            this.btn_ExerciseSys_timerStop.TabIndex = 19;
-            this.btn_ExerciseSys_timerStop.Text = "타이머 정지";
-            this.btn_ExerciseSys_timerStop.UseVisualStyleBackColor = true;
-            this.btn_ExerciseSys_timerStop.Click += new System.EventHandler(this.btn_ExerciseSys_timerStop_Click);
-            // 
-            // btn_ExerciseSys_timerStart
-            // 
-            this.btn_ExerciseSys_timerStart.Font = new System.Drawing.Font("타이포_쌍문동 B", 8.999999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_ExerciseSys_timerStart.Location = new System.Drawing.Point(541, 30);
-            this.btn_ExerciseSys_timerStart.Name = "btn_ExerciseSys_timerStart";
-            this.btn_ExerciseSys_timerStart.Size = new System.Drawing.Size(91, 25);
-            this.btn_ExerciseSys_timerStart.TabIndex = 20;
-            this.btn_ExerciseSys_timerStart.Text = "타이머 시작";
-            this.btn_ExerciseSys_timerStart.UseVisualStyleBackColor = true;
-            this.btn_ExerciseSys_timerStart.Click += new System.EventHandler(this.btn_ExerciseSys_timerStart_Click);
             // 
             // label66
             // 
@@ -5756,7 +5814,10 @@
             "(D)데이 모드",
             "(EC)캐비넷 열기",
             "(EC)캐비넷 닫기",
-            "(W)장치리셋"});
+            "(W)장치리셋",
+            "(Q)아이템박스 빠른리셋",
+            "(I) 도어 침입시도 멈추기",
+            "(!) 훈련소 도어 리셋"});
             this.cb_ExerciseSys_DeivceState.Location = new System.Drawing.Point(22, 132);
             this.cb_ExerciseSys_DeivceState.Name = "cb_ExerciseSys_DeivceState";
             this.cb_ExerciseSys_DeivceState.Size = new System.Drawing.Size(223, 24);
@@ -5874,7 +5935,9 @@
             this.gp_ExerciseSys_timer.Controls.Add(this.lb_Exercise_progress);
             this.gp_ExerciseSys_timer.Controls.Add(this.lb_Exercise_progress_name);
             this.gp_ExerciseSys_timer.Controls.Add(this.lb_Exercise_device_time);
+            this.gp_ExerciseSys_timer.Controls.Add(this.btn_ExerciseSys_timerStop);
             this.gp_ExerciseSys_timer.Controls.Add(this.lb_Exercise_trm_time);
+            this.gp_ExerciseSys_timer.Controls.Add(this.btn_ExerciseSys_timerStart);
             this.gp_ExerciseSys_timer.Controls.Add(this.lb_ExerciseSys_subtime);
             this.gp_ExerciseSys_timer.Controls.Add(this.lb_ExerciseSys_maintime);
             this.gp_ExerciseSys_timer.Controls.Add(this.lb_ExerciseSys_Clock);
@@ -5913,6 +5976,17 @@
             this.lb_Exercise_device_time.TabIndex = 41;
             this.lb_Exercise_device_time.Text = "인식대기";
             // 
+            // btn_ExerciseSys_timerStop
+            // 
+            this.btn_ExerciseSys_timerStop.Font = new System.Drawing.Font("타이포_쌍문동 B", 8.999999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_ExerciseSys_timerStop.Location = new System.Drawing.Point(182, 56);
+            this.btn_ExerciseSys_timerStop.Name = "btn_ExerciseSys_timerStop";
+            this.btn_ExerciseSys_timerStop.Size = new System.Drawing.Size(65, 25);
+            this.btn_ExerciseSys_timerStop.TabIndex = 19;
+            this.btn_ExerciseSys_timerStop.Text = "STOP";
+            this.btn_ExerciseSys_timerStop.UseVisualStyleBackColor = true;
+            this.btn_ExerciseSys_timerStop.Click += new System.EventHandler(this.btn_ExerciseSys_timerStop_Click);
+            // 
             // lb_Exercise_trm_time
             // 
             this.lb_Exercise_trm_time.AutoSize = true;
@@ -5921,6 +5995,17 @@
             this.lb_Exercise_trm_time.Size = new System.Drawing.Size(69, 19);
             this.lb_Exercise_trm_time.TabIndex = 40;
             this.lb_Exercise_trm_time.Text = "시나리오";
+            // 
+            // btn_ExerciseSys_timerStart
+            // 
+            this.btn_ExerciseSys_timerStart.Font = new System.Drawing.Font("타이포_쌍문동 B", 8.999999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_ExerciseSys_timerStart.Location = new System.Drawing.Point(182, 25);
+            this.btn_ExerciseSys_timerStart.Name = "btn_ExerciseSys_timerStart";
+            this.btn_ExerciseSys_timerStart.Size = new System.Drawing.Size(65, 25);
+            this.btn_ExerciseSys_timerStart.TabIndex = 20;
+            this.btn_ExerciseSys_timerStart.Text = "START";
+            this.btn_ExerciseSys_timerStart.UseVisualStyleBackColor = true;
+            this.btn_ExerciseSys_timerStart.Click += new System.EventHandler(this.btn_ExerciseSys_timerStart_Click);
             // 
             // lb_ExerciseSys_subtime
             // 
@@ -5948,10 +6033,10 @@
             // 
             this.lb_ExerciseSys_Clock.AutoSize = true;
             this.lb_ExerciseSys_Clock.BackColor = System.Drawing.Color.Transparent;
-            this.lb_ExerciseSys_Clock.Font = new System.Drawing.Font("HelveticaInserat", 66.74999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_ExerciseSys_Clock.Location = new System.Drawing.Point(1, 14);
+            this.lb_ExerciseSys_Clock.Font = new System.Drawing.Font("HelveticaInserat", 54.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_ExerciseSys_Clock.Location = new System.Drawing.Point(-6, 22);
             this.lb_ExerciseSys_Clock.Name = "lb_ExerciseSys_Clock";
-            this.lb_ExerciseSys_Clock.Size = new System.Drawing.Size(249, 110);
+            this.lb_ExerciseSys_Clock.Size = new System.Drawing.Size(200, 90);
             this.lb_ExerciseSys_Clock.TabIndex = 37;
             this.lb_ExerciseSys_Clock.Text = "00:00";
             this.lb_ExerciseSys_Clock.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -6864,6 +6949,161 @@
             // 
             this.serialPort_TRM.DtrEnable = true;
             // 
+            // lb_BD_mode
+            // 
+            this.lb_BD_mode.AutoSize = true;
+            this.lb_BD_mode.Font = new System.Drawing.Font("타이포_쌍문동 B", 9F, System.Drawing.FontStyle.Bold);
+            this.lb_BD_mode.Location = new System.Drawing.Point(244, 3);
+            this.lb_BD_mode.Name = "lb_BD_mode";
+            this.lb_BD_mode.Size = new System.Drawing.Size(31, 15);
+            this.lb_BD_mode.TabIndex = 42;
+            this.lb_BD_mode.Text = "일반";
+            // 
+            // lb_CD_mode
+            // 
+            this.lb_CD_mode.AutoSize = true;
+            this.lb_CD_mode.Font = new System.Drawing.Font("타이포_쌍문동 B", 9F, System.Drawing.FontStyle.Bold);
+            this.lb_CD_mode.Location = new System.Drawing.Point(540, 3);
+            this.lb_CD_mode.Name = "lb_CD_mode";
+            this.lb_CD_mode.Size = new System.Drawing.Size(31, 15);
+            this.lb_CD_mode.TabIndex = 43;
+            this.lb_CD_mode.Text = "일반";
+            // 
+            // lb_SD_mode
+            // 
+            this.lb_SD_mode.AutoSize = true;
+            this.lb_SD_mode.Font = new System.Drawing.Font("타이포_쌍문동 B", 9F, System.Drawing.FontStyle.Bold);
+            this.lb_SD_mode.Location = new System.Drawing.Point(687, 3);
+            this.lb_SD_mode.Name = "lb_SD_mode";
+            this.lb_SD_mode.Size = new System.Drawing.Size(31, 15);
+            this.lb_SD_mode.TabIndex = 44;
+            this.lb_SD_mode.Text = "일반";
+            // 
+            // lb_TD_mode
+            // 
+            this.lb_TD_mode.AutoSize = true;
+            this.lb_TD_mode.Font = new System.Drawing.Font("타이포_쌍문동 B", 9F, System.Drawing.FontStyle.Bold);
+            this.lb_TD_mode.Location = new System.Drawing.Point(831, 3);
+            this.lb_TD_mode.Name = "lb_TD_mode";
+            this.lb_TD_mode.Size = new System.Drawing.Size(31, 15);
+            this.lb_TD_mode.TabIndex = 45;
+            this.lb_TD_mode.Text = "일반";
+            // 
+            // lb_BD_showtime
+            // 
+            this.lb_BD_showtime.AutoSize = true;
+            this.lb_BD_showtime.BackColor = System.Drawing.Color.Gold;
+            this.lb_BD_showtime.Font = new System.Drawing.Font("타이포_쌍문동 B", 9F, System.Drawing.FontStyle.Bold);
+            this.lb_BD_showtime.ForeColor = System.Drawing.Color.Black;
+            this.lb_BD_showtime.Location = new System.Drawing.Point(134, 1);
+            this.lb_BD_showtime.Name = "lb_BD_showtime";
+            this.lb_BD_showtime.Size = new System.Drawing.Size(43, 15);
+            this.lb_BD_showtime.TabIndex = 46;
+            this.lb_BD_showtime.Text = "쇼타임";
+            this.lb_BD_showtime.Visible = false;
+            // 
+            // lb_CD_showtime
+            // 
+            this.lb_CD_showtime.AutoSize = true;
+            this.lb_CD_showtime.BackColor = System.Drawing.Color.Gold;
+            this.lb_CD_showtime.Font = new System.Drawing.Font("타이포_쌍문동 B", 9F, System.Drawing.FontStyle.Bold);
+            this.lb_CD_showtime.ForeColor = System.Drawing.Color.Black;
+            this.lb_CD_showtime.Location = new System.Drawing.Point(428, 1);
+            this.lb_CD_showtime.Name = "lb_CD_showtime";
+            this.lb_CD_showtime.Size = new System.Drawing.Size(43, 15);
+            this.lb_CD_showtime.TabIndex = 48;
+            this.lb_CD_showtime.Text = "쇼타임";
+            this.lb_CD_showtime.Visible = false;
+            // 
+            // lb_SD_showtime
+            // 
+            this.lb_SD_showtime.AutoSize = true;
+            this.lb_SD_showtime.BackColor = System.Drawing.Color.Gold;
+            this.lb_SD_showtime.Font = new System.Drawing.Font("타이포_쌍문동 B", 9F, System.Drawing.FontStyle.Bold);
+            this.lb_SD_showtime.ForeColor = System.Drawing.Color.Black;
+            this.lb_SD_showtime.Location = new System.Drawing.Point(576, 2);
+            this.lb_SD_showtime.Name = "lb_SD_showtime";
+            this.lb_SD_showtime.Size = new System.Drawing.Size(43, 15);
+            this.lb_SD_showtime.TabIndex = 49;
+            this.lb_SD_showtime.Text = "쇼타임";
+            this.lb_SD_showtime.Visible = false;
+            // 
+            // lb_TD_showtime
+            // 
+            this.lb_TD_showtime.AutoSize = true;
+            this.lb_TD_showtime.BackColor = System.Drawing.Color.Gold;
+            this.lb_TD_showtime.Font = new System.Drawing.Font("타이포_쌍문동 B", 9F, System.Drawing.FontStyle.Bold);
+            this.lb_TD_showtime.ForeColor = System.Drawing.Color.Black;
+            this.lb_TD_showtime.Location = new System.Drawing.Point(722, 2);
+            this.lb_TD_showtime.Name = "lb_TD_showtime";
+            this.lb_TD_showtime.Size = new System.Drawing.Size(43, 15);
+            this.lb_TD_showtime.TabIndex = 50;
+            this.lb_TD_showtime.Text = "쇼타임";
+            this.lb_TD_showtime.Visible = false;
+            // 
+            // lb_BD_taggertime
+            // 
+            this.lb_BD_taggertime.AutoSize = true;
+            this.lb_BD_taggertime.Font = new System.Drawing.Font("타이포_쌍문동 B", 9F, System.Drawing.FontStyle.Bold);
+            this.lb_BD_taggertime.Location = new System.Drawing.Point(250, 65);
+            this.lb_BD_taggertime.Name = "lb_BD_taggertime";
+            this.lb_BD_taggertime.Size = new System.Drawing.Size(28, 15);
+            this.lb_BD_taggertime.TabIndex = 51;
+            this.lb_BD_taggertime.Text = "7초";
+            // 
+            // lb_CD_taggertime
+            // 
+            this.lb_CD_taggertime.AutoSize = true;
+            this.lb_CD_taggertime.Font = new System.Drawing.Font("타이포_쌍문동 B", 9F, System.Drawing.FontStyle.Bold);
+            this.lb_CD_taggertime.Location = new System.Drawing.Point(546, 66);
+            this.lb_CD_taggertime.Name = "lb_CD_taggertime";
+            this.lb_CD_taggertime.Size = new System.Drawing.Size(28, 15);
+            this.lb_CD_taggertime.TabIndex = 52;
+            this.lb_CD_taggertime.Text = "7초";
+            // 
+            // lb_SD_taggertime
+            // 
+            this.lb_SD_taggertime.AutoSize = true;
+            this.lb_SD_taggertime.Font = new System.Drawing.Font("타이포_쌍문동 B", 9F, System.Drawing.FontStyle.Bold);
+            this.lb_SD_taggertime.Location = new System.Drawing.Point(693, 66);
+            this.lb_SD_taggertime.Name = "lb_SD_taggertime";
+            this.lb_SD_taggertime.Size = new System.Drawing.Size(28, 15);
+            this.lb_SD_taggertime.TabIndex = 53;
+            this.lb_SD_taggertime.Text = "7초";
+            // 
+            // lb_TD_taggertime
+            // 
+            this.lb_TD_taggertime.AutoSize = true;
+            this.lb_TD_taggertime.Font = new System.Drawing.Font("타이포_쌍문동 B", 9F, System.Drawing.FontStyle.Bold);
+            this.lb_TD_taggertime.Location = new System.Drawing.Point(838, 66);
+            this.lb_TD_taggertime.Name = "lb_TD_taggertime";
+            this.lb_TD_taggertime.Size = new System.Drawing.Size(28, 15);
+            this.lb_TD_taggertime.TabIndex = 54;
+            this.lb_TD_taggertime.Text = "7초";
+            // 
+            // lb_LT_destroy
+            // 
+            this.lb_LT_destroy.AutoSize = true;
+            this.lb_LT_destroy.BackColor = System.Drawing.Color.Gold;
+            this.lb_LT_destroy.Font = new System.Drawing.Font("타이포_쌍문동 B", 9F, System.Drawing.FontStyle.Bold);
+            this.lb_LT_destroy.ForeColor = System.Drawing.Color.Black;
+            this.lb_LT_destroy.Location = new System.Drawing.Point(281, 1);
+            this.lb_LT_destroy.Name = "lb_LT_destroy";
+            this.lb_LT_destroy.Size = new System.Drawing.Size(55, 15);
+            this.lb_LT_destroy.TabIndex = 55;
+            this.lb_LT_destroy.Text = "제단파괴";
+            this.lb_LT_destroy.Visible = false;
+            // 
+            // lb_LT_mode
+            // 
+            this.lb_LT_mode.AutoSize = true;
+            this.lb_LT_mode.Font = new System.Drawing.Font("타이포_쌍문동 B", 9F, System.Drawing.FontStyle.Bold);
+            this.lb_LT_mode.Location = new System.Drawing.Point(396, 0);
+            this.lb_LT_mode.Name = "lb_LT_mode";
+            this.lb_LT_mode.Size = new System.Drawing.Size(31, 15);
+            this.lb_LT_mode.TabIndex = 55;
+            this.lb_LT_mode.Text = "일반";
+            // 
             // MainControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -7528,6 +7768,23 @@
         private System.Windows.Forms.Label lb_Exercise_progress;
         private System.Windows.Forms.Label lb_Exercise_progress_name;
         private System.Windows.Forms.Button btn_setting_light;
+        private System.Windows.Forms.CheckBox cb_GameSys_deviceLight_auto;
+        private System.Windows.Forms.Button btn_ExerciseSys_SkipMode;
+        private System.Windows.Forms.Button btn_ExerciseSys_trainroomMode;
+        private System.Windows.Forms.Label lb_TD_showtime;
+        private System.Windows.Forms.Label lb_SD_showtime;
+        private System.Windows.Forms.Label lb_CD_showtime;
+        private System.Windows.Forms.Label lb_BD_showtime;
+        private System.Windows.Forms.Label lb_TD_mode;
+        private System.Windows.Forms.Label lb_SD_mode;
+        private System.Windows.Forms.Label lb_CD_mode;
+        private System.Windows.Forms.Label lb_BD_mode;
+        private System.Windows.Forms.Label lb_TD_taggertime;
+        private System.Windows.Forms.Label lb_SD_taggertime;
+        private System.Windows.Forms.Label lb_CD_taggertime;
+        private System.Windows.Forms.Label lb_BD_taggertime;
+        private System.Windows.Forms.Label lb_LT_mode;
+        private System.Windows.Forms.Label lb_LT_destroy;
     }
 }
 

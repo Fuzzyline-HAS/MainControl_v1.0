@@ -609,6 +609,8 @@
             this.serialPort_PCM = new System.IO.Ports.SerialPort(this.components);
             this.serialPort_IOT = new System.IO.Ports.SerialPort(this.components);
             this.serialPort_TRM = new System.IO.Ports.SerialPort(this.components);
+            this.lb_GameSys_leftLifeChip_cnt = new System.Windows.Forms.Label();
+            this.lb_GameSys_leftLifeChip = new System.Windows.Forms.Label();
             this.gp_GameSys.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.gp_IotSys_Animation.SuspendLayout();
@@ -3097,9 +3099,9 @@
             this.gb_BlockTree.Controls.Add(this.lb_block_10min);
             this.gb_BlockTree.Controls.Add(this.lb_block_30min);
             this.gb_BlockTree.Font = new System.Drawing.Font("타이포_쌍문동 B", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.gb_BlockTree.Location = new System.Drawing.Point(385, 790);
+            this.gb_BlockTree.Location = new System.Drawing.Point(383, 797);
             this.gb_BlockTree.Name = "gb_BlockTree";
-            this.gb_BlockTree.Size = new System.Drawing.Size(112, 206);
+            this.gb_BlockTree.Size = new System.Drawing.Size(112, 199);
             this.gb_BlockTree.TabIndex = 47;
             this.gb_BlockTree.TabStop = false;
             this.gb_BlockTree.Text = "봉쇄 트리";
@@ -3108,7 +3110,7 @@
             // 
             this.btn_TaggerSkill_timereset.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btn_TaggerSkill_timereset.Font = new System.Drawing.Font("타이포_쌍문동 B", 8.999999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btn_TaggerSkill_timereset.Location = new System.Drawing.Point(75, 148);
+            this.btn_TaggerSkill_timereset.Location = new System.Drawing.Point(75, 140);
             this.btn_TaggerSkill_timereset.Name = "btn_TaggerSkill_timereset";
             this.btn_TaggerSkill_timereset.Size = new System.Drawing.Size(20, 23);
             this.btn_TaggerSkill_timereset.TabIndex = 95;
@@ -3120,7 +3122,7 @@
             // 
             this.btn_TaggerSkill_timesubraction.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btn_TaggerSkill_timesubraction.Font = new System.Drawing.Font("타이포_쌍문동 B", 8.999999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btn_TaggerSkill_timesubraction.Location = new System.Drawing.Point(40, 148);
+            this.btn_TaggerSkill_timesubraction.Location = new System.Drawing.Point(40, 140);
             this.btn_TaggerSkill_timesubraction.Name = "btn_TaggerSkill_timesubraction";
             this.btn_TaggerSkill_timesubraction.Size = new System.Drawing.Size(20, 23);
             this.btn_TaggerSkill_timesubraction.TabIndex = 94;
@@ -3132,7 +3134,7 @@
             // 
             this.btn_TaggerSkill_timeadd.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btn_TaggerSkill_timeadd.Font = new System.Drawing.Font("타이포_쌍문동 B", 8.999999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btn_TaggerSkill_timeadd.Location = new System.Drawing.Point(14, 148);
+            this.btn_TaggerSkill_timeadd.Location = new System.Drawing.Point(14, 140);
             this.btn_TaggerSkill_timeadd.Name = "btn_TaggerSkill_timeadd";
             this.btn_TaggerSkill_timeadd.Size = new System.Drawing.Size(20, 23);
             this.btn_TaggerSkill_timeadd.TabIndex = 93;
@@ -3144,7 +3146,7 @@
             // 
             this.lb_TaggerSkill_timer.AutoSize = true;
             this.lb_TaggerSkill_timer.Font = new System.Drawing.Font("HelveticaInserat", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_TaggerSkill_timer.Location = new System.Drawing.Point(6, 110);
+            this.lb_TaggerSkill_timer.Location = new System.Drawing.Point(4, 101);
             this.lb_TaggerSkill_timer.Name = "lb_TaggerSkill_timer";
             this.lb_TaggerSkill_timer.Size = new System.Drawing.Size(100, 44);
             this.lb_TaggerSkill_timer.TabIndex = 92;
@@ -3153,7 +3155,7 @@
             // btn_GameSys_rndBlock
             // 
             this.btn_GameSys_rndBlock.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btn_GameSys_rndBlock.Location = new System.Drawing.Point(3, 175);
+            this.btn_GameSys_rndBlock.Location = new System.Drawing.Point(3, 169);
             this.btn_GameSys_rndBlock.Name = "btn_GameSys_rndBlock";
             this.btn_GameSys_rndBlock.Size = new System.Drawing.Size(103, 26);
             this.btn_GameSys_rndBlock.TabIndex = 78;
@@ -3524,6 +3526,8 @@
             // gp_GameSys_Progress
             // 
             this.gp_GameSys_Progress.BackColor = System.Drawing.SystemColors.Control;
+            this.gp_GameSys_Progress.Controls.Add(this.lb_GameSys_leftLifeChip_cnt);
+            this.gp_GameSys_Progress.Controls.Add(this.lb_GameSys_leftLifeChip);
             this.gp_GameSys_Progress.Controls.Add(this.lb_GameSys_CollectedTemple_cnt);
             this.gp_GameSys_Progress.Controls.Add(this.lb_GameSys_CollectedTemple);
             this.gp_GameSys_Progress.Controls.Add(this.lb_GameSys_SelfReviveTime);
@@ -3537,7 +3541,7 @@
             this.gp_GameSys_Progress.Font = new System.Drawing.Font("타이포_쌍문동 B", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.gp_GameSys_Progress.Location = new System.Drawing.Point(385, 657);
             this.gp_GameSys_Progress.Name = "gp_GameSys_Progress";
-            this.gp_GameSys_Progress.Size = new System.Drawing.Size(133, 128);
+            this.gp_GameSys_Progress.Size = new System.Drawing.Size(133, 137);
             this.gp_GameSys_Progress.TabIndex = 46;
             this.gp_GameSys_Progress.TabStop = false;
             this.gp_GameSys_Progress.Text = "게임 진행도";
@@ -3546,7 +3550,7 @@
             // 
             this.lb_GameSys_CollectedTemple_cnt.AutoSize = true;
             this.lb_GameSys_CollectedTemple_cnt.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lb_GameSys_CollectedTemple_cnt.Location = new System.Drawing.Point(112, 60);
+            this.lb_GameSys_CollectedTemple_cnt.Location = new System.Drawing.Point(113, 76);
             this.lb_GameSys_CollectedTemple_cnt.Name = "lb_GameSys_CollectedTemple_cnt";
             this.lb_GameSys_CollectedTemple_cnt.Size = new System.Drawing.Size(17, 16);
             this.lb_GameSys_CollectedTemple_cnt.TabIndex = 11;
@@ -3556,7 +3560,8 @@
             // 
             this.lb_GameSys_CollectedTemple.AutoSize = true;
             this.lb_GameSys_CollectedTemple.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lb_GameSys_CollectedTemple.Location = new System.Drawing.Point(6, 60);
+            this.lb_GameSys_CollectedTemple.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.lb_GameSys_CollectedTemple.Location = new System.Drawing.Point(6, 77);
             this.lb_GameSys_CollectedTemple.Name = "lb_GameSys_CollectedTemple";
             this.lb_GameSys_CollectedTemple.Size = new System.Drawing.Size(107, 16);
             this.lb_GameSys_CollectedTemple.TabIndex = 6;
@@ -3566,7 +3571,7 @@
             // 
             this.lb_GameSys_SelfReviveTime.AutoSize = true;
             this.lb_GameSys_SelfReviveTime.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lb_GameSys_SelfReviveTime.Location = new System.Drawing.Point(71, 99);
+            this.lb_GameSys_SelfReviveTime.Location = new System.Drawing.Point(88, 113);
             this.lb_GameSys_SelfReviveTime.Name = "lb_GameSys_SelfReviveTime";
             this.lb_GameSys_SelfReviveTime.Size = new System.Drawing.Size(42, 16);
             this.lb_GameSys_SelfReviveTime.TabIndex = 10;
@@ -3576,7 +3581,7 @@
             // 
             this.lb_GameSys_FixedGenerator_cnt.AutoSize = true;
             this.lb_GameSys_FixedGenerator_cnt.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lb_GameSys_FixedGenerator_cnt.Location = new System.Drawing.Point(112, 44);
+            this.lb_GameSys_FixedGenerator_cnt.Location = new System.Drawing.Point(113, 43);
             this.lb_GameSys_FixedGenerator_cnt.Name = "lb_GameSys_FixedGenerator_cnt";
             this.lb_GameSys_FixedGenerator_cnt.Size = new System.Drawing.Size(17, 16);
             this.lb_GameSys_FixedGenerator_cnt.TabIndex = 9;
@@ -3586,7 +3591,7 @@
             // 
             this.lb_GameSys_UsedRevive_cnt.AutoSize = true;
             this.lb_GameSys_UsedRevive_cnt.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lb_GameSys_UsedRevive_cnt.Location = new System.Drawing.Point(112, 78);
+            this.lb_GameSys_UsedRevive_cnt.Location = new System.Drawing.Point(113, 60);
             this.lb_GameSys_UsedRevive_cnt.Name = "lb_GameSys_UsedRevive_cnt";
             this.lb_GameSys_UsedRevive_cnt.Size = new System.Drawing.Size(17, 16);
             this.lb_GameSys_UsedRevive_cnt.TabIndex = 8;
@@ -3596,7 +3601,7 @@
             // 
             this.lb_GameSys_OpenItembox_cnt.AutoSize = true;
             this.lb_GameSys_OpenItembox_cnt.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lb_GameSys_OpenItembox_cnt.Location = new System.Drawing.Point(112, 26);
+            this.lb_GameSys_OpenItembox_cnt.Location = new System.Drawing.Point(113, 26);
             this.lb_GameSys_OpenItembox_cnt.Name = "lb_GameSys_OpenItembox_cnt";
             this.lb_GameSys_OpenItembox_cnt.Size = new System.Drawing.Size(17, 16);
             this.lb_GameSys_OpenItembox_cnt.TabIndex = 7;
@@ -3606,7 +3611,7 @@
             // 
             this.lb_GameSys_SelfRevive.AutoSize = true;
             this.lb_GameSys_SelfRevive.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lb_GameSys_SelfRevive.Location = new System.Drawing.Point(6, 99);
+            this.lb_GameSys_SelfRevive.Location = new System.Drawing.Point(6, 113);
             this.lb_GameSys_SelfRevive.Name = "lb_GameSys_SelfRevive";
             this.lb_GameSys_SelfRevive.Size = new System.Drawing.Size(64, 16);
             this.lb_GameSys_SelfRevive.TabIndex = 3;
@@ -3626,7 +3631,7 @@
             // 
             this.lb_GameSys_UsedRevive.AutoSize = true;
             this.lb_GameSys_UsedRevive.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lb_GameSys_UsedRevive.Location = new System.Drawing.Point(6, 78);
+            this.lb_GameSys_UsedRevive.Location = new System.Drawing.Point(6, 60);
             this.lb_GameSys_UsedRevive.Name = "lb_GameSys_UsedRevive";
             this.lb_GameSys_UsedRevive.Size = new System.Drawing.Size(107, 16);
             this.lb_GameSys_UsedRevive.TabIndex = 1;
@@ -7342,6 +7347,26 @@
             // 
             this.serialPort_TRM.DtrEnable = true;
             // 
+            // lb_GameSys_leftLifeChip_cnt
+            // 
+            this.lb_GameSys_leftLifeChip_cnt.AutoSize = true;
+            this.lb_GameSys_leftLifeChip_cnt.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lb_GameSys_leftLifeChip_cnt.Location = new System.Drawing.Point(113, 94);
+            this.lb_GameSys_leftLifeChip_cnt.Name = "lb_GameSys_leftLifeChip_cnt";
+            this.lb_GameSys_leftLifeChip_cnt.Size = new System.Drawing.Size(17, 16);
+            this.lb_GameSys_leftLifeChip_cnt.TabIndex = 13;
+            this.lb_GameSys_leftLifeChip_cnt.Text = "0";
+            // 
+            // lb_GameSys_leftLifeChip
+            // 
+            this.lb_GameSys_leftLifeChip.AutoSize = true;
+            this.lb_GameSys_leftLifeChip.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lb_GameSys_leftLifeChip.Location = new System.Drawing.Point(6, 94);
+            this.lb_GameSys_leftLifeChip.Name = "lb_GameSys_leftLifeChip";
+            this.lb_GameSys_leftLifeChip.Size = new System.Drawing.Size(68, 16);
+            this.lb_GameSys_leftLifeChip.TabIndex = 12;
+            this.lb_GameSys_leftLifeChip.Text = "남은 생명:";
+            // 
             // MainControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -8044,6 +8069,8 @@
         private System.Windows.Forms.CheckBox cb_CE_except;
         private System.Windows.Forms.CheckBox cb_TE_except;
         private System.Windows.Forms.CheckBox cb_SE_except;
+        private System.Windows.Forms.Label lb_GameSys_leftLifeChip_cnt;
+        private System.Windows.Forms.Label lb_GameSys_leftLifeChip;
     }
 }
 

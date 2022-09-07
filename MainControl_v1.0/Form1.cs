@@ -572,7 +572,10 @@ namespace MainControl_v1._0
                         SV_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
                         TV_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
                         }break;
-                    case 'I': temple_collected_chip = Convert.ToInt32(pcm_str[2][1] - 48); lb_GameSys_CollectedTemple_cnt.Text = temple_collected_chip.ToString();
+                    case 'I': 
+                    temple_collected_chip = Convert.ToInt32(pcm_str[2][1] - 48); 
+                    lb_GameSys_CollectedTemple_cnt.Text = temple_collected_chip.ToString();
+                    leftLifeChip();
                     if (rb_GameSys_NightMode.Checked == true)
                         PCM_send("LL _Z");
                     if (selfrevive_cnt == temple_collected_chip)
@@ -625,6 +628,16 @@ namespace MainControl_v1._0
 
             }
         }
+        int leftLifeChipCnt = 0;
+        private void leftLifeChip()
+        {
+            if (rb_GameSys_4P.Checked) leftLifeChipCnt = 3;
+            else if(rb_GameSys_5P.Checked) leftLifeChipCnt = 4;
+            else if (rb_GameSys_6P.Checked) leftLifeChipCnt = 5;
+            else if (rb_GameSys_7P.Checked) leftLifeChipCnt = 6;
+            leftLifeChipCnt = leftLifeChipCnt + open_revive_cnt - temple_collected_chip;
+            lb_GameSys_leftLifeChip_cnt.Text = leftLifeChipCnt.ToString();
+        }
         private void revivalOpenChk(string reviveName)  //생명장치 열렸는지 확인하는 함수 부분
         {
             for (int i = 0; i < 10; i++)
@@ -640,6 +653,7 @@ namespace MainControl_v1._0
                     }
                 }
             }
+            leftLifeChip();
         }
         private void revivalOpenShow(string reviveName, string label_name)
         {
@@ -1603,6 +1617,7 @@ namespace MainControl_v1._0
         private void btn_GameSys_playPeople_Click(object sender, EventArgs e)
         {
             Radiobutton_PlayPeople();
+            leftLifeChip();
         }
         private void Radiobutton_PlayMode()
         {
@@ -1650,6 +1665,7 @@ namespace MainControl_v1._0
         }
         private void btn_GameSys_GameStart_Click(object sender, EventArgs e)
         {
+            
             if (OS_start == false)
             {
                 if (serialPort_PCM.IsOpen)
@@ -1683,11 +1699,12 @@ namespace MainControl_v1._0
                 else
                     MessageBox.Show((String)"PCM 통신 연결을 먼저 진행해주세요!");
             }
-
+            leftLifeChip();
         }
 
         private void btn_GameSys_ReadyMode_Click(object sender, EventArgs e)
         {
+            
             OS_start = false;
             PCM_send("PT");         //덕트테스트
             if (rb_GameSys_HardMode.Checked) 
@@ -1740,6 +1757,7 @@ namespace MainControl_v1._0
             }
             else
                 MessageBox.Show((String)"PCM 통신 연결을 먼저 진행해주세요!");
+            leftLifeChip();
         }
         private void lb_text_change(String lb_name, String text)
         {
@@ -1754,6 +1772,7 @@ namespace MainControl_v1._0
             {
                 PCM_send("BF _S");
             }
+            leftLifeChip();
         }
 
         private void btn_GameSys_GameStop_Click(object sender, EventArgs e)
@@ -2098,6 +2117,7 @@ namespace MainControl_v1._0
         }
         private void btn_GameSys_OSReset_Click(object sender, EventArgs e)
         {
+            
             lb_block_1.Text = "랜덤";
             lb_GameSys_SelfReviveTime.Text = "1:30";
             open_revive_cnt = 0;
@@ -2117,7 +2137,7 @@ namespace MainControl_v1._0
             CV_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
             SV_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
             TV_Timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
-
+            leftLifeChip();
         }
         private void btn_GameSys_NarrantionPlay_Click(object sender, EventArgs e)
         {

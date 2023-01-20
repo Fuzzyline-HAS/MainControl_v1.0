@@ -296,6 +296,8 @@
             this.rb_GameSys_4P = new System.Windows.Forms.RadioButton();
             this.btn_GameSys_ReadyMode = new System.Windows.Forms.Button();
             this.gp_GameSys_Progress = new System.Windows.Forms.GroupBox();
+            this.lb_GameSys_leftLifeChip_cnt = new System.Windows.Forms.Label();
+            this.lb_GameSys_leftLifeChip = new System.Windows.Forms.Label();
             this.lb_GameSys_CollectedTemple_cnt = new System.Windows.Forms.Label();
             this.lb_GameSys_CollectedTemple = new System.Windows.Forms.Label();
             this.lb_GameSys_SelfReviveTime = new System.Windows.Forms.Label();
@@ -609,8 +611,6 @@
             this.serialPort_PCM = new System.IO.Ports.SerialPort(this.components);
             this.serialPort_IOT = new System.IO.Ports.SerialPort(this.components);
             this.serialPort_TRM = new System.IO.Ports.SerialPort(this.components);
-            this.lb_GameSys_leftLifeChip_cnt = new System.Windows.Forms.Label();
-            this.lb_GameSys_leftLifeChip = new System.Windows.Forms.Label();
             this.gp_GameSys.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.gp_IotSys_Animation.SuspendLayout();
@@ -1381,7 +1381,7 @@
             this.tb_easy_itembox_vibe1.Name = "tb_easy_itembox_vibe1";
             this.tb_easy_itembox_vibe1.Size = new System.Drawing.Size(35, 21);
             this.tb_easy_itembox_vibe1.TabIndex = 9;
-            this.tb_easy_itembox_vibe1.Text = "200";
+            this.tb_easy_itembox_vibe1.Text = "150";
             // 
             // tp_easy_gamedoor
             // 
@@ -1792,7 +1792,7 @@
             this.tb_normal_itembox_vibe4.Name = "tb_normal_itembox_vibe4";
             this.tb_normal_itembox_vibe4.Size = new System.Drawing.Size(35, 21);
             this.tb_normal_itembox_vibe4.TabIndex = 43;
-            this.tb_normal_itembox_vibe4.Text = "40";
+            this.tb_normal_itembox_vibe4.Text = "0";
             // 
             // tb_normal_itembox_vibe3
             // 
@@ -1800,7 +1800,7 @@
             this.tb_normal_itembox_vibe3.Name = "tb_normal_itembox_vibe3";
             this.tb_normal_itembox_vibe3.Size = new System.Drawing.Size(35, 21);
             this.tb_normal_itembox_vibe3.TabIndex = 42;
-            this.tb_normal_itembox_vibe3.Text = "70";
+            this.tb_normal_itembox_vibe3.Text = "35";
             // 
             // lb_normal_itembox_vibe4
             // 
@@ -1826,7 +1826,7 @@
             this.tb_normal_itembox_vibe2.Name = "tb_normal_itembox_vibe2";
             this.tb_normal_itembox_vibe2.Size = new System.Drawing.Size(35, 21);
             this.tb_normal_itembox_vibe2.TabIndex = 39;
-            this.tb_normal_itembox_vibe2.Text = "100";
+            this.tb_normal_itembox_vibe2.Text = "75";
             // 
             // lb_normal_itembox_vibe2
             // 
@@ -1852,7 +1852,7 @@
             this.tb_normal_itembox_vibe1.Name = "tb_normal_itembox_vibe1";
             this.tb_normal_itembox_vibe1.Size = new System.Drawing.Size(35, 21);
             this.tb_normal_itembox_vibe1.TabIndex = 36;
-            this.tb_normal_itembox_vibe1.Text = "250";
+            this.tb_normal_itembox_vibe1.Text = "150";
             // 
             // tp_normal_door
             // 
@@ -2263,7 +2263,7 @@
             this.tb_hard_itembox_vibe4.Name = "tb_hard_itembox_vibe4";
             this.tb_hard_itembox_vibe4.Size = new System.Drawing.Size(35, 21);
             this.tb_hard_itembox_vibe4.TabIndex = 16;
-            this.tb_hard_itembox_vibe4.Text = "40";
+            this.tb_hard_itembox_vibe4.Text = "0";
             // 
             // tb_hard_itembox_vibe3
             // 
@@ -2271,7 +2271,7 @@
             this.tb_hard_itembox_vibe3.Name = "tb_hard_itembox_vibe3";
             this.tb_hard_itembox_vibe3.Size = new System.Drawing.Size(35, 21);
             this.tb_hard_itembox_vibe3.TabIndex = 15;
-            this.tb_hard_itembox_vibe3.Text = "75";
+            this.tb_hard_itembox_vibe3.Text = "35";
             // 
             // lb_hard_itembox_vibe4
             // 
@@ -2297,7 +2297,7 @@
             this.tb_hard_itembox_vibe2.Name = "tb_hard_itembox_vibe2";
             this.tb_hard_itembox_vibe2.Size = new System.Drawing.Size(35, 21);
             this.tb_hard_itembox_vibe2.TabIndex = 12;
-            this.tb_hard_itembox_vibe2.Text = "150";
+            this.tb_hard_itembox_vibe2.Text = "75";
             // 
             // lb_hard_itembox_vibe2
             // 
@@ -2323,7 +2323,7 @@
             this.tb_hard_itembox_vibe1.Name = "tb_hard_itembox_vibe1";
             this.tb_hard_itembox_vibe1.Size = new System.Drawing.Size(35, 21);
             this.tb_hard_itembox_vibe1.TabIndex = 9;
-            this.tb_hard_itembox_vibe1.Text = "250";
+            this.tb_hard_itembox_vibe1.Text = "150";
             // 
             // tp_hard_door
             // 
@@ -3545,6 +3545,26 @@
             this.gp_GameSys_Progress.TabIndex = 46;
             this.gp_GameSys_Progress.TabStop = false;
             this.gp_GameSys_Progress.Text = "게임 진행도";
+            // 
+            // lb_GameSys_leftLifeChip_cnt
+            // 
+            this.lb_GameSys_leftLifeChip_cnt.AutoSize = true;
+            this.lb_GameSys_leftLifeChip_cnt.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lb_GameSys_leftLifeChip_cnt.Location = new System.Drawing.Point(113, 94);
+            this.lb_GameSys_leftLifeChip_cnt.Name = "lb_GameSys_leftLifeChip_cnt";
+            this.lb_GameSys_leftLifeChip_cnt.Size = new System.Drawing.Size(17, 16);
+            this.lb_GameSys_leftLifeChip_cnt.TabIndex = 13;
+            this.lb_GameSys_leftLifeChip_cnt.Text = "0";
+            // 
+            // lb_GameSys_leftLifeChip
+            // 
+            this.lb_GameSys_leftLifeChip.AutoSize = true;
+            this.lb_GameSys_leftLifeChip.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lb_GameSys_leftLifeChip.Location = new System.Drawing.Point(6, 94);
+            this.lb_GameSys_leftLifeChip.Name = "lb_GameSys_leftLifeChip";
+            this.lb_GameSys_leftLifeChip.Size = new System.Drawing.Size(68, 16);
+            this.lb_GameSys_leftLifeChip.TabIndex = 12;
+            this.lb_GameSys_leftLifeChip.Text = "남은 생명:";
             // 
             // lb_GameSys_CollectedTemple_cnt
             // 
@@ -7346,26 +7366,6 @@
             // serialPort_TRM
             // 
             this.serialPort_TRM.DtrEnable = true;
-            // 
-            // lb_GameSys_leftLifeChip_cnt
-            // 
-            this.lb_GameSys_leftLifeChip_cnt.AutoSize = true;
-            this.lb_GameSys_leftLifeChip_cnt.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lb_GameSys_leftLifeChip_cnt.Location = new System.Drawing.Point(113, 94);
-            this.lb_GameSys_leftLifeChip_cnt.Name = "lb_GameSys_leftLifeChip_cnt";
-            this.lb_GameSys_leftLifeChip_cnt.Size = new System.Drawing.Size(17, 16);
-            this.lb_GameSys_leftLifeChip_cnt.TabIndex = 13;
-            this.lb_GameSys_leftLifeChip_cnt.Text = "0";
-            // 
-            // lb_GameSys_leftLifeChip
-            // 
-            this.lb_GameSys_leftLifeChip.AutoSize = true;
-            this.lb_GameSys_leftLifeChip.Font = new System.Drawing.Font("타이포_쌍문동 B", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lb_GameSys_leftLifeChip.Location = new System.Drawing.Point(6, 94);
-            this.lb_GameSys_leftLifeChip.Name = "lb_GameSys_leftLifeChip";
-            this.lb_GameSys_leftLifeChip.Size = new System.Drawing.Size(68, 16);
-            this.lb_GameSys_leftLifeChip.TabIndex = 12;
-            this.lb_GameSys_leftLifeChip.Text = "남은 생명:";
             // 
             // MainControl
             // 

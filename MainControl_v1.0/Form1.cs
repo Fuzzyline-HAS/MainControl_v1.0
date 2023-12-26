@@ -209,6 +209,13 @@ namespace MainControl_v1._0
                             PCM_send("VO58");
                             PCM_send("VO57");
                         }
+                        else if (rb_GameSys_7P.Checked || rb_GameSys_8P.Checked)
+                        {
+                            lb_LT_destroy.Visible = true;
+                            PCM_send(("AD _TL_" + tb_hard_door_taggertime_templedestroy.Text));
+                            PCM_send("VO58");
+                            PCM_send("VO57");
+                        }
                     }
                     else
                         lb_color_change(lb_name, "데이모트", Color.Yellow, Color.White);
@@ -271,6 +278,12 @@ namespace MainControl_v1._0
                             PCM_send("AD _TL_5");
                             PCM_send("VO59");
                         }
+                        else if (rb_GameSys_7P.Checked || rb_GameSys_8P.Checked)
+                        {
+                            lb_LT_destroy.Visible = false;
+                            PCM_send("AD _TL_7");
+                            PCM_send("VO59");
+                        }
                         
                     }
                     else if (pcm_str[1][1] == 'I')
@@ -298,30 +311,75 @@ namespace MainControl_v1._0
                 case 'H':
                     if (pcm_str[1].Contains('T'))
                     {
-                        lb_LT_mode.Text = "하드";
+                        if(rb_GameSys_7P.Checked || rb_GameSys_8P.Checked)
+                        {
+                            lb_LT_mode.Text = "7/8인";
+                        }
+                        else
+                        {
+                            lb_LT_mode.Text = "하드";
+                        }
                     }
                     if (pcm_str[1].Contains("AD"))
                     {
-                        lb_BD_mode.Text = "하드";
-                        lb_CD_mode.Text = "하드";
-                        lb_SD_mode.Text = "하드";
-                        lb_TD_mode.Text = "하드";
+                        if (rb_GameSys_7P.Checked || rb_GameSys_8P.Checked)
+                        {
+                            lb_BD_mode.Text = "7/8인";
+                            lb_CD_mode.Text = "7/8인";
+                            lb_SD_mode.Text = "7/8인";
+                            lb_TD_mode.Text = "7/8인";
+                        }
+                        else
+                        {
+                            lb_BD_mode.Text = "하드";
+                            lb_CD_mode.Text = "하드";
+                            lb_SD_mode.Text = "하드";
+                            lb_TD_mode.Text = "하드";
+                        }
                     }
                     else if (pcm_str[1].Contains("BD"))
                     {
-                        lb_BD_mode.Text = "하드";
+                        if (rb_GameSys_7P.Checked || rb_GameSys_8P.Checked)
+                        {
+                            lb_BD_mode.Text = "7/8인";
+                        }
+                        else
+                        {
+                            lb_BD_mode.Text = "하드";
+                        }
                     }
                     else if (pcm_str[1].Contains("CD"))
                     {
-                        lb_BD_mode.Text = "하드";
+                        if (rb_GameSys_7P.Checked || rb_GameSys_8P.Checked)
+                        {
+                            lb_CD_mode.Text = "7/8인";
+                        }
+                        else
+                        {
+                            lb_CD_mode.Text = "하드";
+                        }
                     }
                     else if (pcm_str[1].Contains("SD"))
                     {
-                        lb_BD_mode.Text = "하드";
+                        if (rb_GameSys_7P.Checked || rb_GameSys_8P.Checked)
+                        {
+                            lb_SD_mode.Text = "7/8인";
+                        }
+                        else
+                        {
+                            lb_SD_mode.Text = "하드";
+                        }
                     }
                     else if (pcm_str[1].Contains("TD"))
                     {
-                        lb_BD_mode.Text = "하드";
+                        if (rb_GameSys_7P.Checked || rb_GameSys_8P.Checked)
+                        {
+                            lb_TD_mode.Text = "7/8인";
+                        }
+                        else
+                        {
+                            lb_TD_mode.Text = "하드";
+                        }
                     }
                     break;
                 case 'K':
@@ -635,6 +693,7 @@ namespace MainControl_v1._0
             else if(rb_GameSys_5P.Checked) leftLifeChipCnt = 4;
             else if (rb_GameSys_6P.Checked) leftLifeChipCnt = 5;
             else if (rb_GameSys_7P.Checked) leftLifeChipCnt = 6;
+            else if (rb_GameSys_8P.Checked) leftLifeChipCnt = 7;
             leftLifeChipCnt = leftLifeChipCnt + open_revive_cnt - temple_collected_chip;
             lb_GameSys_leftLifeChip_cnt.Text = leftLifeChipCnt.ToString();
         }
@@ -1059,6 +1118,13 @@ namespace MainControl_v1._0
                     {
                         lb_color_change(lb_name, "DAY영상재생", Color.Yellow, Color.Black);
                     }
+                    else if (pcm_str[1].Contains("ET"))
+                    {
+                        lb_LT_destroy.Visible = true;
+                        //TRM_send(("AD _TL_" + tb_hard_door_taggertime_templedestroy.Text));
+                        TRM_send("VO58");
+                        TRM_send("VO57");
+                    }
                     break;
                 case 'R': lb_color_change(lb_name, "장치 활성", Color.Yellow, Color.Black); break;
                 case 'S': lb_color_change(lb_name, "장치 세팅", Color.White, Color.Black);
@@ -1083,6 +1149,12 @@ namespace MainControl_v1._0
                         btn_setting_light.BackColor = Color.Green;
                         btn_setting_light.Text = "청소등 ON";
                     }
+                    else if (pcm_str[1].Contains("ET"))
+                    {
+                        //lb_LT_destroy.Visible = false;
+                        //PCM_send("AD _TL_5");
+                        TRM_send("VO59");
+                    }
                     break;
                 case 'L': 
                     if (pcm_str[1][1] == 'D')
@@ -1105,7 +1177,9 @@ namespace MainControl_v1._0
                         {
                             lb_name_color_change(block_name, Color.LightGray, Color.Black);
                             lb_color_change(lb_name, "장치 활성", Color.Yellow, Color.Black);
+                            TRM_send("ET _H");
                             TRM_send("VO51");
+
                         }
                     }
                     else
@@ -1611,6 +1685,11 @@ namespace MainControl_v1._0
             {
                 headcount = 6;                                              //플레이 멤버 6명
                 PCM_send("PP _7");                                         //(통신) 플레이 멤버 6명 전송
+            }
+            else if (rb_GameSys_8P.Checked == true)                     // 6p모드가 선택되어있을때
+            {
+                headcount = 7;                                              //플레이 멤버 6명
+                PCM_send("PP _8");                                         //(통신) 플레이 멤버 6명 전송
             }
             selfrevive_cnt = headcount;
         }
@@ -2485,7 +2564,14 @@ namespace MainControl_v1._0
 
         private void btn_IOTreset_Click(object sender, EventArgs e)
         {
-            MessageBox.Show((String)"아직 지원하지 않는 기능입니다!");
+            if (rb_iotSys_iotG2.Checked) { 
+                if (serialPort_IOT.IsOpen)
+                     iotSys_PlayGroup("WATCHDOG");
+                else
+                    MessageBox.Show((String)"IOT 통신 연결을 먼저 진행해주세요!");
+            }
+            else
+                MessageBox.Show((String)"G2 만 지원하는 기능입니다.");
         }
 
         private void btn_IOTnightmode_Click(object sender, EventArgs e)
@@ -2636,10 +2722,10 @@ namespace MainControl_v1._0
                 {
                     case ((0 * 60) + 1): ExerciseSys_cbScenrio_sel(13); lb_Exercise_progress.Text = "생명장치"; break;
                     case ((0 * 60) + 6): TRM_send("ER _R"); break;
-                    case ((1 * 60)):
+                    case ((0 * 60) + 30):
                         TRM_send("ER _O"); ExerciseSys_cbScenrio_sel(14); Console.Write("1분경과");
                         break;
-                    case ((1 * 60) + 10):
+                    case ((0 * 60) + 36):
                         ExerciseSys_cbScenrio_sel(15); trm_device_time = 0;
                         TRM_send("ER _S");
                         TRM_send("EC _OFF");
@@ -2668,8 +2754,8 @@ namespace MainControl_v1._0
                     case ((0 * 60) + 10): ExerciseSys_cbScenrio_sel(20); ExerciseSys_cbScenrio_sel(100); break;
                     case ((0 * 60) + 16): ExerciseSys_cbScenrio_sel(21); break;
                     case ((0 * 60) + 26): ExerciseSys_cbScenrio_sel(22); break;
-                    case ((3 * 60)): ExerciseSys_cbScenrio_sel(23); break;
-                    case ((3 * 60) + 10):
+                    case ((1 * 60) + 00): ExerciseSys_cbScenrio_sel(23); break;
+                    case ((1 * 60) + 8):
                         trm_device_time = 0; TRM_send("EI1_O"); TRM_send("EI2_O");
                         using_device = ' ';
                         TRM_ThreadTimer.Change(0, 1000);                                    // timer_ExerciseSys.Enabled = true;//(타이머) TRM타이머 시작
@@ -2691,7 +2777,7 @@ namespace MainControl_v1._0
                     case ((0 * 60) + 1): ExerciseSys_cbScenrio_sel(27); lb_Exercise_progress.Text = "발전기"; break;
                     case ((0 * 60) + 16): ExerciseSys_cbScenrio_sel(28); break;
                     case ((0 * 60) + 23): ExerciseSys_cbScenrio_sel(29); break;
-                    case ((3 * 60)):
+                    case ((1 * 60) + 30):
                         ExerciseSys_cbScenrio_sel(30); trm_device_time = 0; TRM_send("EG _F"); TRM_send("EE _O");
                         using_device = ' ';
                         TRM_ThreadTimer.Change(0, 1000);                                    // timer_ExerciseSys.Enabled = true;//(타이머) TRM타이머 시작
@@ -2712,15 +2798,15 @@ namespace MainControl_v1._0
                 switch (trm_device_time)
                 {
                     case ((0 * 60) + 1): ExerciseSys_cbScenrio_sel(34); lb_Exercise_progress.Text = "도어"; break;
-                    case ((0 * 60) + 16): ExerciseSys_cbScenrio_sel(100); break;
-                    case ((0 * 60) + 31): ExerciseSys_cbScenrio_sel(35); break;
-                    case ((0 * 60) + 46): ExerciseSys_cbScenrio_sel(100); break;
-                    case ((1 * 60) + 1): ExerciseSys_cbScenrio_sel(36); TRM_send("ER _A"); break;
-                    case ((1 * 60) + 16): ExerciseSys_cbScenrio_sel(100); break;
+                    case ((0 * 60) + 10): ExerciseSys_cbScenrio_sel(100); break;
+                    case ((0 * 60) + 15): ExerciseSys_cbScenrio_sel(35); break;
+                    case ((0 * 60) + 26): ExerciseSys_cbScenrio_sel(100); break;
+                    case ((1 * 60) + 35): ExerciseSys_cbScenrio_sel(36); TRM_send("ER _A"); break;
+                    case ((1 * 60) + 45): ExerciseSys_cbScenrio_sel(100); break;
 
-                    case ((1 * 60) + 30):
+                    case ((0 * 60) + 55):
                         ExerciseSys_cbScenrio_sel(37); break;
-                    case ((1 * 60) + 38):
+                    case ((1 * 60) + 00):
                         trm_device_time = 0; TRM_send("ED _L");
                         using_device = ' ';
                         TRM_ThreadTimer.Change(0, 1000);                                    // timer_ExerciseSys.Enabled = true;//(타이머) TRM타이머 시작
@@ -2738,6 +2824,10 @@ namespace MainControl_v1._0
                     TRM_DeviceTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //decivetimer 동작 정지
                     trm_device_time = 0;
                 }
+                switch (trm_device_time)
+                {
+                    case ((0 * 60) + 30): TRM_send("EE _E"); lb_Exercise_progress.Text = "탈출장치"; break;
+                }
             }
             else if (using_device == 'V')
             {
@@ -2748,6 +2838,10 @@ namespace MainControl_v1._0
                     TRM_ThreadTimer.Change(0, 1000);                                    // timer_ExerciseSys.Enabled = true;//(타이머) TRM타이머 시작
                     TRM_DeviceTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //decivetimer 동작 정지
                     trm_device_time = 0;
+                }
+                switch (trm_device_time)
+                {
+                    case ((0 * 60) + 30): TRM_send("EV _O"); lb_Exercise_progress.Text = "덕트"; break;
                 }
             }
         }
@@ -2800,49 +2894,49 @@ namespace MainControl_v1._0
                         TRM_DeviceTimer.Change(0, 1000); // 다른 타이머 동작 Device_timerWork
                         break;
                     //발전기
-                    case ((2 * 60) + 55): ExerciseSys_cbScenrio_sel(25); TRM_send("EI1_O"); TRM_send("EI2_O"); break;
-                    case ((3 * 60) + 5): ExerciseSys_cbScenrio_sel(26); TRM_send("EI1_A"); TRM_send("EI2_A");
+                    case ((2 * 60) + 50): ExerciseSys_cbScenrio_sel(25); TRM_send("EI1_O"); TRM_send("EI2_O"); break;
+                    case ((3 * 60) + 0): ExerciseSys_cbScenrio_sel(26); TRM_send("EI1_A"); TRM_send("EI2_A");
                         using_device = 'G'; TRM_send("EG _R");
                         TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false; //(타이머) TRM타이머 정지
                         TRM_DeviceTimer.Change(0, 1000); // 다른 타이머 동작 Device_timerWork
                         break;
                     //도어
-                    case ((3 * 60) + 13): ExerciseSys_cbScenrio_sel(32); break;
-                    case ((3 * 60) + 19): ExerciseSys_cbScenrio_sel(100); break;
-                    case ((3 * 60) + 23): ExerciseSys_cbScenrio_sel(33); break;
-                    case ((3 * 60) + 29): ExerciseSys_cbScenrio_sel(100); TRM_send("ED _R"); lb_Exercise_progress.Text = "도어"; using_device = 'D'; TRM_send("EE _A");
+                    case ((3 * 60) + 10): ExerciseSys_cbScenrio_sel(32); break;
+                    case ((3 * 60) + 17): ExerciseSys_cbScenrio_sel(100); break;
+                    case ((3 * 60) + 21): ExerciseSys_cbScenrio_sel(33); break;
+                    case ((3 * 60) + 27): ExerciseSys_cbScenrio_sel(100); TRM_send("ED _R"); lb_Exercise_progress.Text = "도어"; using_device = 'D'; TRM_send("EE _A");
                         TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false; //(타이머) TRM타이머 정지
                         TRM_DeviceTimer.Change(0, 1000); // 다른 타이머 동작 Device_timerWork
                         break;
 
                     //탈출장치
-                    case ((3 * 60) + 42): ExerciseSys_cbScenrio_sel(39);lb_Exercise_progress.Text = "탈출장치"; break;
-                    case ((3 * 60) + 52): TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false; //(타이머) TRM타이머 정지
+                    case ((3 * 60) + 38): ExerciseSys_cbScenrio_sel(39);lb_Exercise_progress.Text = "탈출장치"; break;
+                    case ((3 * 60) + 48): TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false; //(타이머) TRM타이머 정지
                         TRM_DeviceTimer.Change(0, 1000); using_device = 'E'; TRM_send("EE _R"); // 다른 타이머 동작 Device_timerWork
                         break;
 
-                    case ((3 * 60) + 59): ExerciseSys_cbScenrio_sel(41); break;
-                    case ((4 * 60) + 1): TRM_send("ED _K"); TRM_send("EL _EOFF"); break;
-                    case ((4 * 60) + 8): ExerciseSys_cbScenrio_sel(42); break;
-                    case ((4 * 60) + 9): ExerciseSys_cbScenrio_sel(100); break;
+                    case ((3 * 60) + 55): ExerciseSys_cbScenrio_sel(41); break;
+                    case ((3 * 60) + 57): TRM_send("ED _K"); TRM_send("EL _EOFF"); break;
+                    case ((4 * 60) + 6): ExerciseSys_cbScenrio_sel(42); break;
+                    case ((4 * 60) + 7): ExerciseSys_cbScenrio_sel(100); break;
 
                     //덕트
-                    case ((4 * 60) + 12): TRM_send("ED _V"); break;
-                    case ((4 * 60) + 14): ExerciseSys_cbScenrio_sel(43); break;
-                    case ((4 * 60) + 16):   //ExerciseSys_cbScenrio_sel(100); TRM_send("ED _V"); 
+                    case ((4 * 60) + 12): TRM_send("ED _V"); TRM_send("EV _R"); break;
+                    case ((4 * 60) + 13): ExerciseSys_cbScenrio_sel(43); break;
+                    case ((4 * 60) + 15):   //ExerciseSys_cbScenrio_sel(100); TRM_send("ED _V"); 
                         TRM_send("EM _M12"); break;
+                    case ((4 * 60) + 19): ExerciseSys_cbScenrio_sel(44); break;
                     case ((4 * 60) + 21): TRM_send("ED _V"); break;
-                    case ((4 * 60) + 23): ExerciseSys_cbScenrio_sel(44); break;
-                    case ((4 * 60) + 30):   //ExerciseSys_cbScenrio_sel(100); 
+                    case ((4 * 60) + 22):   //ExerciseSys_cbScenrio_sel(100); 
                                             //TRM_send("EM _M13\n");
                         TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false; //(타이머) TRM타이머 정지
-                        TRM_DeviceTimer.Change(0, 1000); using_device = 'V'; TRM_send("EV _R"); lb_Exercise_progress.Text = "덕트";// 다른 타이머 동작 Device_timerWork
+                        TRM_DeviceTimer.Change(0, 1000); using_device = 'V';  lb_Exercise_progress.Text = "덕트";// 다른 타이머 동작 Device_timerWork
                         break;
 
-                    case ((4 * 60) + 38): ExerciseSys_cbScenrio_sel(46); break;
-                    case ((4 * 60) + 48): ExerciseSys_cbScenrio_sel(100); break;
-                    case ((4 * 60) + 49): ExerciseSys_cbScenrio_sel(47); TRM_send("EL _EON"); TRM_send("EA _S"); break; //TRM_send("ED _!");
-                    case ((4 * 60) + 56): TRM_send("EA _R"); TRM_send("EE _A"); TRM_send("ED _S"); TRM_send("ED _R"); TRM_send("ET _B"); lb_Exercise_progress.Text = "종료";
+                    case ((4 * 60) + 27): ExerciseSys_cbScenrio_sel(46); break;
+                    case ((4 * 60) + 28): ExerciseSys_cbScenrio_sel(100); break;
+                    case ((4 * 60) + 40): ExerciseSys_cbScenrio_sel(47); TRM_send("EL _EON"); TRM_send("EA _S"); break; //TRM_send("ED _!");
+                    case ((4 * 60) + 45): TRM_send("EA _R"); TRM_send("EE _A"); TRM_send("ED _S"); TRM_send("ED _R"); TRM_send("ET _H"); TRM_send("ET _B"); lb_Exercise_progress.Text = "종료";
                         TRM_ThreadTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite); //TRM_start = false;
                         break;
                 }
@@ -3116,6 +3210,8 @@ namespace MainControl_v1._0
             send_Arduio += ExerciseSys_cbDevicceState_sel();
             if(send_Arduio.Equals("ED _R"))
                 TRM_send("ED _A");
+            else if (send_Arduio.Equals("ET _R"))
+                TRM_send("ET _H");
             TRM_send(send_Arduio);
             Console.WriteLine(send_Arduio);
         }
@@ -3280,6 +3376,12 @@ namespace MainControl_v1._0
                 gamemode = "AV _M2_" + tb_normal_vent_cooltime_addup.Text;
                 PCM_send(gamemode);
                 PCM_send("AD _TL_7");
+
+                if (rb_GameSys_7P.Checked || rb_GameSys_8P.Checked) //7,8인 모드시에 제단 파괴 가능하게 하기 위해
+                {
+                    PCM_send("AD _H");
+                    PCM_send("LT _H");
+                }
             }
             else if (rb_GameSys_EasyMode.Checked == true)
             {
@@ -3305,6 +3407,12 @@ namespace MainControl_v1._0
                 gamemode = "AV _M2_" + tb_easy_vent_cooltime_addup.Text;
                 PCM_send(gamemode);
                 PCM_send("AD _TL_7");
+
+                if (rb_GameSys_7P.Checked || rb_GameSys_8P.Checked) //7,8인 모드시에 제단 파괴 가능하게 하기 위해
+                {
+                    PCM_send("AD _H");
+                    PCM_send("LT _H");
+                }
             }
             else if (rb_GameSys_HardMode.Checked == true)
             { 
@@ -3452,6 +3560,7 @@ namespace MainControl_v1._0
         private void btn_ExerciseSys_SkipMode_Click(object sender, EventArgs e)
         {
             TRM_send("EA _R");
+            TRM_send("ET _H");
             TRM_send("ET _B");
             TRM_send("ELE_EON");
             TRM_send("ELW_WON");

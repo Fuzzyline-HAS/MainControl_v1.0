@@ -611,6 +611,7 @@
             this.serialPort_PCM = new System.IO.Ports.SerialPort(this.components);
             this.serialPort_IOT = new System.IO.Ports.SerialPort(this.components);
             this.serialPort_TRM = new System.IO.Ports.SerialPort(this.components);
+            this.rb_GameSys_8P = new System.Windows.Forms.RadioButton();
             this.gp_GameSys.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.gp_IotSys_Animation.SuspendLayout();
@@ -1800,7 +1801,7 @@
             this.tb_normal_itembox_vibe3.Name = "tb_normal_itembox_vibe3";
             this.tb_normal_itembox_vibe3.Size = new System.Drawing.Size(35, 21);
             this.tb_normal_itembox_vibe3.TabIndex = 42;
-            this.tb_normal_itembox_vibe3.Text = "35";
+            this.tb_normal_itembox_vibe3.Text = "75";
             // 
             // lb_normal_itembox_vibe4
             // 
@@ -1826,7 +1827,7 @@
             this.tb_normal_itembox_vibe2.Name = "tb_normal_itembox_vibe2";
             this.tb_normal_itembox_vibe2.Size = new System.Drawing.Size(35, 21);
             this.tb_normal_itembox_vibe2.TabIndex = 39;
-            this.tb_normal_itembox_vibe2.Text = "75";
+            this.tb_normal_itembox_vibe2.Text = "100";
             // 
             // lb_normal_itembox_vibe2
             // 
@@ -3440,6 +3441,7 @@
             // gp_MemeberSetup
             // 
             this.gp_MemeberSetup.BackColor = System.Drawing.SystemColors.Control;
+            this.gp_MemeberSetup.Controls.Add(this.rb_GameSys_8P);
             this.gp_MemeberSetup.Controls.Add(this.btn_GameSys_playPeople);
             this.gp_MemeberSetup.Controls.Add(this.rb_GameSys_7P);
             this.gp_MemeberSetup.Controls.Add(this.rb_GameSys_6P);
@@ -3468,22 +3470,22 @@
             // 
             this.rb_GameSys_7P.AutoSize = true;
             this.rb_GameSys_7P.Font = new System.Drawing.Font("타이포_쌍문동 B", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.rb_GameSys_7P.Location = new System.Drawing.Point(58, 43);
+            this.rb_GameSys_7P.Location = new System.Drawing.Point(24, 40);
             this.rb_GameSys_7P.Name = "rb_GameSys_7P";
-            this.rb_GameSys_7P.Size = new System.Drawing.Size(44, 17);
+            this.rb_GameSys_7P.Size = new System.Drawing.Size(33, 17);
             this.rb_GameSys_7P.TabIndex = 3;
-            this.rb_GameSys_7P.Text = "7인";
+            this.rb_GameSys_7P.Text = "7";
             this.rb_GameSys_7P.UseVisualStyleBackColor = true;
             // 
             // rb_GameSys_6P
             // 
             this.rb_GameSys_6P.AutoSize = true;
             this.rb_GameSys_6P.Font = new System.Drawing.Font("타이포_쌍문동 B", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.rb_GameSys_6P.Location = new System.Drawing.Point(58, 22);
+            this.rb_GameSys_6P.Location = new System.Drawing.Point(76, 23);
             this.rb_GameSys_6P.Name = "rb_GameSys_6P";
-            this.rb_GameSys_6P.Size = new System.Drawing.Size(44, 17);
+            this.rb_GameSys_6P.Size = new System.Drawing.Size(33, 17);
             this.rb_GameSys_6P.TabIndex = 2;
-            this.rb_GameSys_6P.Text = "6인";
+            this.rb_GameSys_6P.Text = "6";
             this.rb_GameSys_6P.UseVisualStyleBackColor = true;
             // 
             // rb_GameSys_5P
@@ -3491,23 +3493,23 @@
             this.rb_GameSys_5P.AutoSize = true;
             this.rb_GameSys_5P.Checked = true;
             this.rb_GameSys_5P.Font = new System.Drawing.Font("타이포_쌍문동 B", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.rb_GameSys_5P.Location = new System.Drawing.Point(7, 44);
+            this.rb_GameSys_5P.Location = new System.Drawing.Point(42, 23);
             this.rb_GameSys_5P.Name = "rb_GameSys_5P";
-            this.rb_GameSys_5P.Size = new System.Drawing.Size(44, 17);
+            this.rb_GameSys_5P.Size = new System.Drawing.Size(33, 17);
             this.rb_GameSys_5P.TabIndex = 1;
             this.rb_GameSys_5P.TabStop = true;
-            this.rb_GameSys_5P.Text = "5인";
+            this.rb_GameSys_5P.Text = "5";
             this.rb_GameSys_5P.UseVisualStyleBackColor = true;
             // 
             // rb_GameSys_4P
             // 
             this.rb_GameSys_4P.AutoSize = true;
             this.rb_GameSys_4P.Font = new System.Drawing.Font("타이포_쌍문동 B", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.rb_GameSys_4P.Location = new System.Drawing.Point(7, 23);
+            this.rb_GameSys_4P.Location = new System.Drawing.Point(6, 23);
             this.rb_GameSys_4P.Name = "rb_GameSys_4P";
-            this.rb_GameSys_4P.Size = new System.Drawing.Size(44, 17);
+            this.rb_GameSys_4P.Size = new System.Drawing.Size(33, 17);
             this.rb_GameSys_4P.TabIndex = 0;
-            this.rb_GameSys_4P.Text = "4인";
+            this.rb_GameSys_4P.Text = "4";
             this.rb_GameSys_4P.UseVisualStyleBackColor = true;
             // 
             // btn_GameSys_ReadyMode
@@ -5277,7 +5279,7 @@
             // 
             this.lb_TD_mode.AutoSize = true;
             this.lb_TD_mode.Font = new System.Drawing.Font("타이포_쌍문동 B", 9F, System.Drawing.FontStyle.Bold);
-            this.lb_TD_mode.Location = new System.Drawing.Point(831, 3);
+            this.lb_TD_mode.Location = new System.Drawing.Point(826, 3);
             this.lb_TD_mode.Name = "lb_TD_mode";
             this.lb_TD_mode.Size = new System.Drawing.Size(31, 15);
             this.lb_TD_mode.TabIndex = 45;
@@ -5287,7 +5289,7 @@
             // 
             this.lb_SD_mode.AutoSize = true;
             this.lb_SD_mode.Font = new System.Drawing.Font("타이포_쌍문동 B", 9F, System.Drawing.FontStyle.Bold);
-            this.lb_SD_mode.Location = new System.Drawing.Point(687, 3);
+            this.lb_SD_mode.Location = new System.Drawing.Point(684, 3);
             this.lb_SD_mode.Name = "lb_SD_mode";
             this.lb_SD_mode.Size = new System.Drawing.Size(31, 15);
             this.lb_SD_mode.TabIndex = 44;
@@ -5297,7 +5299,7 @@
             // 
             this.lb_CD_mode.AutoSize = true;
             this.lb_CD_mode.Font = new System.Drawing.Font("타이포_쌍문동 B", 9F, System.Drawing.FontStyle.Bold);
-            this.lb_CD_mode.Location = new System.Drawing.Point(540, 3);
+            this.lb_CD_mode.Location = new System.Drawing.Point(537, 3);
             this.lb_CD_mode.Name = "lb_CD_mode";
             this.lb_CD_mode.Size = new System.Drawing.Size(31, 15);
             this.lb_CD_mode.TabIndex = 43;
@@ -5307,7 +5309,7 @@
             // 
             this.lb_BD_mode.AutoSize = true;
             this.lb_BD_mode.Font = new System.Drawing.Font("타이포_쌍문동 B", 9F, System.Drawing.FontStyle.Bold);
-            this.lb_BD_mode.Location = new System.Drawing.Point(244, 3);
+            this.lb_BD_mode.Location = new System.Drawing.Point(242, 3);
             this.lb_BD_mode.Name = "lb_BD_mode";
             this.lb_BD_mode.Size = new System.Drawing.Size(31, 15);
             this.lb_BD_mode.TabIndex = 42;
@@ -7367,6 +7369,17 @@
             // 
             this.serialPort_TRM.DtrEnable = true;
             // 
+            // rb_GameSys_8P
+            // 
+            this.rb_GameSys_8P.AutoSize = true;
+            this.rb_GameSys_8P.Font = new System.Drawing.Font("타이포_쌍문동 B", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.rb_GameSys_8P.Location = new System.Drawing.Point(59, 40);
+            this.rb_GameSys_8P.Name = "rb_GameSys_8P";
+            this.rb_GameSys_8P.Size = new System.Drawing.Size(33, 17);
+            this.rb_GameSys_8P.TabIndex = 79;
+            this.rb_GameSys_8P.Text = "8";
+            this.rb_GameSys_8P.UseVisualStyleBackColor = true;
+            // 
             // MainControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -8071,6 +8084,7 @@
         private System.Windows.Forms.CheckBox cb_SE_except;
         private System.Windows.Forms.Label lb_GameSys_leftLifeChip_cnt;
         private System.Windows.Forms.Label lb_GameSys_leftLifeChip;
+        private System.Windows.Forms.RadioButton rb_GameSys_8P;
     }
 }
 

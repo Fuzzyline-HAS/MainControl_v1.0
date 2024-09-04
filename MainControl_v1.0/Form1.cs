@@ -1810,7 +1810,8 @@ namespace MainControl_v1._0
            
             if (serialPort_PCM.IsOpen)
             {
-                serialPort_PCM.Write("AA _A\n");                                //(통신) 전체장치 연결 (비활성화)
+                PCM_send("AA _A");
+                //serialPort_PCM.Write("AA _A\n");                                //(통신) 전체장치 연결 (비활성화)
                 game_remaing_time = GAMETIME * 60;                              //(변수) 남은시간 초기화
                 lb_GameSys_Clock.Text = "35:00";                                //남은시간 35:00로 출력
                 revive_rnd = rand.Next(0, 9);
